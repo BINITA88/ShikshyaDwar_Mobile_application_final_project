@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shikshyadwar_mobile_application_project/view/Home/home_view.dart';
 import 'package:shikshyadwar_mobile_application_project/view/auth/login_view.dart';
 import 'package:shikshyadwar_mobile_application_project/view/auth/signup_view.dart';
 import 'package:shikshyadwar_mobile_application_project/view/auth/splash_view%20copy.dart';
@@ -24,6 +25,7 @@ void main() {
         '/': (context) => const SplashView(),
         '/signup': (context) => RegisterPage(),
         '/login': (context) => LoginPage(),
+        '/home': (context) => HomepageView(),
       },
     ),
   );

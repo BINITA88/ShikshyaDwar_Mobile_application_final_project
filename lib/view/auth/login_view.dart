@@ -23,23 +23,27 @@ class LoginPage extends StatelessWidget {
                 children: [
                   const Text(
                     'Login',
-                    style: TextStyle(fontSize: 50.0),
+                    style: TextStyle(fontSize: 40.0),
                   ),
-                  const SizedBox(height: 10.0),
+                  const SizedBox(height: 15.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text(
                         'Welcome back',
-                        style: TextStyle(fontSize: 30.0),
+                        style: TextStyle(fontSize: 26.0),
                       ),
                       Text(
-                        'please login to your account',
-                        style: TextStyle(fontSize: 30.0),
+                        'please login to your ',
+                        style: TextStyle(fontSize: 26.0),
+                      ),
+                      Text(
+                        ' account',
+                        style: TextStyle(fontSize: 26.0),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 15.0),
                   Column(
                     children: [
                       const SizedBox(height: 20.0),
@@ -57,17 +61,20 @@ class LoginPage extends StatelessWidget {
                           labelText: 'Password',
                         ),
                       ),
-                      const SizedBox(height: 17.0),
+                      const SizedBox(height: 38.0),
                     ],
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           vertical: 13.0, horizontal: 12.0),
-                      backgroundColor: const Color(0xff447def),
+                      backgroundColor: Color.fromARGB(255, 24, 171, 80),
                     ),
                     onPressed: () {
-                      // Implement your registration logic here.
+                      // Ensure navigation happens after any logic is completed
+                      Navigator.pushReplacementNamed(context,
+                          '/home'); // Use pushReplacement for better UX
+                      // Implement your registration logic here, if any
                     },
                     child: const Text(
                       'Login',
@@ -75,21 +82,21 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: SizedBox(
                           width: 60.0,
                           child: Divider(color: Colors.black87),
                         ),
                       ),
-                      const Text(
+                      Text(
                         'Or',
-                        style: TextStyle(fontSize: 25.0),
+                        style: TextStyle(fontSize: 20.0),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: SizedBox(
                           width: 60.0,
@@ -118,8 +125,8 @@ class LoginPage extends StatelessWidget {
                               Image.asset(
                                 'assets/images/google.png',
                                 fit: BoxFit.contain,
-                                width: 40.0,
-                                height: 40.0,
+                                width: 30.0,
+                                height: 30.0,
                               ),
                               const Text(
                                 'Google',
@@ -148,8 +155,8 @@ class LoginPage extends StatelessWidget {
                               Image.asset(
                                 'assets/images/facebook.png',
                                 fit: BoxFit.cover,
-                                width: 40.0,
-                                height: 40.0,
+                                width: 30.0,
+                                height: 30.0,
                               ),
                               const Text(
                                 'Facebook',
@@ -176,7 +183,10 @@ class LoginPage extends StatelessWidget {
                         },
                         child: const Text(
                           'SignUp',
-                          style: TextStyle(fontSize: 20.0, color: Colors.blue),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Color.fromARGB(255, 24, 171, 80),
+                          ),
                         ),
                       ),
                     ],
