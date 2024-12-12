@@ -1,123 +1,191 @@
 import 'package:flutter/material.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
-
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
-  final _gap = const SizedBox(height: 15);
-
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Login",
-          style: TextStyle(fontStyle: FontStyle.normal),
-        ),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: SizedBox(
-                    height: 200,
-                    width: double.infinity,
-                    child: Image.asset(
-                      "assets/images/login.png",
-                      fit: BoxFit.cover,
-                    ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: Image.asset(
+              'assets/images/background.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Login',
+                    style: TextStyle(fontSize: 50.0),
                   ),
-                ),
-                const SizedBox(height: 30),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Email",
-                    prefixIcon: Icon(Icons.email),
-                  ),
-                ),
-                _gap,
-                TextFormField(
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Password",
-                    prefixIcon: Icon(Icons.lock),
-                  ),
-                ),
-                _gap,
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                  const SizedBox(height: 10.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Welcome back',
+                        style: TextStyle(fontSize: 30.0),
                       ),
+                      Text(
+                        'please login to your account',
+                        style: TextStyle(fontSize: 30.0),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0),
+                  Column(
+                    children: [
+                      const SizedBox(height: 20.0),
+                      const TextField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      const TextField(
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                        ),
+                      ),
+                      const SizedBox(height: 17.0),
+                    ],
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 13.0, horizontal: 12.0),
+                      backgroundColor: const Color(0xff447def),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, "/homepage");
+                      // Implement your registration logic here.
                     },
                     child: const Text(
                       'Login',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
                     ),
                   ),
-                ),
-                _gap,
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      // Add navigation logic for forgot password here
-                      Navigator.pushNamed(context, '/forgotPassword');
-                    },
-                    child: const Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("Don't have an account? "),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/signup');
-                      },
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
+                  const SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: SizedBox(
+                          width: 60.0,
+                          child: Divider(color: Colors.black87),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const Text(
+                        'Or',
+                        style: TextStyle(fontSize: 25.0),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: SizedBox(
+                          width: 60.0,
+                          child: Divider(color: Colors.black87),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(
+                                width: 0.5, color: Colors.grey),
+                          ),
+                          onPressed: () {
+                            // Google authentication logic.
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/google.png',
+                                fit: BoxFit.contain,
+                                width: 40.0,
+                                height: 40.0,
+                              ),
+                              const Text(
+                                'Google',
+                                style: TextStyle(
+                                    fontSize: 20.0, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20.0),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(
+                                width: 0.5, color: Colors.grey),
+                          ),
+                          onPressed: () {
+                            // Facebook authentication logic.
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/facebook.png',
+                                fit: BoxFit.cover,
+                                width: 40.0,
+                                height: 40.0,
+                              ),
+                              const Text(
+                                'Facebook',
+                                style: TextStyle(
+                                    fontSize: 20.0, color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        ' Do not have an account?',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/signup');
+                        },
+                        child: const Text(
+                          'SignUp',
+                          style: TextStyle(fontSize: 20.0, color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

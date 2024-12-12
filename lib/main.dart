@@ -22,9 +22,8 @@ void main() {
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashView(),
-        '/signup': (context) => const SignupView(),
-        '/login': (context) => const LoginView(),
-        // '/homepage': (context) => const HomepageView(),
+        '/signup': (context) => RegisterPage(),
+        '/login': (context) => LoginPage(),
       },
     ),
   );
