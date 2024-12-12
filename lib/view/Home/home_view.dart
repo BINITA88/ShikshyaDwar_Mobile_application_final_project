@@ -83,23 +83,41 @@ class _CardViewState extends State<HomepageView> {
         centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: GlobalVariables.appBarGradient,
+            gradient:
+                GlobalVariables.appBarGradient, // Ensure this is correctly set
+            // Ensure there is no border or unnecessary decoration
           ),
         ),
-        leading:
-            const Icon(Icons.menu, color: Color.fromARGB(255, 243, 241, 241)),
+        leading: Padding(
+          padding: const EdgeInsets.only(
+              left: 8.0), // Adjust padding for left spacing
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.menu, color: Color.fromARGB(255, 19, 19, 19)),
+              // const SizedBox(
+              //     width: 8), // Space between the menu icon and the logo
+              // Image.asset(
+              //   'assets/images/logo.png', // Correct path to the image
+              //   height: 30, // Adjust the height of the logo
+              //   width: 50, // Adjust the width according to your preference
+              // ),
+            ],
+          ),
+        ),
         title: const Text(
           "ShikshyaDwar",
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color.fromARGB(255, 7, 7, 7),
           ),
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.person,
-                color: Color.fromARGB(255, 243, 241, 241)),
+                color: Color.fromARGB(255, 18, 17, 17)),
             onPressed: () {
               // Navigator.push(
               //   context,

@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void _login(BuildContext context) {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    // Dummy data for login (hardcoded credentials)
+    if (email == 'user@example.com' && password == 'user123') {
+      // Regular user
+      Navigator.pushReplacementNamed(context, '/home');
+    } else if (email == 'admin@example.com' && password == 'admin123') {
+      // Admin user
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else {
+      // Invalid credentials
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid email or password')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,17 +69,19 @@ class LoginPage extends StatelessWidget {
                   Column(
                     children: [
                       const SizedBox(height: 20.0),
-                      const TextField(
+                      TextField(
+                        controller: emailController,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Email',
                         ),
                       ),
                       const SizedBox(height: 20.0),
-                      const TextField(
+                      TextField(
+                        controller: passwordController,
                         obscureText: true,
                         keyboardType: TextInputType.visiblePassword,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Password',
                         ),
                       ),
@@ -68,14 +92,9 @@ class LoginPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           vertical: 13.0, horizontal: 12.0),
-                      backgroundColor: Color.fromARGB(255, 24, 171, 80),
+                      backgroundColor: const Color.fromARGB(255, 24, 171, 80),
                     ),
-                    onPressed: () {
-                      // Ensure navigation happens after any logic is completed
-                      Navigator.pushReplacementNamed(context,
-                          '/home'); // Use pushReplacement for better UX
-                      // Implement your registration logic here, if any
-                    },
+                    onPressed: () => _login(context),
                     child: const Text(
                       'Login',
                       style: TextStyle(fontSize: 18.0, color: Colors.white),
