@@ -29,7 +29,7 @@ void main() {
         '/login': (context) => LoginPage(),
         '/home': (context) => const HomepageView(),
         '/dashboard': (context) => const Dashboard(),
-        '/onboarding': (context) => OnboardingPage(),
+        '/onboarding': (context) => const OnboardingPage(),
       },
     ),
   );

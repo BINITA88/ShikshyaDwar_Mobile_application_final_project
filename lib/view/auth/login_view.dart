@@ -10,21 +10,23 @@ class LoginPage extends StatelessWidget {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    if (email == 'user@example.com' && password == 'user123') {
+    if (email == 'samjhana@gmail.com' && password == 'samjhana123') {
       // Regular user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login Successful!'),
           backgroundColor: Colors.green,
+          duration: Duration(milliseconds: 5),
         ),
       );
       Navigator.pushReplacementNamed(context, '/home');
-    } else if (email == 'admin@example.com' && password == 'admin123') {
+    } else if (email == 'binita@gmail.com' && password == 'binita123') {
       // Admin user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Admin Login Successful!'),
           backgroundColor: Colors.green,
+          duration: Duration(milliseconds: 5),
         ),
       );
       Navigator.pushReplacementNamed(context, '/dashboard');
@@ -72,15 +74,15 @@ class LoginPage extends StatelessWidget {
                     children: [
                       Text(
                         'Welcome back',
-                        style: TextStyle(fontSize: 26.0),
+                        style: TextStyle(fontSize: 24.0),
                       ),
                       Text(
                         'please login to your ',
-                        style: TextStyle(fontSize: 26.0),
+                        style: TextStyle(fontSize: 24.0),
                       ),
                       Text(
                         'account',
-                        style: TextStyle(fontSize: 26.0),
+                        style: TextStyle(fontSize: 24.0),
                       ),
                     ],
                   ),
@@ -221,7 +223,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 30.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

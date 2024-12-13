@@ -13,6 +13,15 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Dashboard"),
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pushNamed(
+                context, '/signup'); // Navigate to '/signup' page
+          },
+        ),
+      ),
+      body: const Center(
+        child: Text("Welcome to the Dashboard!"),
       ),
     );
   }
