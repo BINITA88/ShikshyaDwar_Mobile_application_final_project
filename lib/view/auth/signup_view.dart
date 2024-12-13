@@ -32,13 +32,12 @@ class RegisterPage extends StatelessWidget {
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(
-                          top: 30.0), // Add top padding to move text down
+                          top: 35.0), // Add top padding to move text down
                       child: Text(
                         'Register',
                         style: TextStyle(fontSize: 40.0),
                       ),
                     ),
-                    const SizedBox(height: 10.0),
                     const Padding(
                       padding: EdgeInsets.only(top: 10.0),
                       child: Column(
@@ -127,7 +126,7 @@ class RegisterPage extends StatelessWidget {
                             const SnackBar(
                               content: Text('Registration Successful'),
                               backgroundColor: Colors.green,
-                              duration: Duration(seconds: 1),
+                              duration: Duration(milliseconds: 5),
                             ),
                           );
 
