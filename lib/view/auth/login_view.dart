@@ -4,21 +4,37 @@ class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  LoginPage({super.key});
+
   void _login(BuildContext context) {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    // Dummy data for login (hardcoded credentials)
     if (email == 'user@example.com' && password == 'user123') {
       // Regular user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login Successful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
       Navigator.pushReplacementNamed(context, '/home');
     } else if (email == 'admin@example.com' && password == 'admin123') {
       // Admin user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Admin Login Successful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
       Navigator.pushReplacementNamed(context, '/dashboard');
     } else {
       // Invalid credentials
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid email or password')),
+        const SnackBar(
+          content: Text('Invalid email or password'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -48,9 +64,9 @@ class LoginPage extends StatelessWidget {
                     style: TextStyle(fontSize: 40.0),
                   ),
                   const SizedBox(height: 15.0),
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         'Welcome back',
                         style: TextStyle(fontSize: 26.0),
@@ -60,7 +76,7 @@ class LoginPage extends StatelessWidget {
                         style: TextStyle(fontSize: 26.0),
                       ),
                       Text(
-                        ' account',
+                        'account',
                         style: TextStyle(fontSize: 26.0),
                       ),
                     ],
@@ -136,7 +152,13 @@ class LoginPage extends StatelessWidget {
                                 width: 0.5, color: Colors.grey),
                           ),
                           onPressed: () {
-                            // Google authentication logic.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Google authentication coming soon!'),
+                                backgroundColor: Colors.blue,
+                              ),
+                            );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -166,7 +188,15 @@ class LoginPage extends StatelessWidget {
                                 width: 0.5, color: Colors.grey),
                           ),
                           onPressed: () {
-                            // Facebook authentication logic.
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Facebook authentication coming soon!'),
+                                backgroundColor:
+                                    Color.fromARGB(255, 44, 190, 95),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -201,7 +231,7 @@ class LoginPage extends StatelessWidget {
                           Navigator.pushNamed(context, '/signup');
                         },
                         child: const Text(
-                          'SignUp',
+                          ' SignUp',
                           style: TextStyle(
                             fontSize: 20.0,
                             color: Color.fromARGB(255, 24, 171, 80),

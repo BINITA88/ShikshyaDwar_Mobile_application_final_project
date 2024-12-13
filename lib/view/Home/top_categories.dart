@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TopCategories extends StatelessWidget {
-  const TopCategories({Key? key}) : super(key: key);
+  const TopCategories({super.key});
 
   @override
   Widget build(BuildContext context) {

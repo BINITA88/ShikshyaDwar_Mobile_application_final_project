@@ -11,9 +11,9 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    // Navigate to the Sign-Up page after 3 seconds
+    // Navigate to the Onboarding page after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, "/signup");
+      Navigator.pushReplacementNamed(context, "/onboarding");
     });
   }
 

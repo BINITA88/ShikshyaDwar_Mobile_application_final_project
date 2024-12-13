@@ -5,7 +5,7 @@ import 'package:shikshyadwar_mobile_application_project/constants/global_variabl
 import 'package:shikshyadwar_mobile_application_project/view/Home/top_categories.dart';
 
 class HomepageView extends StatefulWidget {
-  const HomepageView({Key? key}) : super(key: key);
+  const HomepageView({super.key});
 
   @override
   State<HomepageView> createState() => _CardViewState();
@@ -88,14 +88,14 @@ class _CardViewState extends State<HomepageView> {
             // Ensure there is no border or unnecessary decoration
           ),
         ),
-        leading: Padding(
-          padding: const EdgeInsets.only(
-              left: 8.0), // Adjust padding for left spacing
+        leading: const Padding(
+          padding:
+              EdgeInsets.only(left: 8.0), // Adjust padding for left spacing
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.menu, color: Color.fromARGB(255, 19, 19, 19)),
+              Icon(Icons.menu, color: Color.fromARGB(255, 19, 19, 19)),
               // const SizedBox(
               //     width: 8), // Space between the menu icon and the logo
               // Image.asset(
@@ -303,7 +303,7 @@ class _CardViewState extends State<HomepageView> {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromARGB(
+                                backgroundColor: const Color.fromARGB(
                                     255, 53, 201, 110), // Button color
                               ),
                               onPressed: () {

@@ -6,6 +6,8 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  RegisterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +35,9 @@ class RegisterPage extends StatelessWidget {
                       style: TextStyle(fontSize: 40.0),
                     ),
                     const SizedBox(height: 10.0),
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'Let’s get you',
                           style: TextStyle(fontSize: 27.0),
@@ -115,9 +117,10 @@ class RegisterPage extends StatelessWidget {
 
                           // Show success Snackbar
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: const Text('Registration Successful'),
+                            const SnackBar(
+                              content: Text('Registration Successful'),
                               backgroundColor: Colors.green,
+                              duration: Duration(seconds: 1),
                             ),
                           );
 
@@ -131,21 +134,21 @@ class RegisterPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20.0),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: SizedBox(
                             width: 60.0,
                             child: Divider(color: Colors.black87),
                           ),
                         ),
-                        const Text(
+                        Text(
                           'Or',
                           style: TextStyle(fontSize: 20.0),
                         ),
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: SizedBox(
                             width: 60.0,
