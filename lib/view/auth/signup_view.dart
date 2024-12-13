@@ -30,23 +30,30 @@ class RegisterPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Register',
-                      style: TextStyle(fontSize: 40.0),
+                    const Padding(
+                      padding: EdgeInsets.only(
+                          top: 30.0), // Add top padding to move text down
+                      child: Text(
+                        'Register',
+                        style: TextStyle(fontSize: 40.0),
+                      ),
                     ),
                     const SizedBox(height: 10.0),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Let’s get you',
-                          style: TextStyle(fontSize: 27.0),
-                        ),
-                        Text(
-                          'on board',
-                          style: TextStyle(fontSize: 27.0),
-                        ),
-                      ],
+                    const Padding(
+                      padding: EdgeInsets.only(top: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Let’s get you',
+                            style: TextStyle(fontSize: 27.0),
+                          ),
+                          Text(
+                            'on board',
+                            style: TextStyle(fontSize: 27.0),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 20.0),
                     Column(

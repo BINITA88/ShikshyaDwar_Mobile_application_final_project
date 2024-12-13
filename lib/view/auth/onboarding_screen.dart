@@ -116,26 +116,18 @@ class SecondOnboardingScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              border:
-                  Border.all(color: Colors.black, width: 2), // Add black border
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Image.asset(
-              'assets/images/hee.png', // Change image for the second screen
-              height: 250.0,
-              width: 250.0,
-              fit: BoxFit.contain,
-            ),
+          Image.asset(
+            'assets/images/hee.png', // Change image for the second screen
+            height: 350.0,
+            width: 450.0,
+            fit: BoxFit.contain,
           ),
-          const SizedBox(height: 20.0),
           const Text(
             'Start Your Learning Journey',
             style: TextStyle(
               fontSize: 28.0,
               fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 101, 67, 185),
+              color: Color.fromARGB(255, 13, 132, 49),
             ),
             textAlign: TextAlign.center,
           ),

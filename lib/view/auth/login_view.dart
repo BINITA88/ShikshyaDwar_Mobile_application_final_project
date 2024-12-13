@@ -59,11 +59,14 @@ class LoginPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Login',
-                    style: TextStyle(fontSize: 40.0),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 30.0),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(fontSize: 40.0),
+                    ),
                   ),
-                  const SizedBox(height: 15.0),
+                  const SizedBox(height: 10.0),
                   const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -81,7 +84,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 15.0),
+                  const SizedBox(height: 10.0),
                   Column(
                     children: [
                       const SizedBox(height: 20.0),
