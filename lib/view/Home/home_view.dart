@@ -336,7 +336,6 @@
 //     );
 //   }
 // }
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shikshyadwar_mobile_application_project/core/common/my_card.dart';
@@ -349,10 +348,10 @@ class HomepageView extends StatefulWidget {
   const HomepageView({super.key});
 
   @override
-  State<HomepageView> createState() => _CardViewState();
+  State<HomepageView> createState() => _HomepageViewState();
 }
 
-class _CardViewState extends State<HomepageView> {
+class _HomepageViewState extends State<HomepageView> {
   final List<String> carouselImages = [
     'assets/images/cr1.png',
     'assets/images/cr2.png',
@@ -391,6 +390,13 @@ class _CardViewState extends State<HomepageView> {
   late PageController _pageController;
   late Timer _timer;
 
+  final List<Widget> _pages = [
+    const HomepageView(),
+    const Classes(),
+    const Message(),
+    const Profile(),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -417,30 +423,15 @@ class _CardViewState extends State<HomepageView> {
   }
 
   void _onNavBarTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    Widget nextPage;
-    switch (index) {
-      case 0:
-        nextPage = const HomepageView();
-        break;
-      case 1:
-        nextPage = const Classes();
-        break;
-      case 2:
-        nextPage = const Message();
-        break;
-      case 3:
-        nextPage = const Profile();
-        break;
-      default:
-        nextPage = const HomepageView();
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => _pages[index]),
+      );
     }
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => nextPage),
-    );
   }
 
   @override
