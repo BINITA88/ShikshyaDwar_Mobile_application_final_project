@@ -45,7 +45,7 @@ class LoginPage extends StatelessWidget {
     }
   }
 
-// login
+// login page
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
