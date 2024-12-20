@@ -90,7 +90,7 @@ class OnboardingScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               padding:
                   const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-              backgroundColor: const Color.fromARGB(255, 24, 171, 80),
+              backgroundColor: const Color.fromARGB(255, 23, 104, 176),
               minimumSize: const Size(150, 50), // Fix button size
             ),
             onPressed: onNext,
@@ -127,7 +127,7 @@ class SecondOnboardingScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 28.0,
               fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 13, 132, 49),
+              color: Color.fromARGB(255, 13, 13, 14),
             ),
             textAlign: TextAlign.center,
           ),
@@ -148,7 +148,7 @@ class SecondOnboardingScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 25.0),
-                  backgroundColor: const Color.fromARGB(255, 24, 171, 80),
+                  backgroundColor: const Color.fromARGB(255, 23, 104, 176),
                   minimumSize: const Size(150, 50), // Fix button size
                 ),
                 onPressed: () {
@@ -163,7 +163,7 @@ class SecondOnboardingScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 25.0),
-                  backgroundColor: const Color.fromARGB(255, 24, 171, 80),
+                  backgroundColor: const Color.fromARGB(255, 23, 104, 176),
                   minimumSize: const Size(150, 50), // Fix button size
                 ),
                 onPressed: () {
