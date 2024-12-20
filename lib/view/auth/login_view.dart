@@ -10,30 +10,41 @@ class LoginPage extends StatelessWidget {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    if (email == 'user@example.com' && password == 'user123') {
+    if (email == 'samjhana@gmail.com' && password == 'samjhana123') {
       // Regular user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login Successful!'),
           backgroundColor: Colors.green,
+          duration: Duration(seconds: 1), // Show message for 2 seconds
         ),
       );
-      Navigator.pushReplacementNamed(context, '/home');
-    } else if (email == 'admin@example.com' && password == 'admin123') {
+
+      // Delay navigation to give time for snack bar to appear
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, '/home');
+      });
+    } else if (email == 'binita@gmail.com' && password == 'binita123') {
       // Admin user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Admin Login Successful!'),
           backgroundColor: Colors.green,
+          duration: Duration(seconds: 1), // Show message for 2 seconds
         ),
       );
-      Navigator.pushReplacementNamed(context, '/dashboard');
+
+      // Delay navigation to give time for snack bar to appear
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      });
     } else {
       // Invalid credentials
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Invalid email or password'),
           backgroundColor: Colors.red,
+          duration: Duration(seconds: 1), // Show message for 2 seconds
         ),
       );
     }
@@ -72,15 +83,15 @@ class LoginPage extends StatelessWidget {
                     children: [
                       Text(
                         'Welcome back',
-                        style: TextStyle(fontSize: 26.0),
+                        style: TextStyle(fontSize: 24.0),
                       ),
                       Text(
                         'please login to your ',
-                        style: TextStyle(fontSize: 26.0),
+                        style: TextStyle(fontSize: 24.0),
                       ),
                       Text(
                         'account',
-                        style: TextStyle(fontSize: 26.0),
+                        style: TextStyle(fontSize: 24.0),
                       ),
                     ],
                   ),
@@ -111,7 +122,7 @@ class LoginPage extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           vertical: 13.0, horizontal: 12.0),
-                      backgroundColor: const Color.fromARGB(255, 24, 171, 80),
+                      backgroundColor: const Color.fromARGB(255, 23, 104, 176),
                     ),
                     onPressed: () => _login(context),
                     child: const Text(
@@ -197,7 +208,7 @@ class LoginPage extends StatelessWidget {
                                     'Facebook authentication coming soon!'),
                                 backgroundColor:
                                     Color.fromARGB(255, 44, 190, 95),
-                                duration: Duration(seconds: 1),
+                                duration: Duration(seconds: 6),
                               ),
                             );
                           },
@@ -221,7 +232,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 30.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -237,7 +248,7 @@ class LoginPage extends StatelessWidget {
                           ' SignUp',
                           style: TextStyle(
                             fontSize: 20.0,
-                            color: Color.fromARGB(255, 24, 171, 80),
+                            color: const Color.fromARGB(255, 23, 104, 176),
                           ),
                         ),
                       ),

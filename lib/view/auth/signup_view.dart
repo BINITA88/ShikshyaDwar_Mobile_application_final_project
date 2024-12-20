@@ -32,13 +32,12 @@ class RegisterPage extends StatelessWidget {
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(
-                          top: 30.0), // Add top padding to move text down
+                          top: 35.0), // Add top padding to move text down
                       child: Text(
                         'Register',
                         style: TextStyle(fontSize: 40.0),
                       ),
                     ),
-                    const SizedBox(height: 10.0),
                     const Padding(
                       padding: EdgeInsets.only(top: 10.0),
                       child: Column(
@@ -113,7 +112,8 @@ class RegisterPage extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                             vertical: 13.0, horizontal: 12.0),
-                        backgroundColor: const Color.fromARGB(255, 24, 171, 80),
+                        backgroundColor:
+                            const Color.fromARGB(255, 23, 104, 176),
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -127,12 +127,15 @@ class RegisterPage extends StatelessWidget {
                             const SnackBar(
                               content: Text('Registration Successful'),
                               backgroundColor: Colors.green,
-                              duration: Duration(seconds: 1),
+                              duration: Duration(
+                                  seconds: 2), // Show Snackbar for 2 seconds
                             ),
                           );
 
-                          // Navigate to login page
-                          Navigator.pushReplacementNamed(context, '/login');
+                          // Delay navigation to give time for Snackbar to appear
+                          Future.delayed(const Duration(seconds: 2), () {
+                            Navigator.pushReplacementNamed(context, '/login');
+                          });
                         }
                       },
                       child: const Text(
@@ -246,7 +249,7 @@ class RegisterPage extends StatelessWidget {
                             ' Sign In',
                             style: TextStyle(
                               fontSize: 20.0,
-                              color: Color.fromARGB(255, 24, 171, 80),
+                              color: const Color.fromARGB(255, 23, 104, 176),
                             ),
                           ),
                         ),
