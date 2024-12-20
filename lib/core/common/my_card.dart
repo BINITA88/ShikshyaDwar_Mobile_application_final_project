@@ -92,10 +92,9 @@ class MyCart extends StatelessWidget {
                 child: const Text(
                   'Add to Schedule',
                   style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 59, 62, 127),
-                  ),
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 56, 57, 62)),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),

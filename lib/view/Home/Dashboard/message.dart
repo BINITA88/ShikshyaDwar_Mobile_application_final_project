@@ -58,16 +58,6 @@ class _MessageState extends State<Message> {
         "message": "Instructor's note: Practice test uploaded.",
         "link": "View Class Messages"
       },
-      {
-        "class": "SAT - Writing",
-        "message": "Homework: Submit essay by 5 PM tomorrow.",
-        "link": "View Class Messages"
-      },
-      {
-        "class": "PTE - Speaking",
-        "message": "Live session scheduled for next Friday.",
-        "link": "View Class Messages"
-      },
     ];
 
     return Scaffold(

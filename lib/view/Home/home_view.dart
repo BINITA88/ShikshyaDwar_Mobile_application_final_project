@@ -442,7 +442,6 @@ class _HomepageViewState extends State<HomepageView> {
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
-        centerTitle: true,
         title: Text(
           "ShikshyaDwar",
           style: theme.appBarTheme.titleTextStyle,

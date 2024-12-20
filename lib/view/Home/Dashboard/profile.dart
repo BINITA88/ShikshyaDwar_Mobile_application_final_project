@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shikshyadwar_mobile_application_project/view/Home/Dashboard/classes.dart';
 import 'package:shikshyadwar_mobile_application_project/view/Home/Dashboard/message.dart';
 import 'package:shikshyadwar_mobile_application_project/view/Home/home_view.dart';
+import 'package:shikshyadwar_mobile_application_project/view/auth/signup_view.dart'; // Import SignupView
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -11,7 +12,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  int _selectedIndex = 3; // Default to "Message" tab
+  int _selectedIndex = 3; // Default to "Profile" tab
 
   void _onNavBarTap(int index) {
     if (_selectedIndex != index) {
@@ -157,7 +158,36 @@ class _ProfileState extends State<Profile> {
                     ),
                     OutlinedButton.icon(
                       onPressed: () {
-                        // Logout action
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Logout"),
+                              content: const Text("Do you want to logout?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the dialog
+                                  },
+                                  child: const Text("Cancel"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the dialog
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            RegisterPage(), // Navigate to SignupView
+                                      ),
+                                    );
+                                  },
+                                  child: const Text("Logout"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                       icon: const Icon(Icons.logout, size: 20),
                       label: const Text("Logout"),
