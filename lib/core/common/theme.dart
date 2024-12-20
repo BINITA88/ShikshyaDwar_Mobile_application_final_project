@@ -13,7 +13,7 @@ ThemeData getApplicationTheme() {
           fontWeight: FontWeight.normal,
           color: Colors.white, // Text color
         ),
-        backgroundColor: Colors.orange,
+        backgroundColor: const Color.fromARGB(255, 225, 164, 31),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9),
         ),

@@ -12,8 +12,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: PageView(
         controller: _pageController,
         children: [
@@ -90,13 +91,13 @@ class OnboardingScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               padding:
                   const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-              backgroundColor: const Color.fromARGB(255, 23, 104, 176),
-              minimumSize: const Size(150, 50), // Fix button size
+              backgroundColor: Color.fromARGB(255, 12, 51, 82),
+              minimumSize: const Size(150, 60), // Fix button size
             ),
             onPressed: onNext,
             child: const Text(
               'Next',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
+              style: TextStyle(fontSize: 20.0, color: Colors.white),
             ),
           ),
         ],
@@ -127,7 +128,7 @@ class SecondOnboardingScreen extends StatelessWidget {
             style: TextStyle(
               fontSize: 28.0,
               fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 13, 13, 14),
+              color: Color.fromARGB(255, 217, 127, 24),
             ),
             textAlign: TextAlign.center,
           ),
@@ -148,7 +149,7 @@ class SecondOnboardingScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 25.0),
-                  backgroundColor: const Color.fromARGB(255, 23, 104, 176),
+                  backgroundColor: Color.fromARGB(255, 12, 51, 82),
                   minimumSize: const Size(150, 50), // Fix button size
                 ),
                 onPressed: () {
@@ -163,7 +164,7 @@ class SecondOnboardingScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 25.0),
-                  backgroundColor: const Color.fromARGB(255, 23, 104, 176),
+                  backgroundColor: Color.fromARGB(255, 12, 51, 82),
                   minimumSize: const Size(150, 50), // Fix button size
                 ),
                 onPressed: () {

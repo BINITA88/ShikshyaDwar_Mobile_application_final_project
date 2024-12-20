@@ -82,13 +82,19 @@ class MyCart extends StatelessWidget {
                 onPressed: onPressed,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero,
+                  backgroundColor:
+                      const Color.fromARGB(255, 225, 164, 31), // Button color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        10), // Optional: Rounded button edges
+                  ),
                 ),
                 child: const Text(
                   'Add to Schedule',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Color.fromARGB(255, 59, 62, 127),
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,

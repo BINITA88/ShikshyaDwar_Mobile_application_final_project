@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shikshyadwar_mobile_application_project/core/common/snackbar.dart';
 
 class RegisterPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -10,8 +11,9 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Stack(
         children: [
           Align(
@@ -110,10 +112,8 @@ class RegisterPage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 13.0, horizontal: 12.0),
-                        backgroundColor:
-                            const Color.fromARGB(255, 23, 104, 176),
+                        fixedSize: Size(5, 45),
+                        backgroundColor: Color.fromARGB(255, 12, 51, 82),
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -122,14 +122,11 @@ class RegisterPage extends StatelessWidget {
                           _emailController.clear();
                           _passwordController.clear();
 
-                          // Show success Snackbar
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Registration Successful'),
-                              backgroundColor: Colors.green,
-                              duration: Duration(
-                                  seconds: 2), // Show Snackbar for 2 seconds
-                            ),
+                          // Use the showMySnackbar function
+                          showMySnackbar(
+                            context: context,
+                            message: 'Registration Successful',
+                            color: Colors.green,
                           );
 
                           // Delay navigation to give time for Snackbar to appear
@@ -249,7 +246,7 @@ class RegisterPage extends StatelessWidget {
                             ' Sign In',
                             style: TextStyle(
                               fontSize: 20.0,
-                              color: const Color.fromARGB(255, 23, 104, 176),
+                              color: Color.fromARGB(255, 23, 104, 176),
                             ),
                           ),
                         ),

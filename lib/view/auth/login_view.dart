@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shikshyadwar_mobile_application_project/core/common/snackbar.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -12,12 +13,10 @@ class LoginPage extends StatelessWidget {
 
     if (email == 'samjhana@gmail.com' && password == 'samjhana123') {
       // Regular user
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login Successful!'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 1), // Show message for 2 seconds
-        ),
+      showMySnackbar(
+        context: context,
+        message: 'Login Successful!',
+        color: Colors.green,
       );
 
       // Delay navigation to give time for snack bar to appear
@@ -26,12 +25,10 @@ class LoginPage extends StatelessWidget {
       });
     } else if (email == 'binita@gmail.com' && password == 'binita123') {
       // Admin user
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Admin Login Successful!'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 1), // Show message for 2 seconds
-        ),
+      showMySnackbar(
+        context: context,
+        message: 'Admin Login Successful!',
+        color: Colors.green,
       );
 
       // Delay navigation to give time for snack bar to appear
@@ -40,20 +37,19 @@ class LoginPage extends StatelessWidget {
       });
     } else {
       // Invalid credentials
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid email or password'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 1), // Show message for 2 seconds
-        ),
+      showMySnackbar(
+        context: context,
+        message: 'Invalid email or password',
+        color: Colors.red,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Stack(
         children: [
           Align(
@@ -120,9 +116,8 @@ class LoginPage extends StatelessWidget {
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 13.0, horizontal: 12.0),
-                      backgroundColor: const Color.fromARGB(255, 23, 104, 176),
+                      fixedSize: Size(5, 45),
+                      backgroundColor: Color.fromARGB(255, 12, 51, 82),
                     ),
                     onPressed: () => _login(context),
                     child: const Text(
@@ -166,12 +161,10 @@ class LoginPage extends StatelessWidget {
                                 width: 0.5, color: Colors.grey),
                           ),
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content:
-                                    Text('Google authentication coming soon!'),
-                                backgroundColor: Colors.blue,
-                              ),
+                            showMySnackbar(
+                              context: context,
+                              message: 'Google authentication coming soon!',
+                              color: Colors.blue,
                             );
                           },
                           child: Row(
@@ -202,14 +195,10 @@ class LoginPage extends StatelessWidget {
                                 width: 0.5, color: Colors.grey),
                           ),
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'Facebook authentication coming soon!'),
-                                backgroundColor:
-                                    Color.fromARGB(255, 44, 190, 95),
-                                duration: Duration(seconds: 6),
-                              ),
+                            showMySnackbar(
+                              context: context,
+                              message: 'Facebook authentication coming soon!',
+                              color: Color.fromARGB(255, 44, 190, 95),
                             );
                           },
                           child: Row(

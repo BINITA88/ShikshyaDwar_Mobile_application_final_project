@@ -11,14 +11,13 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  int _selectedIndex = 3; // Default to "Profile" tab
+  int _selectedIndex = 3; // Default to "Message" tab
 
   void _onNavBarTap(int index) {
     if (_selectedIndex != index) {
       setState(() {
         _selectedIndex = index;
       });
-
       Widget nextPage;
       switch (index) {
         case 0:
@@ -28,12 +27,14 @@ class _ProfileState extends State<Profile> {
           nextPage = const Classes();
           break;
         case 2:
-          nextPage = const Message();
+          nextPage = const Message(); // Current Page
+          break;
+        case 3:
+          nextPage = const Profile();
           break;
         default:
-          nextPage = const Profile(); // Current Page
+          nextPage = const HomepageView();
       }
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => nextPage),
@@ -44,15 +45,17 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Profile",
-          style: theme.textTheme.titleLarge
-              ?.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            fontSize: 22.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
       ),
       body: SafeArea(
@@ -67,30 +70,45 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage:
-                          AssetImage('assets/images/profile_pic.png'),
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 6.0,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        radius: 55,
+                        backgroundImage: const AssetImage(
+                            'assets/images/profile.png'), // Your cartoon image
+                        backgroundColor: const Color.fromARGB(0, 178, 169, 169),
+                      ),
                     ),
                     const SizedBox(height: 12),
-                    Text(
-                      "John Doe",
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        color: const Color.fromARGB(255, 18, 18, 18),
+                    const Text(
+                      "Binita Acharya",
+                      style: TextStyle(
+                        fontSize: 22.0,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black, // Deep black color for the name
                       ),
                     ),
                     const SizedBox(height: 6),
-                    Text(
-                      "john.doe@example.com",
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: const Color.fromARGB(255, 13, 13, 14),
+                    const Text(
+                      "binita@example.com",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Color.fromARGB(153, 67, 66, 66),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+
               // Profile Details
               Expanded(
                 child: ListView(
@@ -127,26 +145,29 @@ class _ProfileState extends State<Profile> {
                         // Edit Profile action
                       },
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(10),
-                        minimumSize: const Size(50, 40), // Small width button
+                        padding: const EdgeInsets.all(12),
+                        backgroundColor:
+                            const Color.fromARGB(255, 225, 164, 31),
+                        minimumSize: const Size(60, 45), // Small width button
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      child: const Icon(Icons.edit, size: 20),
+                      child: const Icon(Icons.edit, size: 24),
                     ),
                     OutlinedButton.icon(
                       onPressed: () {
                         // Logout action
                       },
-                      icon: const Icon(Icons.logout),
+                      icon: const Icon(Icons.logout, size: 20),
                       label: const Text("Logout"),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 10),
+                            horizontal: 20, vertical: 12),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(15),
                         ),
+                        side: BorderSide(color: Colors.blue.shade800),
                         foregroundColor: Colors.blue.shade800,
                       ),
                     ),
@@ -187,17 +208,16 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-// Profile Info Card Widget
 class ProfileInfoCard extends StatelessWidget {
   final IconData icon;
-  final Color iconColor;
+  final Color iconColor; // Explicit color for the icon
   final String title;
   final String value;
 
   const ProfileInfoCard({
     super.key,
     required this.icon,
-    required this.iconColor,
+    required this.iconColor, // Pass the icon color
     required this.title,
     required this.value,
   });
@@ -206,43 +226,66 @@ class ProfileInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: iconColor.withOpacity(0.2),
+      child: Container(
+        padding: const EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade300,
+              blurRadius: 6.0,
+              offset: Offset(0, 2),
             ),
-            child: Icon(
-              icon,
-              size: 24.0,
-              color: iconColor,
-            ),
+          ],
+          border: Border.all(
+            color: Colors.grey.shade300,
+            width: 1.0,
           ),
-          const SizedBox(width: 16.0),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  value,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey.shade700,
-                      ),
-                ),
-              ],
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    iconColor.withOpacity(0.1), // Light background for the icon
+              ),
+              child: Icon(
+                icon,
+                size: 26.0,
+                color: iconColor, // Explicitly set the icon color
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 16.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black, // Set explicit text color
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.black
+                          .withOpacity(0.7), // Set explicit text color
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
