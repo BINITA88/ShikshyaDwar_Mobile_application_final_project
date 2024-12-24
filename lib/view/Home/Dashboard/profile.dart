@@ -4,6 +4,7 @@ import 'package:shikshyadwar_mobile_application_project/view/Home/Dashboard/mess
 import 'package:shikshyadwar_mobile_application_project/view/Home/home_view.dart';
 import 'package:shikshyadwar_mobile_application_project/view/auth/signup_view.dart'; // Import SignupView
 
+// this is a profile page
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -12,7 +13,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  int _selectedIndex = 3; // Default to "Profile" 
+  int _selectedIndex = 3; // Default to "Profile"
 
   void _onNavBarTap(int index) {
     if (_selectedIndex != index) {
