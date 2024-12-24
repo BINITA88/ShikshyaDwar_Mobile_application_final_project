@@ -12,7 +12,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  int _selectedIndex = 3; // Default to "Profile" tab
+  int _selectedIndex = 3; // Default to "Profile" 
 
   void _onNavBarTap(int index) {
     if (_selectedIndex != index) {
