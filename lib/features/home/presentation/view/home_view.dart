@@ -1,14 +1,20 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/core/common/snackbar/my_snackbar.dart';
+import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/dashboard_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_state.dart';
 
-
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
-  final bool _isDarkTheme = false;
+  @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  
 
   @override
   Widget build(BuildContext context) {
@@ -20,31 +26,25 @@ class HomeView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Logout code
               showMySnackBar(
                 context: context,
                 message: 'Logging out...',
                 color: Colors.red,
               );
-
-              //   context.read<HomeCubit>().logout();
-            },
-          ),
-          Switch(
-            value: _isDarkTheme,
-            onChanged: (value) {
-              // Change theme
-              // setState(() {
-              //   _isDarkTheme = value;
-              // });
+              // Handle logout logic here
             },
           ),
         ],
       ),
-      // body: _views.elementAt(_selectedIndex),
-      body: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
-        return state.views.elementAt(state.selectedIndex);
-      }),
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          return state.selectedIndex == 0
+              ? DashboardView()  // Show DashboardView as default
+              : state.views[state.selectedIndex];  // Dynamic content for other tabs
+        },
+      ),
+
+      // Bottom Navigation Bar
       bottomNavigationBar: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           return BottomNavigationBar(
@@ -67,7 +67,8 @@ class HomeView extends StatelessWidget {
               ),
             ],
             currentIndex: state.selectedIndex,
-            selectedItemColor: Colors.white,
+            selectedItemColor: Colors.blue,
+            unselectedItemColor: Colors.grey,
             onTap: (index) {
               context.read<HomeCubit>().onTabTapped(index);
             },
