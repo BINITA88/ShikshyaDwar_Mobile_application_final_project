@@ -5,7 +5,6 @@ import 'package:shikshyadwar_mobile_application_project/core/theme/app_theme.dar
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view/splash_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
 
-
 class App extends StatelessWidget {
   const App({super.key});
 
