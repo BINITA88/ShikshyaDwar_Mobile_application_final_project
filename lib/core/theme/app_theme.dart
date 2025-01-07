@@ -8,7 +8,7 @@ class AppTheme {
     return ThemeData(
       // change the theme according to the user preference
       colorScheme: isDarkMode
-          ? const ColorScheme.dark(
+          ? ColorScheme.dark(
               primary: ThemeConstant.darkPrimaryColor,
             )
           : const ColorScheme.light(
@@ -19,11 +19,11 @@ class AppTheme {
       useMaterial3: true,
 
       // Change app bar color
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         elevation: 0,
         backgroundColor: ThemeConstant.appBarColor,
         centerTitle: true,
-        titleTextStyle: TextStyle(
+        titleTextStyle: const TextStyle(
           color: Colors.white,
           fontSize: 20,
         ),
@@ -45,13 +45,13 @@ class AppTheme {
       ),
 
       // Change text field theme
-      inputDecorationTheme: const InputDecorationTheme(
-        contentPadding: EdgeInsets.all(15),
-        border: OutlineInputBorder(),
-        labelStyle: TextStyle(
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding: const EdgeInsets.all(15),
+        border: const OutlineInputBorder(),
+        labelStyle: const TextStyle(
           fontSize: 20,
         ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             color: Colors.red,
           ),
@@ -63,12 +63,12 @@ class AppTheme {
         ),
       ),
       // Circular progress bar theme
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
+      progressIndicatorTheme: ProgressIndicatorThemeData(
         color: ThemeConstant.primaryColor,
       ),
       //Bottom navigation bar theme
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.lightGreen,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: Colors.pink.shade600, // Changed to pink.shade800
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.black,
         type: BottomNavigationBarType.fixed,
