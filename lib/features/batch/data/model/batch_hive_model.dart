@@ -5,6 +5,12 @@ import 'package:shikshyadwar_mobile_application_project/features/batch/domain/en
 
 import 'package:uuid/uuid.dart';
 
+// part garni adapter ko lagi
+
+// it is a adapter class for generating automatically
+part 'batch_hive_model.g.dart';
+// dart run build_runner build -d
+
 @HiveType(typeId: HiveTableConstant.batchTableId)
 class BatchHiveModel extends Equatable {
   @HiveField(0)
@@ -38,11 +44,16 @@ class BatchHiveModel extends Equatable {
     );
   }
 
-  // to entity list
+  // from entity list
   static List<BatchHiveModel> fromEntityList(List<BatchEntity> entityList) {
     return entityList
         .map((entity) => BatchHiveModel.fromEntity(entity))
         .toList();
+  }
+
+  // to entity list
+  static List<BatchEntity> toEntityList(List<BatchHiveModel> entities) {
+    return entities.map((e) => e.toEntity()).toList();
   }
 
   @override

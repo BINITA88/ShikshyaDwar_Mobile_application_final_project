@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/app/di/di.dart';
-import 'package:shikshyadwar_mobile_application_project/features/batch/presentation/view/batch_view.dart'; // BatchView is already imported
+import 'package:shikshyadwar_mobile_application_project/features/batch/presentation/view/batch_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/batch/presentation/view_model/batch_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/account_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/course_view.dart';
