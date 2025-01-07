@@ -14,8 +14,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +37,12 @@ class _HomeViewState extends State<HomeView> {
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           return state.selectedIndex == 0
-              ? DashboardView()  // Show DashboardView as default
-              : state.views[state.selectedIndex];  // Dynamic content for other tabs
+              ? DashboardView() // Show DashboardView as default
+              : state
+                  .views[state.selectedIndex]; // Dynamic content for other tabs
         },
       ),
-
+// bottom
       // Bottom Navigation Bar
       bottomNavigationBar: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
