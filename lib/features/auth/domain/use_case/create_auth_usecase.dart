@@ -15,6 +15,7 @@ class CreateAuthParams extends Equatable {
   final List<CourseEntity> courseId;
   final String username;
   final String password;
+   final String email;
 
   const CreateAuthParams({
     this.studentId,
@@ -24,7 +25,9 @@ class CreateAuthParams extends Equatable {
     required this.phone,
     required this.courseId,
     required this.username,
+     required this.email,
     required this.password,
+    
   });
 
   const CreateAuthParams.empty()
@@ -35,7 +38,8 @@ class CreateAuthParams extends Equatable {
         phone = '_empty.string',
         courseId = const [],
         username = '_empty.string',
-        password = '_empty.string';
+        password = '_empty.string',
+        email = '_empty.string';
 
   @override
   List<Object?> get props => [
@@ -46,6 +50,7 @@ class CreateAuthParams extends Equatable {
         phone,
         courseId,
         username,
+        email,
         password
       ];
 }
@@ -60,12 +65,10 @@ class CreateStudentUsecase
   Future<Either<Failure, void>> call(CreateAuthParams params) async {
     return await studentRepository.createStudent(StudentEntity(
       studentId: params.studentId,
-      fname: params.fname,
-      lname: params.lname,
-      image: params.image,
-      phone: params.phone,
+
       courseId: params.courseId,
       username: params.username,
+       email: params.email,
       password: params.password,
     ));
   }

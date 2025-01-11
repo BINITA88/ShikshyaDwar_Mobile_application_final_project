@@ -14,34 +14,21 @@ class AuthHiveModel extends Equatable {
   final String? studentId;
 
   @HiveField(1)
-  final String fname;
-
-  @HiveField(2)
-  final String lname;
-
-  @HiveField(3)
-  final String? image;
-
-  @HiveField(4)
-  final String phone;
-
-  @HiveField(5)
   final String username;
 
-  @HiveField(6)
+  @HiveField(2)
   final String password;
 
+  @HiveField(3)
+  final String email;
 
-  @HiveField(8)
+  @HiveField(4)
   final List<CourseHiveModel>
       courseId; // Storing course IDs as a list of strings
 
   AuthHiveModel({
     String? studentId,
-    required this.fname,
-    required this.lname,
-    this.image,
-    required this.phone,
+    required this.email,
     required this.username,
     required this.password,
     required this.courseId,
@@ -50,11 +37,8 @@ class AuthHiveModel extends Equatable {
   // Initial Constructor
   const AuthHiveModel.initial()
       : studentId = '',
-        fname = '',
-        lname = '',
-        image = '',
-        phone = '',
         username = '',
+        email = '',
         password = '',
         courseId = const [];
 
@@ -62,10 +46,7 @@ class AuthHiveModel extends Equatable {
   factory AuthHiveModel.fromEntity(StudentEntity entity) {
     return AuthHiveModel(
       studentId: entity.studentId,
-      fname: entity.fname,
-      lname: entity.lname,
-      image: entity.image,
-      phone: entity.phone,
+      email: entity.email,
       username: entity.username,
       password: entity.password,
       courseId: CourseHiveModel.fromEntityList(entity.courseId),
@@ -76,11 +57,8 @@ class AuthHiveModel extends Equatable {
   StudentEntity toEntity() {
     return StudentEntity(
       studentId: studentId,
-      fname: fname,
-      lname: lname,
-      image: image,
-      phone: phone,
       username: username,
+      email: email,
       password: password,
       courseId: CourseHiveModel.toEntityList(courseId),
     );
@@ -94,14 +72,5 @@ class AuthHiveModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        studentId,
-        fname,
-        lname,
-        image,
-        phone,
-        username,
-        password,
-        courseId
-      ];
+  List<Object?> get props => [studentId, username, email, password, courseId];
 }

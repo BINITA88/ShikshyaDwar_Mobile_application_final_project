@@ -10,9 +10,7 @@ class RegisterView extends StatelessWidget {
   final _gap = const SizedBox(height: 16);
   final _key = GlobalKey<FormState>();
 
-  final _fnameController = TextEditingController();
-  final _lnameController = TextEditingController();
-  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -112,7 +110,7 @@ class RegisterView extends StatelessWidget {
                                   ),
                                   _gap,
                                   CustomTextField(
-                                    controller: _usernameController,
+                                    controller: _emailController,
                                     label: 'Email',
                                     icon: Icons.email,
                                     validator: (value) =>

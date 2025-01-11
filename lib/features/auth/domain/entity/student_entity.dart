@@ -3,23 +3,20 @@ import 'package:shikshyadwar_mobile_application_project/features/course/domain/e
 
 class StudentEntity extends Equatable {
   final String? studentId;
-  final String fname;
-  final String lname;
-  final String? image;
-  final String phone;
+
+  // final String phone;
   final List<CourseEntity> courseId;
   final String username;
+  final String email;
   final String password;
 
   const StudentEntity({
     this.studentId,
-    required this.lname,
-    this.image,
-    required this.phone,
     required this.courseId,
     required this.username,
+    required this.email,
     required this.password,
-    required this.fname,
+
   });
 
   @override
