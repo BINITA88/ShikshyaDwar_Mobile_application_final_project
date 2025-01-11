@@ -100,36 +100,6 @@ class RegisterView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 30),
-                                  CustomTextField(
-                                    controller: _fnameController,
-                                    label: 'First Name',
-                                    icon: Icons.person,
-                                    validator: (value) =>
-                                        value == null || value.isEmpty
-                                            ? 'Please enter first name'
-                                            : null,
-                                  ),
-                                  _gap,
-                                  CustomTextField(
-                                    controller: _lnameController,
-                                    label: 'Last Name',
-                                    icon: Icons.person,
-                                    validator: (value) =>
-                                        value == null || value.isEmpty
-                                            ? 'Please enter last name'
-                                            : null,
-                                  ),
-                                  _gap,
-                                  CustomTextField(
-                                    controller: _phoneController,
-                                    label: 'Phone No',
-                                    icon: Icons.phone,
-                                    keyboardType: TextInputType.phone,
-                                    validator: (value) =>
-                                        value == null || value.isEmpty
-                                            ? 'Please enter phone number'
-                                            : null,
-                                  ),
                                   _gap,
                                   CustomTextField(
                                     controller: _usernameController,
@@ -138,6 +108,16 @@ class RegisterView extends StatelessWidget {
                                     validator: (value) =>
                                         value == null || value.isEmpty
                                             ? 'Please enter username'
+                                            : null,
+                                  ),
+                                  _gap,
+                                  CustomTextField(
+                                    controller: _usernameController,
+                                    label: 'Email',
+                                    icon: Icons.email,
+                                    validator: (value) =>
+                                        value == null || value.isEmpty
+                                            ? 'Please enter email'
                                             : null,
                                   ),
                                   _gap,
@@ -166,7 +146,6 @@ class RegisterView extends StatelessWidget {
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.blue[800],
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(15),
@@ -204,7 +183,7 @@ class RegisterView extends StatelessWidget {
                                           child: Text(
                                             'Login',
                                             style: TextStyle(
-                                              color: Colors.blue[800],
+                                              color: Colors.pink[800],
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),

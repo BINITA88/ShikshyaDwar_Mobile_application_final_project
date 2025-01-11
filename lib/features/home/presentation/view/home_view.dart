@@ -1,8 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shikshyadwar_mobile_application_project/core/common/snackbar/my_snackbar.dart';
-import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/dashboard_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_state.dart';
 
@@ -24,26 +21,19 @@ class _HomeViewState extends State<HomeView> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              showMySnackBar(
-                context: context,
-                message: 'Logging out...',
-                color: Colors.red,
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Logging out...')),
               );
-              // Handle logout logic here
+              // Handle logout logic
             },
           ),
         ],
       ),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
-          return state.selectedIndex == 0
-              ? DashboardView() // Show DashboardView as default
-              : state
-                  .views[state.selectedIndex]; // Dynamic content for other tabs
+          return state.views[state.selectedIndex];
         },
       ),
-// bottom
-      // Bottom Navigation Bar
       bottomNavigationBar: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           return BottomNavigationBar(
@@ -58,7 +48,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.group),
-                label: 'Batch',
+                label: 'Admission',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle),

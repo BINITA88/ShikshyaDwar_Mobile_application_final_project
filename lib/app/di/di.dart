@@ -1,24 +1,19 @@
 import 'package:get_it/get_it.dart';
-import 'package:shikshyadwar_mobile_application_project/features/batch/presentation/view_model/batch_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
+import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/onboarding_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
 
+//  it is a service locator
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
-  await _initBatchDependencies();
   await _initHomeDependencies();
   await _initRegisterDependencies();
   await _initLoginDependencies();
   await _initSplashScreenDependencies();
-}
-
-_initBatchDependencies() async {
-  getIt.registerFactory<BatchBloc>(
-    () => BatchBloc(),
-  );
+  await _initOnboardingScreenDependencies();
 }
 
 _initHomeDependencies() async {
@@ -44,6 +39,12 @@ _initLoginDependencies() async {
 
 _initSplashScreenDependencies() async {
   getIt.registerFactory<SplashCubit>(
-    () => SplashCubit(getIt<LoginBloc>()),
+    () => SplashCubit(getIt<OnboardingCubit>()),
+  );
+}
+
+_initOnboardingScreenDependencies() async {
+  getIt.registerFactory<OnboardingCubit>(
+    () => OnboardingCubit(getIt<LoginBloc>()),
   );
 }

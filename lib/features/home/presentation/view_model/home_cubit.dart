@@ -3,47 +3,16 @@ import 'package:shikshyadwar_mobile_application_project/features/home/presentati
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit()
-      : super(HomeState(
-          selectedIndex: 3,
-          carouselImages: [
-            'assets/images/cr1.png',
-            'assets/images/cr2.png',
-            'assets/images/cr3.png',
-          ],
-          products: [
-            {
-              "image": "assets/images/reading.png",
-              "title": "IELTS Class",
-              "date": "10 Dec 2024",
-              "duration": "2 Months",
-            },
-            {
-              "image": "assets/images/pte.png",
-              "title": "PTE Class",
-              "date": "11 Dec 2024",
-              "duration": "2 Months",
-            },
-            {
-              "image": "assets/images/reading.png",
-              "title": "SAT Class",
-              "date": "12 Dec 2024",
-              "duration": "2 Months",
-            },
-            {
-              "image": "assets/images/pte.png",
-              "title": "TOEFL Class",
-              "date": "13 Dec 2024",
-              "duration": "2 Months",
-            },
-          ],
-          views: HomeState.initial().views, // Use the initial views
-        ));
+      : super(HomeState
+            .initial()); // Use the `initial` method to ensure consistent initialization
 
   void onTabTapped(int index) {
+    // Emit new state with updated selectedIndex
     emit(state.copyWith(selectedIndex: index));
   }
 
   void updateCarouselIndex(int index) {
+    // Emit new state with updated carousel index
     emit(state.copyWith(currentCarouselIndex: index));
   }
 }
