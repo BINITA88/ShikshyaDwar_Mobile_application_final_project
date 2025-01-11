@@ -200,7 +200,7 @@ class LoginView extends StatelessWidget {
                                       //     );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue[800],
+                                      // maile yesma bg color giena so yesale theme ko elevated button ma bhayako color lincha
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(15),
                                       ),
@@ -285,7 +285,7 @@ class LoginView extends StatelessWidget {
                                         child: Text(
                                           'Sign Up',
                                           style: TextStyle(
-                                            color: Colors.blue[800],
+                                            color: Colors.pink.shade700,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),

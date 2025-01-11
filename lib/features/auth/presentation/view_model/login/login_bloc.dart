@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view/login_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
 
@@ -10,22 +11,27 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final RegisterBloc _registerBloc;
   final HomeCubit _homeCubit;
+
   LoginBloc({
     required RegisterBloc registerBloc,
     required HomeCubit homeCubit,
   })  : _registerBloc = registerBloc,
         _homeCubit = homeCubit,
         super(LoginState.initial()) {
+    // Handling navigation to the Register screen
     on<NavigateRegisterScreenEvent>((event, emit) {
       Navigator.push(
         event.context,
         MaterialPageRoute(
           builder: (context) => BlocProvider.value(
-              value: _registerBloc, child: event.destination),
+            value: _registerBloc,
+            child: event.destination,
+          ),
         ),
       );
     });
 
+    // Handling navigation to the Home screen
     on<NavigateHomeScreenEvent>((event, emit) {
       Navigator.pushReplacement(
         event.context,
@@ -35,6 +41,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             child: event.destination,
           ),
         ),
+      );
+    });
+
+    // Handling navigation to the Login screen
+    on<NavigateToLoginEvent>((event, emit) {
+      Navigator.pushReplacement(
+        event.context,
+        MaterialPageRoute(builder: (context) => LoginView()),
       );
     });
   }

@@ -19,40 +19,21 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[50],
-      body: Stack(
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: Image.asset('assets/images/splash.png'),
-                ),
-                const Text(
-                  'Student Course Management',
-                  style: TextStyle(
-                    fontSize: 25,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const CircularProgressIndicator(),
-                const SizedBox(height: 10),
-                const Text('version : 1.0.0')
-              ],
+      // backgroundColor: const Color.fromARGB(255, 239, 241, 227),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 300,
+              width: 300,
+              child: Image.asset('assets/images/logo.png'),
             ),
-          ),
-          Positioned(
-            bottom: 10,
-            left: MediaQuery.of(context).size.width / 4,
-            child: const Text(
-              'Developed by: Khatra Sir le',
-              style: TextStyle(fontSize: 15),
-            ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            const CircularProgressIndicator(),
+            const SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }

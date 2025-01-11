@@ -1,9 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shikshyadwar_mobile_application_project/app/di/di.dart';
-import 'package:shikshyadwar_mobile_application_project/features/batch/presentation/view/batch_view.dart';
-import 'package:shikshyadwar_mobile_application_project/features/batch/presentation/view_model/batch_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/account_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/course_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/dashboard_view.dart';
@@ -28,20 +24,42 @@ class HomeState extends Equatable {
     return HomeState(
       selectedIndex: 0,
       views: [
-        // Dashboard View
-        const DashboardView(), // Replace this with your actual DashboardView widget
-        // Course View
-        const CourseView(), // Replace this with your actual CourseView widget
-        // Batch View
-        BlocProvider(
-          create: (context) => getIt<BatchBloc>(),
-          child: BatchView(),
-        ),
-        // Account View
-        const AccountView(), // Replace this with your actual AccountView widget
+        const DashboardView(),
+        const CourseView(),
+        Center(child: Text('Admission')), // Placeholder for "Admission"
+        const AccountView(),
       ],
-      carouselImages: [],
-      products: [],
+      carouselImages: [
+        'assets/images/cr1.png',
+        'assets/images/cr2.png',
+        'assets/images/cr3.png',
+      ],
+      products: [
+        {
+          "image": "assets/images/reading.png",
+          "title": "IELTS Class",
+          "date": "10 Dec 2024",
+          "duration": "2 Months",
+        },
+        {
+          "image": "assets/images/pte.png",
+          "title": "PTE Class",
+          "date": "11 Dec 2024",
+          "duration": "2 Months",
+        },
+        {
+          "image": "assets/images/reading.png",
+          "title": "SAT Class",
+          "date": "12 Dec 2024",
+          "duration": "2 Months",
+        },
+        {
+          "image": "assets/images/pte.png",
+          "title": "TOEFL Class",
+          "date": "13 Dec 2024",
+          "duration": "2 Months",
+        },
+      ],
     );
   }
 

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:shikshyadwar_mobile_application_project/features/batch/data/model/batch_hive_model.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/model/course_hive_model.dart';
 
 import 'package:uuid/uuid.dart';
@@ -32,8 +31,6 @@ class AuthHiveModel extends Equatable {
   @HiveField(6)
   final String password;
 
-  @HiveField(7)
-  final BatchHiveModel batchId; // Storing only the batch ID for simplicity
 
   @HiveField(8)
   final List<CourseHiveModel>
@@ -47,7 +44,6 @@ class AuthHiveModel extends Equatable {
     required this.phone,
     required this.username,
     required this.password,
-    required this.batchId,
     required this.courseId,
   }) : studentId = studentId ?? const Uuid().v4();
 
@@ -60,7 +56,6 @@ class AuthHiveModel extends Equatable {
         phone = '',
         username = '',
         password = '',
-        batchId = const BatchHiveModel.initial(),
         courseId = const [];
 
   // From Entity
@@ -73,7 +68,6 @@ class AuthHiveModel extends Equatable {
       phone: entity.phone,
       username: entity.username,
       password: entity.password,
-      batchId: BatchHiveModel.fromEntity(entity.batchId),
       courseId: CourseHiveModel.fromEntityList(entity.courseId),
     );
   }
@@ -88,7 +82,6 @@ class AuthHiveModel extends Equatable {
       phone: phone,
       username: username,
       password: password,
-      batchId: batchId.toEntity(),
       courseId: CourseHiveModel.toEntityList(courseId),
     );
   }
@@ -109,7 +102,6 @@ class AuthHiveModel extends Equatable {
         phone,
         username,
         password,
-        batchId,
         courseId
       ];
 }

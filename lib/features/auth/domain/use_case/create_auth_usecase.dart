@@ -4,7 +4,6 @@ import 'package:shikshyadwar_mobile_application_project/app/usecase/usecase.dart
 import 'package:shikshyadwar_mobile_application_project/core/error/failure.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/entity/student_entity.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/repository/student_repository.dart';
-import 'package:shikshyadwar_mobile_application_project/features/batch/domain/entity/batch_entity.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/entity/course_entity.dart';
 
 class CreateAuthParams extends Equatable {
@@ -13,7 +12,6 @@ class CreateAuthParams extends Equatable {
   final String lname;
   final String? image;
   final String phone;
-  final BatchEntity batchId;
   final List<CourseEntity> courseId;
   final String username;
   final String password;
@@ -24,7 +22,6 @@ class CreateAuthParams extends Equatable {
     required this.lname,
     this.image,
     required this.phone,
-    required this.batchId,
     required this.courseId,
     required this.username,
     required this.password,
@@ -36,7 +33,6 @@ class CreateAuthParams extends Equatable {
         lname = '_empty.string',
         image = null,
         phone = '_empty.string',
-        batchId = BatchEntity.empty, // Use the constant
         courseId = const [],
         username = '_empty.string',
         password = '_empty.string';
@@ -48,7 +44,6 @@ class CreateAuthParams extends Equatable {
         lname,
         image,
         phone,
-        batchId,
         courseId,
         username,
         password
@@ -69,7 +64,6 @@ class CreateStudentUsecase
       lname: params.lname,
       image: params.image,
       phone: params.phone,
-      batchId: params.batchId,
       courseId: params.courseId,
       username: params.username,
       password: params.password,

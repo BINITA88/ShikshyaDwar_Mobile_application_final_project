@@ -24,7 +24,6 @@ class AuthHiveModelAdapter extends TypeAdapter<AuthHiveModel> {
       phone: fields[4] as String,
       username: fields[5] as String,
       password: fields[6] as String,
-      batchId: fields[7] as BatchHiveModel,
       courseId: (fields[8] as List).cast<CourseHiveModel>(),
     );
   }
@@ -47,8 +46,7 @@ class AuthHiveModelAdapter extends TypeAdapter<AuthHiveModel> {
       ..write(obj.username)
       ..writeByte(6)
       ..write(obj.password)
-      ..writeByte(7)
-      ..write(obj.batchId)
+
       ..writeByte(8)
       ..write(obj.courseId);
   }
