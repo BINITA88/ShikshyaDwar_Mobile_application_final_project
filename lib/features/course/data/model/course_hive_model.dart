@@ -17,42 +17,71 @@ class CourseHiveModel extends Equatable {
   @HiveField(1)
   final String courseName;
 
+  @HiveField(2)
+  final double coursePrice;
+
+  @HiveField(3)
+  final String instructor;
+
+  @HiveField(4)
+  final String courseImage;
+
+  @HiveField(5)
+  final String duration;
+
   CourseHiveModel({
     String? courseId,
     required this.courseName,
+    required this.coursePrice,
+    required this.instructor,
+    required this.courseImage,
+    required this.duration,
   }) : courseId = courseId ?? const Uuid().v4();
 
-// Initial Constructor
+  // Initial Constructor
   const CourseHiveModel.initial()
       : courseId = '',
-        courseName = '';
+        courseName = '',
+        coursePrice = 0.0,
+        instructor = '',
+        courseImage = '',
+        duration = '';
 
-// From Entity
+  // From Entity
   factory CourseHiveModel.fromEntity(CourseEntity entity) {
     return CourseHiveModel(
       courseId: entity.courseId,
       courseName: entity.courseName,
+      coursePrice: entity.coursePrice,
+      instructor: entity.instructor,
+      courseImage: entity.courseImage,
+      duration: entity.duration,
     );
   }
 
-  // to entity
+  // To Entity
   CourseEntity toEntity() {
     return CourseEntity(
       courseId: courseId,
       courseName: courseName,
+      coursePrice: coursePrice,
+      instructor: instructor,
+      courseImage: courseImage,
+      duration: duration,
     );
   }
 
-// from entity list to model list
+  // From entity list to model list
   static List<CourseHiveModel> fromEntityList(List<CourseEntity> entities) {
     return entities.map((e) => CourseHiveModel.fromEntity(e)).toList();
   }
 
-  // to entity list
+  // To entity list
   static List<CourseEntity> toEntityList(List<CourseHiveModel> entities) {
     return entities.map((e) => e.toEntity()).toList();
   }
 
   @override
-  List<Object?> get props => [courseId, courseName];
+  List<Object?> get props =>
+      [courseId, courseName, coursePrice, instructor, courseImage, duration];
 }

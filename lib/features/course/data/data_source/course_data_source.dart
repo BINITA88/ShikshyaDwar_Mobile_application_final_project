@@ -3,6 +3,7 @@ import 'package:shikshyadwar_mobile_application_project/features/course/domain/e
 
 abstract interface class ICourseDataSource {
   Future<void> createCourse(CourseEntity courseEntity);
+  Future<void> updateCourse(CourseEntity courseEntity);
 
   Future<List<CourseEntity>> getAllCourses();
 
