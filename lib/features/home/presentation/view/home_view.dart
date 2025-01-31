@@ -17,6 +17,7 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: const Text('ShikshyaDwar'),
         centerTitle: true,
+        // Removes the back icon
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),

@@ -21,7 +21,7 @@ class AppTheme {
       // Change app bar color
       appBarTheme: AppBarTheme(
         elevation: 0,
-        backgroundColor: ThemeConstant.appBarColor,
+        backgroundColor: Colors.pink[800],
         centerTitle: true,
         titleTextStyle: const TextStyle(
           color: Colors.white,
@@ -68,7 +68,8 @@ class AppTheme {
       ),
       //Bottom navigation bar theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Colors.pink.shade600, // Changed to pink.shade800
+        backgroundColor: Colors.pink[800], //
+
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.black,
         type: BottomNavigationBarType.fixed,

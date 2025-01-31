@@ -1,76 +1,67 @@
 import 'package:equatable/equatable.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:shikshyadwar_mobile_application_project/features/course/data/model/course_hive_model.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:shikshyadwar_mobile_application_project/app/constants/hive_table_constant.dart';
 
+import 'package:shikshyadwar_mobile_application_project/features/auth/domain/entity/auth_entity';
 import 'package:uuid/uuid.dart';
 
-import '../../../../app/constants/hive_table_constant.dart';
-import '../../domain/entity/student_entity.dart';
 part 'auth_hive_model.g.dart';
 
-@HiveType(typeId: HiveTableConstant.studentTableId) // Define a unique typeId
+@HiveType(typeId: HiveTableConstant.studentTableId)
 class AuthHiveModel extends Equatable {
   @HiveField(0)
-  final String? studentId;
+  final String? authId;
 
   @HiveField(1)
-  final String username;
+  final String name;
 
   @HiveField(2)
-  final String password;
-
-  @HiveField(3)
   final String email;
 
-  @HiveField(4)
-  final List<CourseHiveModel>
-      courseId; // Storing course IDs as a list of strings
+  @HiveField(3)
+  final String password;
 
   AuthHiveModel({
-    String? studentId,
+    String? authId,
+    required this.name,
     required this.email,
-    required this.username,
     required this.password,
-    required this.courseId,
-  }) : studentId = studentId ?? const Uuid().v4();
+  }) : authId = authId ?? const Uuid().v4();
 
-  // Initial Constructor
+//Initial Constructor
   const AuthHiveModel.initial()
-      : studentId = '',
-        username = '',
+      : authId = '',
+        name = '',
         email = '',
-        password = '',
-        courseId = const [];
+        password = '';
 
-  // From Entity
-  factory AuthHiveModel.fromEntity(StudentEntity entity) {
+// From Entity
+  factory AuthHiveModel.fromEntity(AuthEntity authEntity) {
     return AuthHiveModel(
-      studentId: entity.studentId,
-      email: entity.email,
-      username: entity.username,
-      password: entity.password,
-      courseId: CourseHiveModel.fromEntityList(entity.courseId),
-    );
+        authId: authEntity.authId,
+        name: authEntity.name,
+        email: authEntity.email,
+        password: authEntity.password);
   }
 
-  // To Entity
-  StudentEntity toEntity() {
-    return StudentEntity(
-      studentId: studentId,
-      username: username,
-      email: email,
-      password: password,
-      courseId: CourseHiveModel.toEntityList(courseId),
-    );
+// To Entity
+  AuthEntity toEntity() {
+    return AuthEntity(
+        authId: authId,
+        email: email,
+        contactNo: '',
+        image: null,
+        name: name,
+        password: '');
   }
 
-  // From Entity List
-  static List<AuthHiveModel> fromEntityList(List<StudentEntity> entityList) {
+// From Entity List
+  static List<AuthHiveModel> fromEntityList(List<AuthEntity> entityList) {
     return entityList
-        .map((entity) => AuthHiveModel.fromEntity(entity))
+        .map((authEntity) => AuthHiveModel.fromEntity(authEntity))
         .toList();
   }
 
   @override
-  List<Object?> get props => [studentId, username, email, password, courseId];
+  List<Object?> get props => [authId, name];
 }
