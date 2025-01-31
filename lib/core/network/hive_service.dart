@@ -10,42 +10,69 @@ import 'package:shikshyadwar_mobile_application_project/features/course/data/mod
 
 // this is local data source
 class HiveService {
-  Future<void> init() async {
+  static Future<void> init() async {
     // Initialize the database
     var directory = await getApplicationDocumentsDirectory();
-    var path = '${directory.path}softwarica_student_management.db';
+    var path = '${directory.path}shikshyadwar.db';
 
     Hive.init(path);
 
-    // Register adapters
+    // Register Adapters
     Hive.registerAdapter(CourseHiveModelAdapter());
+    Hive.registerAdapter(CategoryHiveModelAdapter());
     Hive.registerAdapter(AuthHiveModelAdapter());
-    Hive.registerAdapter(CategoryHiveModelAdapter()); // Register category adapter
   }
 
-  // Auth Queries
-  Future<void> addStudent(AuthHiveModel authHiveModel) async {
-    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
-    await box.put(authHiveModel.studentId, authHiveModel);
+/*
+  register box
+  {
+    fname : "asd",
+    lname : "asd",
+    batch : {batchId : 1, batchName : "Batch 1"},
+    courses : [{courseId : 1, courseName : "Course 1"}, {courseId : 2, courseName : "Course 2"}],
+  }
+*/
+
+// OR
+
+/*
+ {
+    fname : "asd",
+    lname : "asd",
+    batch : 1,
+    courses : [1,3,4],
+  }
+*/
+
+// Student Queries
+  Future<void> addStudent(AuthHiveModel student) async {
+    var box =
+        await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    await box.put(student.authId, student);
   }
 
   Future<void> deleteStudent(String id) async {
-    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    var box =
+        await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
     await box.delete(id);
   }
 
-  Future<List<AuthHiveModel>> getAllStudent() async {
-    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
-    var student = box.values.toList();
-    return student;
+  Future<List<AuthHiveModel>> getAllStudents() async {
+    var box =
+        await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    var students = box.values.toList();
+    return students;
   }
 
-  Future<AuthHiveModel?> login(String username, String password) async {
-    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+  Future<AuthHiveModel?> loginStudent(String name, String password) async {
+    var box =
+        await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+
     var auth = box.values.firstWhere(
-        (element) =>
-            element.username == username && element.password == password,
+        (element) => element.name == name && element.password == password,
         orElse: () => AuthHiveModel.initial());
+
+    return auth;
   }
 
   // Course Queries
@@ -78,27 +105,32 @@ class HiveService {
 
   // Category Queries
   Future<void> addCategory(CategoryHiveModel categoryHiveModel) async {
-    var box = await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
     await box.put(categoryHiveModel.categoryId, categoryHiveModel);
   }
 
   Future<void> deleteCategory(String id) async {
-    var box = await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
     await box.delete(id);
   }
 
   Future<List<CategoryHiveModel>> getAllCategories() async {
-    var box = await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
     var categories = box.values.toList();
     return categories;
   }
 
   // Update Category
   Future<void> updateCategory(CategoryHiveModel updatedCategory) async {
-    var box = await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
     // Check if the category already exists
     if (box.containsKey(updatedCategory.categoryId)) {
-      await box.put(updatedCategory.categoryId, updatedCategory); // Update the category
+      await box.put(
+          updatedCategory.categoryId, updatedCategory); // Update the category
     } else {
       throw Exception("Category not found");
     }
@@ -106,10 +138,16 @@ class HiveService {
 
   // Clear all boxes
   Future<void> clearAll() async {
-    await Hive.deleteBoxFromDisk(HiveTableConstant.batchBox);
+    await Hive.deleteBoxFromDisk(HiveTableConstant.categoryBox);
     await Hive.deleteBoxFromDisk(HiveTableConstant.courseBox);
     await Hive.deleteBoxFromDisk(HiveTableConstant.studentBox);
-    await Hive.deleteBoxFromDisk(HiveTableConstant.categoryBox); // Delete category box
+    await Hive.deleteBoxFromDisk(
+        HiveTableConstant.categoryBox); // Delete category box
+  }
+
+  // Clear Student Box
+  Future<void> clearStudentBox() async {
+    await Hive.deleteBoxFromDisk(HiveTableConstant.studentBox);
   }
 
   Future<void> close() async {
