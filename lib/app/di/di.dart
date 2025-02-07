@@ -6,13 +6,17 @@ import 'package:shikshyadwar_mobile_application_project/core/network/api_service
 import 'package:shikshyadwar_mobile_application_project/core/network/hive_service.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/local_datasource/auth_local_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/remote_datasource/auth_remote_datasource.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/remote_datasource/otp_remote_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/auth_local_repository/auth_local_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/auth_remote_repository.dart/auth_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/otp_remote_repository.dart/otp_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/get_verify_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/login_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/register_user_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/verify/verify_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/onboarding_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
@@ -25,6 +29,7 @@ Future<void> initDependencies() async {
   await _initApiService();
   await _initHomeDependencies();
   await _initRegisterDependencies();
+  await _initVerifyDependencies();
   await _initSharedPreferences();
   await _initLoginDependencies();
   await _initSplashScreenDependencies();
@@ -127,14 +132,51 @@ _initRegisterDependencies() {
       registerUseCase: getIt(),
       uploadImageUsecase: getIt(),
       createStudentUsecase: getIt(),
+      verifyBloc: getIt(),
     ),
   );
 }
 
+/// ====================  Verify email ===================
+// _initVerifyDependencies() {
+//   //DataSource
 
+//   //UseCase
+//   getIt.registerLazySingleton<GetVerifyUsecase>(
+//     () => GetVerifyUsecase(
+//       getIt<OtpRemoteRepository>(),
+//     ),
+//   );
+// }
 
+_initVerifyDependencies() {
+  //DataSource
 
+  getIt.registerLazySingleton<OtpRemoteDatasource>(
+    () => OtpRemoteDatasource(getIt<Dio>()),
+  );
 
+  //Repository
+
+  getIt.registerLazySingleton<OtpRemoteRepository>(
+    () => OtpRemoteRepository(getIt<OtpRemoteDatasource>()),
+  );
+
+  //UseCase
+  getIt.registerLazySingleton<GetVerifyUsecase>(
+    () => GetVerifyUsecase(
+      getIt<OtpRemoteRepository>(),
+    ),
+  );
+
+  getIt.registerFactory<VerifyBloc>(
+    () => VerifyBloc(
+      verifyusecase: getIt(),
+    ),
+  );
+}
+
+/// ====================  Login ===================
 _initLoginDependencies() async {
   //Token Shared Preferences
   getIt.registerLazySingleton<TokenSharedPrefs>(
@@ -143,7 +185,6 @@ _initLoginDependencies() async {
 
   //UseCase
 // Use common StudentLocalDatasource and StudentLocalRepository
-  
 
   getIt.registerLazySingleton<LoginUseCase>(() =>
       LoginUseCase(getIt<TokenSharedPrefs>(), getIt<AuthRemoteRepository>()));

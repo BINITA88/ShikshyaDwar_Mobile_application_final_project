@@ -23,13 +23,15 @@ class CourseHiveModelAdapter extends TypeAdapter<CourseHiveModel> {
       instructor: fields[3] as String,
       courseImage: fields[4] as String,
       duration: fields[5] as String,
+      category: fields[6] as String,
+      courseDescription: fields[7] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, CourseHiveModel obj) {
     writer
-      ..writeByte(6) // Total number of fields
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.courseId)
       ..writeByte(1)
@@ -41,7 +43,11 @@ class CourseHiveModelAdapter extends TypeAdapter<CourseHiveModel> {
       ..writeByte(4)
       ..write(obj.courseImage)
       ..writeByte(5)
-      ..write(obj.duration);
+      ..write(obj.duration)
+      ..writeByte(6)
+      ..write(obj.category)
+      ..writeByte(7)
+      ..write(obj.courseDescription);
   }
 
   @override

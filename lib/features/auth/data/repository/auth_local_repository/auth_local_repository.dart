@@ -39,11 +39,25 @@ class AuthLocalRepository implements IAuthRepository {
 
   @override
   Future<Either<Failure, String>> loginUser(
-      String username, String password) async {
+      String email, String password) async {
     try {
-      final token = await _authLocalDataSource.loginUser(username, password);
+      final token = await _authLocalDataSource.loginUser(email, password);
       return (Right(token));
     } catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> sendAndVerifyOTP(
+      String email, String otp) async {
+    try {
+      final verifiedOtp =
+          await _authLocalDataSource.sendAndVerifyOTP(email, otp);
+      return Right(
+          verifiedOtp); // Ensure the response from _authLocalDataSource is correctly passed
+    } catch (e) {
+      // You can also specify different types of exceptions if needed
       return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }

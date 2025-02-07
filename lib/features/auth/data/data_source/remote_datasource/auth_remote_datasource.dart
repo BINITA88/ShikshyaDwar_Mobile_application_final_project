@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:shikshyadwar_mobile_application_project/app/constants/api_endpoints.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/auth_data_source.dart';
@@ -39,10 +38,10 @@ class AuthRemoteDatasource implements IAuthDataSource {
   }
 
   @override
-  Future<String> loginUser(String name, String password) async {
+  Future<String> loginUser(String email, String password) async {
     try {
       Response response = await _dio.post(ApiEndpoints.login, data: {
-        "name": name,
+        "email": email,
         "password": password,
       });
 
@@ -56,6 +55,25 @@ class AuthRemoteDatasource implements IAuthDataSource {
       throw Exception(e);
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  @override
+  Future<String> sendAndVerifyOTP(String email, String otp) async {
+    try {
+      Response response = await _dio.post(ApiEndpoints.sendotp, data: {
+        "email": email,
+        "otp": otp, // Send OTP for verification
+      });
+
+      if (response.statusCode == 200) {
+        return response.data["message"] ??
+            "OTP verified successfully for $email";
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e.response?.data ?? e.message);
     }
   }
 

@@ -14,6 +14,7 @@ class AuthApiModel extends Equatable {
   final String contactNo;
   final String name;
   final String password;
+  final String? otp; // Optional OTP field
 
   const AuthApiModel({
     this.authId,
@@ -22,6 +23,7 @@ class AuthApiModel extends Equatable {
     required this.contactNo,
     required this.name,
     required this.password,
+    this.otp, // Optional OTP field
   });
 
   factory AuthApiModel.fromJson(Map<String, dynamic> json) =>
@@ -29,26 +31,30 @@ class AuthApiModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$AuthApiModelToJson(this);
 
-  //To Entity
+  // To Entity
   AuthEntity toEntity() {
     return AuthEntity(
-        email: email,
-        contactNo: contactNo,
-        name: name,
-        password: password,
-        image: image);
+      email: email,
+      contactNo: contactNo,
+      name: name,
+      password: password,
+      image: image,
+      otp: otp, // Ensure OTP is passed to the entity
+    );
   }
 
+  // From Entity
   factory AuthApiModel.fromEntity(AuthEntity entity) {
     return AuthApiModel(
         name: entity.name,
         password: entity.password,
         email: entity.email,
         contactNo: entity.contactNo,
-        image: entity.image);
+        image: entity.image,
+        otp: entity.otp); // Ensure OTP is handled here as well
   }
 
   @override
   List<Object?> get props =>
-      [authId, email, image, contactNo, name, password];
+      [authId, email, image, contactNo, name, password, otp];
 }

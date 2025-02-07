@@ -7,21 +7,21 @@ import 'package:shikshyadwar_mobile_application_project/features/auth/domain/rep
 
 
 class LoginParams extends Equatable {
-  final String name;
+  final String email;
   final String password;
 
   const LoginParams({
-    required this.name,
-    required this.password,
+    required this.email,
+    required this.password, 
   });
 
   // Initial Constructor
   const LoginParams.initial()
-      : name = '',
+      : email = '',
         password = '';
 
   @override
-  List<Object> get props => [name, password];
+  List<Object> get props => [email, password];
 }
 
 class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
@@ -32,7 +32,7 @@ class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
 
   @override
   Future<Either<Failure, String>> call(LoginParams params) {
-    return repository.loginUser(params.name, params.password).then((value) {
+    return repository.loginUser(params.email, params.password).then((value) {
       return value.fold(
         (failure) => Left(failure),
         (token) {

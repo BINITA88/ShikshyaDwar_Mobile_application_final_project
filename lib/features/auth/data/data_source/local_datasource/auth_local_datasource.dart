@@ -5,7 +5,6 @@ import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/model/auth_hive_model.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/entity/auth_entity';
 
-
 class AuthLocalDataSource implements IAuthDataSource {
   final HiveService _hiveService;
 
@@ -14,12 +13,14 @@ class AuthLocalDataSource implements IAuthDataSource {
   @override
   Future<AuthEntity> getCurrentUser() {
     return Future.value(const AuthEntity(
-        authId: '1',
-        email: '',
-        contactNo: '',
-        image: null,
-        name: '',
-        password: ''));
+      authId: '1',
+      email: '',
+      contactNo: '',
+      image: null,
+      name: '',
+      password: '',
+      otp: '',
+    ));
   }
 
   @override
@@ -42,6 +43,16 @@ class AuthLocalDataSource implements IAuthDataSource {
       return Future.value();
     } catch (e) {
       return Future.error(e);
+    }
+  }
+
+  @override
+  Future<String> sendAndVerifyOTP(String email, String otp) async {
+    try {
+      await _hiveService.verifyOTP(email, otp);
+      return "Success"; // Return a success message instead of Future.value
+    } catch (e) {
+      throw e; // Re-throw the error so it can be caught in the repository
     }
   }
 

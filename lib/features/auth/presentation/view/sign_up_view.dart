@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view/login_view.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view/verify_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
 
 class SignUpView extends StatefulWidget {
@@ -226,16 +227,22 @@ class _SignUpViewState extends State<SignUpView> {
                         final registerState =
                             context.read<RegisterBloc>().state;
                         final imageName = registerState.imageName;
-                        context.read<RegisterBloc>().add(
-                              RegisterUserEvent(
-                                context: context,
-                                name: _usernameController.text,
-                                email: _emailController.text,
-                                contactNo: _contactNoController.text,
-                                password: _passwordController.text,
-                                image: imageName,
-                              ),
-                            );
+
+                        context.read<RegisterBloc>().add(RegisterUserEvent(
+                              context: context,
+                              name: _usernameController.text,
+                              email: _emailController.text,
+                              contactNo: _contactNoController.text,
+                              password: _passwordController.text,
+                              image: imageName,
+                            ));
+
+                        context
+                            .read<RegisterBloc>()
+                            .add(NavigateVerifyScreenEvent(
+                              destination: VerifyView(),
+                              context: context,
+                            ));
                       }
                     },
                     style: ElevatedButton.styleFrom(

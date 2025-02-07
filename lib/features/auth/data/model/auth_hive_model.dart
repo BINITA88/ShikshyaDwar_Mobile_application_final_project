@@ -21,11 +21,15 @@ class AuthHiveModel extends Equatable {
   @HiveField(3)
   final String password;
 
+  @HiveField(4)
+  final String? otp;
+
   AuthHiveModel({
     String? authId,
     required this.name,
     required this.email,
     required this.password,
+    this.otp,
   }) : authId = authId ?? const Uuid().v4();
 
 //Initial Constructor
@@ -33,26 +37,31 @@ class AuthHiveModel extends Equatable {
       : authId = '',
         name = '',
         email = '',
-        password = '';
+        password = '',
+        otp = '';
 
 // From Entity
   factory AuthHiveModel.fromEntity(AuthEntity authEntity) {
     return AuthHiveModel(
-        authId: authEntity.authId,
-        name: authEntity.name,
-        email: authEntity.email,
-        password: authEntity.password);
+      authId: authEntity.authId,
+      name: authEntity.name,
+      email: authEntity.email,
+      password: authEntity.password,
+      otp: authEntity.otp,
+    );
   }
 
 // To Entity
   AuthEntity toEntity() {
     return AuthEntity(
-        authId: authId,
-        email: email,
-        contactNo: '',
-        image: null,
-        name: name,
-        password: '');
+      authId: authId,
+      email: email,
+      contactNo: '',
+      image: null,
+      name: name,
+      password: '',
+      otp: otp,
+    );
   }
 
 // From Entity List
@@ -63,5 +72,5 @@ class AuthHiveModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [authId, name];
+  List<Object?> get props => [authId, name, email, otp];
 }

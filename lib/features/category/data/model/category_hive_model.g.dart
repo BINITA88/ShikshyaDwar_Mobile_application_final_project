@@ -2,9 +2,13 @@
 
 part of 'category_hive_model.dart';
 
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
 class CategoryHiveModelAdapter extends TypeAdapter<CategoryHiveModel> {
   @override
-  final int typeId = 3; // Assign a unique ID for Category
+  final int typeId = 3;
 
   @override
   CategoryHiveModel read(BinaryReader reader) {
@@ -21,7 +25,7 @@ class CategoryHiveModelAdapter extends TypeAdapter<CategoryHiveModel> {
   @override
   void write(BinaryWriter writer, CategoryHiveModel obj) {
     writer
-      ..writeByte(2) // Total number of fields
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.categoryId)
       ..writeByte(1)

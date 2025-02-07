@@ -29,6 +29,12 @@ class CourseHiveModel extends Equatable {
   @HiveField(5)
   final String duration;
 
+  @HiveField(6)
+  final Object category;
+
+  @HiveField(7)
+  final String courseDescription;
+
   CourseHiveModel({
     String? courseId,
     required this.courseName,
@@ -36,6 +42,8 @@ class CourseHiveModel extends Equatable {
     required this.instructor,
     required this.courseImage,
     required this.duration,
+    required this.category,
+    required this.courseDescription,
   }) : courseId = courseId ?? const Uuid().v4();
 
   // Initial Constructor
@@ -45,7 +53,9 @@ class CourseHiveModel extends Equatable {
         coursePrice = 0.0,
         instructor = '',
         courseImage = '',
-        duration = '';
+        duration = '',
+        category = '',
+        courseDescription = '';
 
   // From Entity
   factory CourseHiveModel.fromEntity(CourseEntity entity) {
@@ -56,6 +66,8 @@ class CourseHiveModel extends Equatable {
       instructor: entity.instructor,
       courseImage: entity.courseImage,
       duration: entity.duration,
+      category: entity.category,
+      courseDescription: entity.courseDescription,
     );
   }
 
@@ -68,6 +80,8 @@ class CourseHiveModel extends Equatable {
       instructor: instructor,
       courseImage: courseImage,
       duration: duration,
+      category: category,
+      courseDescription: courseDescription,
     );
   }
 
@@ -82,6 +96,14 @@ class CourseHiveModel extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [courseId, courseName, coursePrice, instructor, courseImage, duration];
+  List<Object?> get props => [
+        courseId,
+        courseName,
+        coursePrice,
+        instructor,
+        courseImage,
+        duration,
+        category,
+        courseDescription,
+      ];
 }

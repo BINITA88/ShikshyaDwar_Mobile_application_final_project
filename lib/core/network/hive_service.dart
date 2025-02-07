@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
@@ -46,30 +45,36 @@ class HiveService {
 
 // Student Queries
   Future<void> addStudent(AuthHiveModel student) async {
-    var box =
-        await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
     await box.put(student.authId, student);
   }
 
   Future<void> deleteStudent(String id) async {
-    var box =
-        await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
     await box.delete(id);
   }
 
   Future<List<AuthHiveModel>> getAllStudents() async {
-    var box =
-        await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
     var students = box.values.toList();
     return students;
   }
 
   Future<AuthHiveModel?> loginStudent(String name, String password) async {
-    var box =
-        await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
 
     var auth = box.values.firstWhere(
         (element) => element.name == name && element.password == password,
+        orElse: () => AuthHiveModel.initial());
+
+    return auth;
+  }
+
+  Future<AuthHiveModel?> verifyOTP(String email, String otp) async {
+    var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.studentBox);
+
+    var auth = box.values.firstWhere(
+        (element) => element.email == email && element.otp == otp,
         orElse: () => AuthHiveModel.initial());
 
     return auth;

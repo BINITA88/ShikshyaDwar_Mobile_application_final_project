@@ -47,4 +47,17 @@ class AuthRemoteRepository implements IAuthRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  // @override
+  // Future<Either<Failure, String>> sendAndVerifyOTP(String email, String otp) async {
+  //   try {
+  //     final verifiedOtp = await _authRemoteDatasource.sendAndVerifyOTP(
+  //         email, otp); // Corrected to use _authRemoteDatasource
+  //     return Right(verifiedOtp); // Ensure the response is correctly passed
+  //   } catch (e) {
+  //     // You can also specify different types of exceptions if needed
+  //     return Left(
+  //         ApiFailure(message: e.toString())); // Updated to match API failure
+  //   }
+  // }
 }

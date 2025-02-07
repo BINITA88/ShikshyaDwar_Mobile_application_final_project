@@ -1,0 +1,63 @@
+
+
+first make entity,model then repo then only go for hive service for making query 
+we will make queries in hive service 
+
+// repository chai domain layer ko ma garna parcha 
+
+
+jati ota function cha teti otta class huncha usecase ma 
+ use cSE WIT PARAMETR AND USE CASE WITHOUT PARAMETER
+so kasaile parAMETER FARKAUCHA KASAILE FARKAUNA SO MAKE  GENREIC CLASS <T>
+
+
+login signup using hive database
+
+cloning branch
+git clone -b hive_database httpp... 
+
+For api step by step 
+Go to data layer 
+install jsonAnotation
+1.make apimodel
+2.remote data source
+3.remote repository
+4.Api service
+5.get_it (di)
+
+FOR GET ALL 
+FIRST MAKE DTO ->datasource->repo->getit dependency
+
+
+remote data source ma api end point rakhni thaucha 
+
+
+
+AT First i go to entity then to model then domain repo then usecase 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

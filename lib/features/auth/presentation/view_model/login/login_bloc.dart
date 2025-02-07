@@ -52,7 +52,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(state.copyWith(isLoading: true));
 
       final params = LoginParams(
-        name: event.name,
+        email: event.email,
         password: event.password,
       );
 

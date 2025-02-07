@@ -16,8 +16,8 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
 
-  final _usernameController = TextEditingController(text: 'Roshan');
-  final _passwordController = TextEditingController(text: 'Roshan@123');
+  final _emailController = TextEditingController(text: 'Binita1234@gmail.com');
+  final _passwordController = TextEditingController(text: 'Binita@1234');
   final _gap = const SizedBox(height: 20);
 
   @override
@@ -70,7 +70,7 @@ class _LoginViewState extends State<LoginView> {
                       const SizedBox(height: 40),
                       TextFormField(
                         key: const ValueKey('username'),
-                        controller: _usernameController,
+                        controller: _emailController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -87,7 +87,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           filled: true,
                           fillColor: Colors.white,
-                          labelText: 'Username',
+                          labelText: 'Email',
                           prefixIcon: Icon(Icons.person_outline,
                               color: Colors.pink[800]),
                           labelStyle: TextStyle(color: Colors.grey[600]),
@@ -154,13 +154,14 @@ class _LoginViewState extends State<LoginView> {
                             context.read<LoginBloc>().add(
                                   LoginStudentEvent(
                                     context: context,
-                                    name: _usernameController.text,
+                                    email: _emailController.text,
                                     password: _passwordController.text,
                                   ),
                                 );
 
-                            if (_usernameController.text == 'Roshan' &&
-                                _passwordController.text == 'Roshan@123') {
+                            if (_emailController.text ==
+                                    'Binita1234@gmail.com' &&
+                                _passwordController.text == 'Binita@1234') {
                               context.read<LoginBloc>().add(
                                     NavigateHomeScreenEvent(
                                       destination: HomeView(),
@@ -170,8 +171,8 @@ class _LoginViewState extends State<LoginView> {
                             } else {
                               showMySnackBar(
                                 context: context,
-                                message: 'Invalid username or password',
-                                color: Colors.red,
+                                message: 'Successfully login',
+                                color: Colors.green,
                               );
                             }
                           }
