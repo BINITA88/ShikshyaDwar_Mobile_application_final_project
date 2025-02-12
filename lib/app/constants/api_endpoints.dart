@@ -20,4 +20,19 @@ class ApiEndpoints {
 
   // ask ....
   static const String uploadImage = "users/uploadImage";
+
+  static const String getAllCourses = "/productlist";
+
+  // ====================== Course Routes ======================
+  static const String getCourseDetailById = "/productDetail/";
+
+  static const String getAllCourse = "/productlist";
+
+  static const String uploadCourseImage = "users/postproduct";
 }
+
+
+
+
+// internet connectivity afai garni 
+

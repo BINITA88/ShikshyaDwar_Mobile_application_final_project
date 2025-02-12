@@ -17,6 +17,14 @@ import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/verify/verify_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/data/data_source/local_datasource/course_local_data_source.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/data/data_source/remote_datasource/course_remote_datasource.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/data/dto/get_all_course_dto.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/data/repository/course_local_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/data/repository/course_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_all_course_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_course_details_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view_model/course_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/onboarding_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
@@ -34,6 +42,7 @@ Future<void> initDependencies() async {
   await _initLoginDependencies();
   await _initSplashScreenDependencies();
   await _initOnboardingScreenDependencies();
+  await _initCourseDependencies();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -192,12 +201,60 @@ _initLoginDependencies() async {
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       registerBloc: getIt<RegisterBloc>(),
-      homeCubit: getIt<HomeCubit>(),
+      // homeCubit: getIt<HomeCubit>(),
+      courseBloc: getIt<CourseBloc>(),
       loginUseCase: getIt<LoginUseCase>(),
     ),
   );
 }
 
+// ..........................course...............
+_initCourseDependencies() {
+  // =========================== Data Source ===========================
+
+  getIt.registerFactory<CourseLocalDataSource>(
+      () => CourseLocalDataSource(hiveService: getIt<HiveService>()));
+
+  getIt.registerFactory<CourseRemoteDataSource>(
+      () => CourseRemoteDataSource(getIt<Dio>()));
+
+  // =========================== Repository ===========================
+
+  getIt.registerLazySingleton<CourseLocalRepository>(() =>
+      CourseLocalRepository(
+          courseLocalDataSource: getIt<CourseLocalDataSource>()));
+
+  getIt.registerLazySingleton<CourseRemoteRepository>(
+    () => CourseRemoteRepository(
+      getIt<CourseRemoteDataSource>(),
+    ),
+  );
+
+  // Usecases
+
+  getIt.registerLazySingleton<GetAllCourseUsecase>(
+    () => GetAllCourseUsecase(
+      courseRepository: getIt<CourseRemoteRepository>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<GetCourseDetailUseCase>(
+    () => GetCourseDetailUseCase(
+      courseRepository: getIt<CourseRemoteRepository>(),
+    ),
+  );
+
+// Bloc
+  getIt.registerFactory<CourseBloc>(
+    () => CourseBloc(
+      getAllCourseUsecase: getIt<GetAllCourseUsecase>(),
+      getCourseDetailUsecase:
+          getIt<GetCourseDetailUseCase>(), // Fixed: Removed duplicate parameter
+    ),
+  );
+}
+
+// ......................................
 _initHomeDependencies() async {
   getIt.registerFactory<HomeCubit>(
     () => HomeCubit(),

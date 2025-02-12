@@ -11,5 +11,3 @@ void main() async {
     App(),
   );
 }
-
-

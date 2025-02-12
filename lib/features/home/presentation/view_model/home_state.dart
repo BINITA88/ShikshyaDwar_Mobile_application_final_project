@@ -25,7 +25,7 @@ class HomeState extends Equatable {
       selectedIndex: 0,
       views: [
         const DashboardView(),
-        const CourseView(),
+        //  CourseView(),
         Center(child: Text('Admission')), // Placeholder for "Admission"
         const AccountView(),
       ],

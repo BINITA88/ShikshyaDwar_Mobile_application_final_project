@@ -8,27 +8,29 @@
 //   List<Object> get props => [];
 // }
 
-
-// class BookingScreenEvent extends CourseEvent {
-//   final BuildContext context;
-//   final Widget destination;
-
-//   const BookingScreenEvent({
-//     required this.context,
-//     required this.destination,
-//   });
-// }
+// class CourseLoad extends CourseEvent {}
 
 
-
+ 
+//   @override
+//   List<Object> get props => [];
 
 part of 'course_bloc.dart';
 
-sealed class CourseEvent extends Equatable {
+abstract class CourseEvent extends Equatable {
   const CourseEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class LoadCoursesEvent extends CourseEvent {}
+class CourseLoad extends CourseEvent {} // Existing event
+
+class CourseDetailLoad extends CourseEvent { // New event
+  final String courseId;
+
+  const CourseDetailLoad(this.courseId);
+
+  @override
+  List<Object?> get props => [courseId];
+}

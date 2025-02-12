@@ -1,63 +1,52 @@
 import 'package:equatable/equatable.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/entity/course_entity.dart';
-import 'package:uuid/uuid.dart';
 
-import '../../../../app/constants/hive_table_constant.dart';
+part 'course_api_model.g.dart';
 
-part 'course_hive_model.g.dart';
-
-@HiveType(typeId: HiveTableConstant.courseTableId)
 @JsonSerializable()
-class CourseHiveModel extends Equatable {
-  @HiveField(0)
+class CourseApiModel extends Equatable {
+  @JsonKey(name: '_id')
   final String? courseId;
 
-  @HiveField(1)
+  @JsonKey(name: 'product_name')
   final String courseName;
 
-  @HiveField(2)
+  @JsonKey(name: 'product_price')
   final num coursePrice;
 
-  @HiveField(3)
   final String instructor;
 
-  @HiveField(4)
+  @JsonKey(name: 'product_image')
   final String? courseImage;
 
-  @HiveField(5)
   final String duration;
 
-  @HiveField(6)
-  final String? category; // Assuming category is a String
+  final String? category;
 
-  @HiveField(7)
+  @JsonKey(name: 'product_description')
   final String courseDescription;
 
-  CourseHiveModel({
-    String? courseId,
+  CourseApiModel({
+    this.courseId,
     required this.courseName,
     required this.coursePrice,
     required this.instructor,
-     this.courseImage,
+    this.courseImage,
     required this.duration,
-     this.category,
+    this.category,
     required this.courseDescription,
-  }) : courseId = courseId ?? const Uuid().v4();
+  });
+  factory CourseApiModel.fromJson(Map<String, dynamic> json) =>
+      _$CourseApiModelFromJson(json);
 
-  const CourseHiveModel.initial()
-      : courseId = '',
-        courseName = '',
-        coursePrice = 0,
-        instructor = '',
-        courseImage = '',
-        duration = '',
-        category = '',
-        courseDescription = '';
-// FROM ENTITY
-  factory CourseHiveModel.fromEntity(CourseEntity entity) {
-    return CourseHiveModel(
+  Map<String, dynamic> toJson() => _$CourseApiModelToJson(this);
+
+  // To entity
+
+// From Entity
+  factory CourseApiModel.fromEntity(CourseEntity entity) {
+    return CourseApiModel(
       courseId: entity.courseId,
       courseName: entity.courseName,
       coursePrice: entity.coursePrice,
@@ -68,7 +57,8 @@ class CourseHiveModel extends Equatable {
       courseDescription: entity.courseDescription,
     );
   }
-// TO ENTITY
+
+  // To Entity
   CourseEntity toEntity() {
     return CourseEntity(
       courseId: courseId,
@@ -82,12 +72,16 @@ class CourseHiveModel extends Equatable {
     );
   }
 
-  static List<CourseHiveModel> fromEntityList(List<CourseEntity> entities) {
-    return entities.map((e) => CourseHiveModel.fromEntity(e)).toList();
+  // To Entity List
+  static List<CourseEntity> toEntityList(List<CourseApiModel> entityList) {
+    return entityList.map((data) => data.toEntity()).toList();
   }
 
-  static List<CourseEntity> toEntityList(List<CourseHiveModel> entities) {
-    return entities.map((e) => e.toEntity()).toList();
+  // From entity list
+  static List<CourseApiModel> fromEntityList(List<CourseEntity> entityList) {
+    return entityList
+        .map((entity) => CourseApiModel.fromEntity(entity))
+        .toList();
   }
 
   @override

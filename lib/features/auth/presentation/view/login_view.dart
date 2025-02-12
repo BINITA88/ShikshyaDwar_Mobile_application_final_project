@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view/sign_up_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view/course_view.dart';
+import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
 
 import '../../../../core/common/snackbar/my_snackbar.dart';
 import '../../../home/presentation/view/home_view.dart';
@@ -164,7 +166,7 @@ class _LoginViewState extends State<LoginView> {
                                 _passwordController.text == 'Binita@1234') {
                               context.read<LoginBloc>().add(
                                     NavigateHomeScreenEvent(
-                                      destination: HomeView(),
+                                      destination: CourseView(),
                                       context: context,
                                     ),
                                   );

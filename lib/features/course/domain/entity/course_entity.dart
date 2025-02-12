@@ -4,24 +4,35 @@ import 'package:flutter/material.dart';
 class CourseEntity extends Equatable {
   final String? courseId;
   final String courseName;
-  final double coursePrice;
+  final num coursePrice;
   final String instructor;
-  final String courseImage;
+  final String? courseImage;
   final String duration;
   final String courseDescription;
-  final Object category;
+  final String? category;
 
   // category is remaining here as per your comment
 
   const CourseEntity(
       {required this.coursePrice,
       required this.instructor,
-      required this.courseImage,
+     this.courseImage,
       required this.duration,
       this.courseId,
       required this.courseName,
-      required this.category,
+       this.category,
       required this.courseDescription});
+
+
+  const CourseEntity.empty()
+      : courseId = '_empty.courseId',
+        courseName = '_empty.courseName',
+        coursePrice = 0,
+        instructor = '_empty.instructor',
+        courseImage = null,
+        duration = '_empty.duration',
+        courseDescription =  '_empty.courseDescription',
+        category =null;
 
   @override
   List<Object?> get props => [
