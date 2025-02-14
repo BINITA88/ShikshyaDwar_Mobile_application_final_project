@@ -2,35 +2,32 @@ import 'package:equatable/equatable.dart';
 
 class BookingsEntity extends Equatable {
   final String? bookId;
-  final String address;
+  final String? Address;
   final String city;
   final String country;
-  final String status;
-  final Object user;
-  final String shift;
-  final String classMode;
-  final bool interestedInCounseling;
+  final String? status;
+  final String? shift;
+  final String? classMode;
+  final bool? interestedInCounseling;
 
   const BookingsEntity({
     this.bookId,
-    required this.address,
+    this.Address,
     required this.city,
     required this.country,
-    required this.status,
-    required this.user,
-    required this.shift,
-    required this.classMode,
-    required this.interestedInCounseling,
+    this.status,
+    this.shift,
+    this.classMode,
+    this.interestedInCounseling,
   });
 
   @override
   List<Object?> get props => [
         bookId,
-        address,
+        Address,
         city,
         country,
         status,
-        user,
         shift,
         classMode,
         interestedInCounseling,
@@ -38,11 +35,10 @@ class BookingsEntity extends Equatable {
 
   static BookingsEntity empty() {
     return BookingsEntity(
-      address: '',
+      Address: '',
       city: '',
       country: '',
       status: '',
-      user: Object(), // Replace with a suitable default value for user
       shift: '',
       classMode: '',
       interestedInCounseling: false,

@@ -8,6 +8,7 @@ abstract class ChatEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+/// ✅ Event to load messages from the database
 class LoadMessages extends ChatEvent {
   final String receiverId;
 
@@ -17,6 +18,7 @@ class LoadMessages extends ChatEvent {
   List<Object?> get props => [receiverId];
 }
 
+/// ✅ Event to send a new message
 class SendMessageEvent extends ChatEvent {
   final String receiverId;
   final String message;
@@ -27,6 +29,7 @@ class SendMessageEvent extends ChatEvent {
   List<Object?> get props => [receiverId, message];
 }
 
+/// ✅ Event triggered when a new message is received via WebSocket
 class NewMessageReceived extends ChatEvent {
   final Message message;
 

@@ -52,8 +52,10 @@ class _HomeViewState extends State<HomeView> {
                 label: 'Routine',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle),
-                label: 'Account',
+                icon: Icon(Icons.message),
+                // icon: Icon(Icons.account_circle),
+                label: 'Message',
+                // label: 'Account',
               ),
             ],
             currentIndex: state.selectedIndex,

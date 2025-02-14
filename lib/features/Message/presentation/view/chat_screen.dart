@@ -7,39 +7,46 @@ import 'package:shikshyadwar_mobile_application_project/features/Message/domain/
 import 'package:shikshyadwar_mobile_application_project/features/Message/presentation/widget/chat_input.dart';
 import 'package:shikshyadwar_mobile_application_project/features/Message/presentation/widget/chat_message_list.dart';
 import '../view_model/chat_bloc.dart';
+import '../view_model/chat_event.dart';
 
 class ChatScreen extends StatefulWidget {
   final String receiverId;
   final String userId;
 
-  const ChatScreen({Key? key, required this.receiverId, required this.userId})
-      : super(key: key);
+  const ChatScreen({super.key, required this.receiverId, required this.userId});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  late SocketService socketService;
+  late WebSocketManager socketService;
   late ChatBloc chatBloc;
 
   @override
   void initState() {
     super.initState();
-    socketService = getIt<SocketService>();
+
+    // ✅ Get WebSocketManager instance
+    socketService = getIt<WebSocketManager>();
+
+    // ✅ Initialize ChatBloc with dependencies
     chatBloc = ChatBloc(
       getMessages: getIt<GetMessages>(),
       sendMessage: getIt<SendMessage>(),
       socketService: socketService,
     );
 
-    socketService.connect(widget.userId, chatBloc);
+    // ✅ Connect WebSocket with userId
+    socketService.connect(widget.userId);
+
+    // ✅ Load previous messages when screen starts
+    chatBloc.add(LoadMessages(widget.receiverId));
   }
 
   @override
   void dispose() {
-    socketService.disconnect();
-    chatBloc.close(); // Properly dispose of BLoC
+    chatBloc.close(); // ✅ Properly dispose of BLoC
     super.dispose();
   }
 
@@ -48,7 +55,6 @@ class _ChatScreenState extends State<ChatScreen> {
     return BlocProvider.value(
       value: chatBloc,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Chat")),
         body: Column(
           children: [
             Expanded(child: ChatMessagesList(receiverId: widget.receiverId)),

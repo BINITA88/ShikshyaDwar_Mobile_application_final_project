@@ -22,9 +22,12 @@ import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/verify/verify_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/booking/data/data_source/remote_data_source/booking_remote_data_source.dart';
+import 'package:shikshyadwar_mobile_application_project/features/booking/data/repository/booking_remote_repository/booking_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/booking/domain/use_case/create_booking_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/data_source/local_datasource/course_local_data_source.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/data_source/remote_datasource/course_remote_datasource.dart';
-import 'package:shikshyadwar_mobile_application_project/features/course/data/dto/get_all_course_dto.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/repository/course_local_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/repository/course_remote_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_all_course_usecase.dart';
@@ -40,18 +43,19 @@ import '../../features/Message/domain/repository/chat_repository.dart';
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
+  _initSocketService(); // ✅ Register WebSocketManager FIRST
+  _initSetupLocator(); // ✅ Register chat-related dependencies
   await _initHiveService();
   await _initApiService();
   await _initHomeDependencies();
-  _initSocketService();
   await _initRegisterDependencies();
+  await _initCourseBookingDependencies();
   await _initVerifyDependencies();
   await _initSharedPreferences();
   await _initLoginDependencies();
   await _initSplashScreenDependencies();
   await _initOnboardingScreenDependencies();
   await _initCourseDependencies();
-  _initSetupLocator();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -109,15 +113,35 @@ _initApiService() {
 //   );
 // }
 
-/// ====================  Register ===================
+/// ==================== web socket Register ===================
 
 void _initSocketService() {
-  if (!GetIt.I.isRegistered<SocketService>()) {
-    getIt.registerLazySingleton<SocketService>(() => SocketService());
+  if (!GetIt.I.isRegistered<WebSocketManager>()) {
+    getIt.registerLazySingleton<WebSocketManager>(() => WebSocketManager());
   }
 }
 
-// .............................................
+// ---------------------------- Chat Dependencies ----------------------------
+
+void _initSetupLocator() {
+  getIt.registerLazySingleton<ChatRemoteDataSource>(
+    () => ChatRemoteDataSourceImpl(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(remoteDataSource: getIt<ChatRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetMessages>(
+    () => GetMessages(getIt<ChatRepository>()),
+  );
+
+  getIt.registerLazySingleton<SendMessage>(
+    () => SendMessage(getIt<ChatRepository>()),
+  );
+}
+
+// .............................................register.......................
 
 _initRegisterDependencies() {
   //DataSource
@@ -160,6 +184,40 @@ _initRegisterDependencies() {
       createStudentUsecase: getIt(),
       verifyBloc: getIt(),
     ),
+  );
+}
+
+// ...............................booking.......................................
+_initCourseBookingDependencies() {
+  //DataSource
+
+  // getIt.registerLazySingleton<AuthLocalDataSource>(
+  //   () => AuthLocalDataSource(getIt<HiveService>()),
+  // );
+
+  getIt.registerLazySingleton<BookingRemoteDataSource>(
+    () => BookingRemoteDataSource(getIt<Dio>()),
+  );
+
+//Repository
+
+  // getIt.registerLazySingleton(
+  //   () => AuthLocalRepository(getIt<AuthLocalDataSource>()),
+  // );
+
+  getIt.registerLazySingleton<BookingRemoteRepository>(
+    () => BookingRemoteRepository(getIt<BookingRemoteDataSource>()),
+  );
+
+//UseCase
+  getIt.registerLazySingleton<CreateBookingUsecase>(
+    () => CreateBookingUsecase(
+      getIt<BookingRemoteRepository>(),
+    ),
+  );
+
+  getIt.registerFactory<BookingBloc>(
+    () => BookingBloc(createBookingUsecase: getIt()),
   );
 }
 
@@ -224,26 +282,6 @@ _initLoginDependencies() async {
     ),
   );
 }
-// ---------------------------- Chat Dependencies ----------------------------
-
-void _initSetupLocator() {
-  getIt.registerLazySingleton<ChatRemoteDataSource>(
-    () => ChatRemoteDataSourceImpl(dio: getIt<Dio>()),
-  );
-
-  getIt.registerLazySingleton<ChatRepository>(
-    () => ChatRepositoryImpl(remoteDataSource: getIt<ChatRemoteDataSource>()),
-  );
-
-  getIt.registerLazySingleton<GetMessages>(
-    () => GetMessages(getIt<ChatRepository>()),
-  );
-
-  getIt.registerLazySingleton<SendMessage>(
-    () => SendMessage(getIt<ChatRepository>()),
-  );
-}
-// ..............................................................
 
 // ..........................course...............
 _initCourseDependencies() {

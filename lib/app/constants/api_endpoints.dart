@@ -29,6 +29,9 @@ class ApiEndpoints {
   static const String getAllCourse = "/productlist";
   static const String courseImageUrl = "  http://10.0.2.2:9000/public/uploads";
   static const String uploadCourseImage = "users/postproduct";
+
+  // ====================== Booking Routes ======================
+  static const String courseBooking = "/postbooking/";
 }
 
 

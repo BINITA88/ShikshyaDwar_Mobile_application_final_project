@@ -18,7 +18,7 @@ class CreateBookingUsecase
     implements UsecaseWithParams<void, CreateBookingParams> {
   final IBookingRepository bookingRepository;
 
-  CreateBookingUsecase({required this.bookingRepository});
+  CreateBookingUsecase(this.bookingRepository);
 
   @override
   Future<Either<Failure, void>> call(CreateBookingParams params) async {
