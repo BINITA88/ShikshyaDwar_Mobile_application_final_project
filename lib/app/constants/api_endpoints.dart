@@ -16,7 +16,7 @@ class ApiEndpoints {
   static const String getAllStudent = "users/userlist";
   static const String postEmailConfirmation = "/users/confirmation/:token";
   static const String deleteStudent = "users/deleteUser/:id";
-  static const String imageUrl = "  http://10.0.2.2:9000/public/uploads/";
+  static const String imageUrl = "  http://10.0.2.2:9000/public/profile";
 
   // ask ....
   static const String uploadImage = "users/uploadImage";
@@ -27,7 +27,7 @@ class ApiEndpoints {
   static const String getCourseDetailById = "/productDetail/";
 
   static const String getAllCourse = "/productlist";
-
+  static const String courseImageUrl = "  http://10.0.2.2:9000/public/uploads";
   static const String uploadCourseImage = "users/postproduct";
 }
 

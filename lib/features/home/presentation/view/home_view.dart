@@ -44,12 +44,12 @@ class _HomeViewState extends State<HomeView> {
                 label: 'Dashboard',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.book),
-                label: 'Course',
+                icon: Icon(Icons.event_seat_outlined),
+                label: 'MockTest',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.group),
-                label: 'Admission',
+                icon: Icon(Icons.schedule),
+                label: 'Routine',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle),

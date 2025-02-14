@@ -5,7 +5,7 @@ import 'package:shikshyadwar_mobile_application_project/features/course/presenta
 
 class CourseDetailView extends StatelessWidget {
   final String courseId;
-  final String baseUrl = "http://10.0.2.2:9000/public/uploads/";
+  final String baseUrl = "http://10.0.2.2:9000/";
 
   const CourseDetailView({Key? key, required this.courseId}) : super(key: key);
 
@@ -33,47 +33,77 @@ class CourseDetailView extends StatelessWidget {
 
           final course = state.selectedCourse!;
 
+          // ✅ Ensure correct image URL
+          String fullImageUrl =
+              (course.courseImage != null && course.courseImage!.isNotEmpty)
+                  ? "$baseUrl${course.courseImage}"
+                  : "https://via.placeholder.com/150"; // Fallback image
+
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  course.courseImage != null && course.courseImage!.isNotEmpty
-                      ? Image.network(
-                          "$baseUrl${course.courseImage}",
-                          height: 200,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.image_not_supported),
-                        )
-                      : const Icon(Icons.image, size: 100),
+                  // ✅ Course Image
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      fullImageUrl,
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: 200,
+                        color: Colors.grey[300],
+                        child: const Center(
+                          child: Icon(Icons.image_not_supported,
+                              size: 50, color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 10),
+
+                  // ✅ Course Name
                   Text(
                     course.courseName,
                     style: const TextStyle(
                         fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
+
+                  // ✅ Instructor Name
                   Text(
                     "Instructor: ${course.instructor}",
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 10),
+
+                  // ✅ Course Price
                   Text(
-                    "Price: \$${course.coursePrice}",
+                    "Price: Rs.${course.coursePrice}",
                     style: const TextStyle(fontSize: 18, color: Colors.green),
                   ),
-                  const SizedBox(height: 10),
                   Text(
-                    "Category: ${course.category ?? 'Unknown'}",
-                    style: const TextStyle(fontSize: 16, color: Colors.blueAccent),
+                    "Category: ${"Course"}",
+                    style: const TextStyle(
+                        fontSize: 18, color: Color.fromARGB(255, 12, 12, 12)),
+                  ),
+                  Text(
+                    "Duration: ${course.duration}",
+                    style: const TextStyle(
+                        fontSize: 18, color: Color.fromARGB(255, 221, 116, 5)),
                   ),
                   const SizedBox(height: 10),
+
+                  // ✅ Course Description
                   Text(
                     "Description:",
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+
                   const SizedBox(height: 5),
                   Text(
                     course.courseDescription,

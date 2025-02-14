@@ -218,8 +218,8 @@ _initLoginDependencies() async {
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       registerBloc: getIt<RegisterBloc>(),
-      // homeCubit: getIt<HomeCubit>(),
-      courseBloc: getIt<CourseBloc>(),
+      homeCubit: getIt<HomeCubit>(),
+      // courseBloc: getIt<CourseBloc>(),
       loginUseCase: getIt<LoginUseCase>(),
     ),
   );
