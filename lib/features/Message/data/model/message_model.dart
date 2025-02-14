@@ -1,4 +1,3 @@
-
 import 'package:shikshyadwar_mobile_application_project/features/Message/domain/entity/message.dart';
 
 class MessageModel extends Message {
@@ -12,11 +11,14 @@ class MessageModel extends Message {
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
-      id: json['_id'],
-      senderId: json['senderId'],
-      receiverId: json['receiverId'],
-      message: json['message'],
-      timestamp: DateTime.parse(json['createdAt']),
+      id: json['_id'].toString(), // ✅ Ensure ID is always a String
+      senderId: json['senderId'].toString(),
+      receiverId: json['receiverId'].toString(),
+      message: json['message'] ?? "",
+      timestamp: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt']) ??
+              DateTime.now() // ✅ Handle timestamp parsing
+          : DateTime.now(),
     );
   }
 

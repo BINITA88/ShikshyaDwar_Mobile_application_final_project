@@ -18,8 +18,7 @@ class _ChatInputState extends State<ChatInput> {
   void _sendMessage(BuildContext context) {
     final messageText = _controller.text.trim();
     if (messageText.isNotEmpty) {
-      BlocProvider.of<ChatBloc>(context)
-          .add(SendMessageEvent(widget.receiverId, messageText));
+      BlocProvider.of<ChatBloc>(context).add(SendMessageEvent(widget.receiverId, messageText));
       _controller.clear(); // Clear input field after sending message
     }
   }

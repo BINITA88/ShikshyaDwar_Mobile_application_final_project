@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view/booking_form_view.dart';
+import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view_model/course_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view_model/course_state.dart';
 
@@ -108,6 +110,40 @@ class CourseDetailView extends StatelessWidget {
                   Text(
                     course.courseDescription,
                     style: const TextStyle(fontSize: 16),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // ✅ "Book Now" Button
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final courseBloc = context.read<BookingBloc>();
+
+                        // ✅ Navigate to Course Detail Page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                              value:
+                                  courseBloc, // ✅ Pass existing Bloc instance
+                              child: BookingFormView(),
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 32),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        "Book Now",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
                   ),
                 ],
               ),
