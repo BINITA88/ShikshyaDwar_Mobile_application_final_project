@@ -4,6 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shikshyadwar_mobile_application_project/app/shared_prefs/token_shared_prefs.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/api_service.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/hive_service.dart';
+import 'package:shikshyadwar_mobile_application_project/core/socket_service.dart';
+import 'package:shikshyadwar_mobile_application_project/features/Message/data/data_source/chat_remote_datasource.dart';
+import 'package:shikshyadwar_mobile_application_project/features/Message/data/repository/chat_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/Message/domain/use_case/get_messages.dart';
+import 'package:shikshyadwar_mobile_application_project/features/Message/domain/use_case/send_message.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/local_datasource/auth_local_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/remote_datasource/auth_remote_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/remote_datasource/otp_remote_datasource.dart';
@@ -29,6 +34,8 @@ import 'package:shikshyadwar_mobile_application_project/features/home/presentati
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/onboarding_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
 
+import '../../features/Message/domain/repository/chat_repository.dart';
+
 //  it is a service locator
 final getIt = GetIt.instance;
 
@@ -36,6 +43,7 @@ Future<void> initDependencies() async {
   await _initHiveService();
   await _initApiService();
   await _initHomeDependencies();
+  _initSocketService();
   await _initRegisterDependencies();
   await _initVerifyDependencies();
   await _initSharedPreferences();
@@ -43,6 +51,7 @@ Future<void> initDependencies() async {
   await _initSplashScreenDependencies();
   await _initOnboardingScreenDependencies();
   await _initCourseDependencies();
+  _initSetupLocator();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -101,6 +110,14 @@ _initApiService() {
 // }
 
 /// ====================  Register ===================
+
+void _initSocketService() {
+  if (!GetIt.I.isRegistered<SocketService>()) {
+    getIt.registerLazySingleton<SocketService>(() => SocketService());
+  }
+}
+
+// .............................................
 
 _initRegisterDependencies() {
   //DataSource
@@ -207,6 +224,26 @@ _initLoginDependencies() async {
     ),
   );
 }
+// ---------------------------- Chat Dependencies ----------------------------
+
+void _initSetupLocator() {
+  getIt.registerLazySingleton<ChatRemoteDataSource>(
+    () => ChatRemoteDataSourceImpl(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(remoteDataSource: getIt<ChatRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetMessages>(
+    () => GetMessages(getIt<ChatRepository>()),
+  );
+
+  getIt.registerLazySingleton<SendMessage>(
+    () => SendMessage(getIt<ChatRepository>()),
+  );
+}
+// ..............................................................
 
 // ..........................course...............
 _initCourseDependencies() {
