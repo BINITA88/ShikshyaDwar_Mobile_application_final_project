@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:shikshyadwar_mobile_application_project/features/Message/presentation/view/chat_screen.dart';
+import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/account_view.dart';
+import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/course_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view/course_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/dashboard_view.dart';
 
@@ -26,6 +29,8 @@ class HomeState extends Equatable {
         const DashboardView(),
         CourseView(),
         Center(child: Text('Admission')), // Placeholder for "Admission"
+        const ChatScreen(receiverId: '', userId: '',),
+
         // const AccountView(),
       ],
       carouselImages: [
