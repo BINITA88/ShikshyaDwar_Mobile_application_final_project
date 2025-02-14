@@ -166,7 +166,7 @@ class _LoginViewState extends State<LoginView> {
                                 _passwordController.text == 'Binita@1234') {
                               context.read<LoginBloc>().add(
                                     NavigateHomeScreenEvent(
-                                      destination: CourseView(),
+                                      destination: HomeView(),
                                       context: context,
                                     ),
                                   );
