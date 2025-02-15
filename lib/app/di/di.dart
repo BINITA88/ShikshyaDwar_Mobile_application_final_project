@@ -34,6 +34,12 @@ import 'package:shikshyadwar_mobile_application_project/features/course/domain/u
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_course_details_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view_model/course_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/data/data_source/remote_datasource/payment_remte_data_source.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/data/repository/payment_repository_impl.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/domain/repository/payment_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/domain/use_cases/get_stripe_api_key_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/domain/use_cases/proccess_payment_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/presentation/payment_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/onboarding_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
 
@@ -50,6 +56,7 @@ Future<void> initDependencies() async {
   await _initHomeDependencies();
   await _initRegisterDependencies();
   await _initCourseBookingDependencies();
+  await _initPaymentDependencies();
   await _initVerifyDependencies();
   await _initSharedPreferences();
   await _initLoginDependencies();
@@ -217,7 +224,40 @@ _initCourseBookingDependencies() {
   );
 
   getIt.registerFactory<BookingBloc>(
-    () => BookingBloc(createBookingUsecase: getIt()),
+    () => BookingBloc(
+      createBookingUsecase: getIt(),
+      paymentBloc: getIt(),
+    ),
+  );
+}
+
+// ...............................payment.......................................
+
+_initPaymentDependencies() {
+  // ✅ Register Remote Data Source
+  getIt.registerLazySingleton<PaymentRemoteDataSource>(
+    () => PaymentRemoteDataSourceImpl(dio: getIt<Dio>()),
+  );
+
+  // ✅ Register Repository
+  getIt.registerLazySingleton<PaymentRepository>(
+    () => PaymentRepositoryImpl(remoteDataSource: getIt()),
+  );
+
+  // ✅ Register Use Cases
+  getIt.registerLazySingleton(
+    () => ProcessPaymentUseCase(repository: getIt()),
+  );
+  getIt.registerLazySingleton(
+    () => GetStripeApiKeyUseCase(repository: getIt()),
+  );
+
+  // ✅ Register Bloc
+  getIt.registerFactory(
+    () => PaymentBloc(
+      processPaymentUseCase: getIt(),
+      getStripeApiKeyUseCase: getIt(),
+    ),
   );
 }
 
@@ -323,8 +363,8 @@ _initCourseDependencies() {
   getIt.registerFactory<CourseBloc>(
     () => CourseBloc(
       getAllCourseUsecase: getIt<GetAllCourseUsecase>(),
-      getCourseDetailUsecase:
-          getIt<GetCourseDetailUseCase>(), // Fixed: Removed duplicate parameter
+      getCourseDetailUsecase: getIt<GetCourseDetailUseCase>(),
+      bookingBloc: getIt(), // Fixed: Removed duplicate parameter
     ),
   );
 }

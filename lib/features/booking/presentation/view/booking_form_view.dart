@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shikshyadwar_mobile_application_project/app/di/di.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/domain/entity/bookings_entity.dart';
+import 'package:shikshyadwar_mobile_application_project/features/booking/domain/use_case/create_booking_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_event.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_state.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/presentation/payment_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/presentation/view/payment_screen.dart';
 
 class BookingFormView extends StatefulWidget {
   @override
@@ -47,6 +52,11 @@ class _BookingFormViewState extends State<BookingFormView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // ✅ Added AppBar
+        title: const Text("Book Your Course"),
+        centerTitle: true,
+      ),
       body: BlocListener<BookingBloc, BookingState>(
         listener: (context, state) {
           if (state is BookingCreated) {
@@ -168,20 +178,32 @@ class _BookingFormViewState extends State<BookingFormView> {
                 ),
                 const SizedBox(height: 20),
 
-                // Submit Button
-                ElevatedButton(
-                  onPressed: () => _submitBooking(context),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+               ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => PaymentBloc(processPaymentUseCase: getIt(), getStripeApiKeyUseCase: getIt(),
+                                // ✅ Correctly provide use case
+                              ),
+                              child: PaymentScreen(),
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 32),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        "Submit Booking",
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    "Submit Booking",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
               ],
             ),
           ),

@@ -5,6 +5,8 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+
+
 android {
     namespace = "com.binita.shikshyadwar_mobile_application_project"
     compileSdk = flutter.compileSdkVersion

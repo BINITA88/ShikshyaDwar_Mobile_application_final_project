@@ -7,6 +7,8 @@ import 'package:shikshyadwar_mobile_application_project/features/booking/present
 import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view/course_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/dashboard_view.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/presentation/payment_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/payment/presentation/view/payment_screen.dart';
 
 class HomeState extends Equatable {
   final int selectedIndex;
@@ -31,8 +33,8 @@ class HomeState extends Equatable {
         const DashboardView(),
         BlocProvider(
           create: (_) => GetIt.instance<
-              BookingBloc>(), // Ensure GetIt is properly initialized
-          child: BookingFormView(),
+              PaymentBloc>(), // Ensure GetIt is properly initialized
+          child: PaymentScreen(),
         ),
         Center(child: Text('Admission')), // Placeholder for "Admission"
         const ChatScreen(

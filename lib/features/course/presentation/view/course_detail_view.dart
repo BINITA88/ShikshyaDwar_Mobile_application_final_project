@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shikshyadwar_mobile_application_project/app/di/di.dart';
+import 'package:shikshyadwar_mobile_application_project/features/booking/domain/use_case/create_booking_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view/booking_form_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view_model/course_bloc.dart';
@@ -13,7 +16,7 @@ class CourseDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch course details when view is opened
+    // Fetch course details when the view is opened
     context.read<CourseBloc>().add(CourseDetailLoad(courseId));
 
     return Scaffold(
@@ -88,7 +91,7 @@ class CourseDetailView extends StatelessWidget {
                     style: const TextStyle(fontSize: 18, color: Colors.green),
                   ),
                   Text(
-                    "Category: ${"Course"}",
+                    "Category: Course",
                     style: const TextStyle(
                         fontSize: 18, color: Color.fromARGB(255, 12, 12, 12)),
                   ),
@@ -118,15 +121,14 @@ class CourseDetailView extends StatelessWidget {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        final courseBloc = context.read<BookingBloc>();
-
-                        // ✅ Navigate to Course Detail Page
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => BlocProvider.value(
-                              value:
-                                  courseBloc, // ✅ Pass existing Bloc instance
+                            builder: (context) => BlocProvider(
+                              create: (context) => BookingBloc(
+                                createBookingUsecase: GetIt.instance<
+                                    CreateBookingUsecase>(), paymentBloc: getIt(), // ✅ Correctly provide use case
+                              ),
                               child: BookingFormView(),
                             ),
                           ),

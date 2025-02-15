@@ -24,6 +24,18 @@ abstract class CourseEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+
+class NavigateBookingScreenEvent extends CourseEvent {
+  final BuildContext context;
+  final Widget destination;
+
+  const NavigateBookingScreenEvent({
+    required this.context,
+    required this.destination,
+  });
+}
+
+
 class CourseLoad extends CourseEvent {} // Existing event
 
 class CourseDetailLoad extends CourseEvent { // New event
