@@ -56,7 +56,10 @@ dependencies:
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
   socket_io_client: ^3.0.2
-
+  flutter_stripe: ^9.3.0  # Ensure you are using the latest version
+  # esewa_pnp: ^1.0.2
+  # khalti_flutter: ^2.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
