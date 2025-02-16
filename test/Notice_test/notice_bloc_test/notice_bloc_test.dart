@@ -5,7 +5,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shikshyadwar_mobile_application_project/core/error/failure.dart';
-import 'package:shikshyadwar_mobile_application_project/features/notice/Presentation/view_models/notice_event.dart';
 import 'package:shikshyadwar_mobile_application_project/features/notice/domain/entity/notice_entity.dart';
 import 'package:shikshyadwar_mobile_application_project/features/notice/Presentation/view_models/notice_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/notice/domain/use%20_case/get_all_notice_usecase.dart';
@@ -13,7 +12,7 @@ import 'package:shikshyadwar_mobile_application_project/features/notice/domain/u
 import 'get_all_notice_usecase.mock.dart';
 
 void main() {
-  late GetAllNoticeUsecase getAllNoticeUsecase;
+  late GetAllNoticesUseCase getAllNoticeUsecase;
   late NoticeBloc noticeBloc;
 
   // Mock data for notice entities

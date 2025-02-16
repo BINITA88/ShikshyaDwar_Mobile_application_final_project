@@ -6,16 +6,16 @@ import 'package:shikshyadwar_mobile_application_project/features/category/domain
 import 'package:shikshyadwar_mobile_application_project/features/category/domain/repository/category_repository.dart';
 
 class CreateCategoryParams extends Equatable {
-  final String categoryName;
+  final String message;
 
   const CreateCategoryParams({
-    required this.categoryName,
+    required this.message,
   });
 
-  const CreateCategoryParams.empty() : categoryName = '_empty.string';
+  const CreateCategoryParams.empty() : message = '_empty.string';
 
   @override
-  List<Object?> get props => [categoryName];
+  List<Object?> get props => [message];
 }
 
 class CreateCategoryUsecase implements UsecaseWithParams<void, CreateCategoryParams> {
@@ -26,7 +26,7 @@ class CreateCategoryUsecase implements UsecaseWithParams<void, CreateCategoryPar
   @override
   Future<Either<Failure, void>> call(CreateCategoryParams params) async {
     return await categoryRepository.createCategory(CategoryEntity(
-      categoryName: params.categoryName,
+      message: params.message,
     ));
   }
 }

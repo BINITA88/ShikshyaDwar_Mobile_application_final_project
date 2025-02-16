@@ -32,6 +32,12 @@ class ApiEndpoints {
 
   // ====================== Booking Routes ======================
   static const String courseBooking = "/postbooking/";
+
+  // ====================== Notice ======================
+  static const String getnotice = "/notifications/";
+
+  // ====================== Routine ======================
+  static const String getroutine = "schedules/getschedule/";
 }
 
 
