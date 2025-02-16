@@ -55,16 +55,39 @@ class RoutineTable extends StatelessWidget {
 
   const RoutineTable({Key? key, required this.routines}) : super(key: key);
 
-  Color _getStatusColor(RoutineStatus status) {
+  /// ✅ **Applies fixed color for index 2 & 5 (Red) and index 4 (Yellow), else dynamic**
+  Color _getStatusColor(int index, RoutineStatus status) {
+    if (index == 2 || index == 5)
+      return Colors.red.shade100; // ✅ Force 3rd & 6th as Red
+    if (index == 4) return Colors.yellow.shade100; // ✅ Force 5th as Yellow
+
     switch (status) {
       case RoutineStatus.active:
-        return Colors.green;
+        return Colors.green.shade100; // ✅ Light green for active
       case RoutineStatus.cancelled:
-        return Colors.red;
+        return Colors.red.shade100; // ✅ Light red for cancelled
       case RoutineStatus.paused:
-        return Colors.amber;
+        return Colors.yellow.shade100; // ✅ Light yellow for paused
       default:
-        return Colors.grey;
+        return Colors.grey.shade200;
+    }
+  }
+
+  /// ✅ **Adjust text colors to match background for readability**
+  Color _getTextColor(int index, RoutineStatus status) {
+    if (index == 2 || index == 5)
+      return Colors.red.shade800; // ✅ Ensure dark red text
+    if (index == 4) return Colors.orange.shade800; // ✅ Ensure dark yellow text
+
+    switch (status) {
+      case RoutineStatus.active:
+        return Colors.green.shade800;
+      case RoutineStatus.cancelled:
+        return Colors.red.shade800;
+      case RoutineStatus.paused:
+        return Colors.orange.shade800;
+      default:
+        return Colors.black;
     }
   }
 
@@ -96,14 +119,14 @@ class RoutineTable extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  color: _getStatusColor(routine.status),
+                  color: _getStatusColor(index, routine.status),
                   child: ListTile(
                     title: Text(
                       routine.subject,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: _getTextColor(index, routine.status),
                       ),
                     ),
                     subtitle: Column(
@@ -111,21 +134,23 @@ class RoutineTable extends StatelessWidget {
                       children: [
                         Text(
                           '${routine.day}, ${routine.time}',
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.white70),
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: _getTextColor(index, routine.status)),
                         ),
                         Text(
                           routine.type,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontStyle: FontStyle.italic,
-                            color: Colors.white,
+                            color: _getTextColor(index, routine.status),
                           ),
                         ),
                       ],
                     ),
                     trailing:
-                        const Icon(Icons.calendar_today, color: Colors.white),
+                        const Icon(Icons.calendar_today, color: Colors.black54),
                   ),
                 );
               },
