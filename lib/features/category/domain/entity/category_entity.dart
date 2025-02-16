@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 
 class CategoryEntity extends Equatable {
   final String? categoryId;
-  final String categoryName;
+  final String message;
  
 
   // category is remaining here as per your comment
 
   const CategoryEntity({
     this.categoryId,
-    required this.categoryName,
+    required this.message,
   });
 
   @override
   List<Object?> get props => [
         categoryId,
-        categoryName,
+        message,
        
       ];
 }

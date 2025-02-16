@@ -6,15 +6,15 @@ import 'package:equatable/equatable.dart';
 
 class UpdateCategoryParams extends Equatable {
   final String categoryId; // ID is required for updating
-  final String categoryName; // Correctly named for category
+  final String message; // Correctly named for category
 
   const UpdateCategoryParams({
     required this.categoryId,
-    required this.categoryName,
+    required this.message,
   });
 
   @override
-  List<Object?> get props => [categoryId, categoryName];
+  List<Object?> get props => [categoryId, message];
 }
 
 class UpdateCategoryUsecase {
@@ -25,7 +25,7 @@ class UpdateCategoryUsecase {
   Future<Either<Failure, void>> call(UpdateCategoryParams params) async {
     return await categoryRepository.updateCategory(CategoryEntity(
       categoryId: params.categoryId,
-      categoryName: params.categoryName,
+      message: params.message,
     ));
   }
 }

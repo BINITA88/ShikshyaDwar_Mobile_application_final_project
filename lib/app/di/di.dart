@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shikshyadwar_mobile_application_project/app/shared_prefs/token_shared_prefs.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/api_service.dart';
@@ -34,12 +35,22 @@ import 'package:shikshyadwar_mobile_application_project/features/course/domain/u
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_course_details_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view_model/course_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
+import 'package:shikshyadwar_mobile_application_project/features/notice/Presentation/view_models/notice_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/notice/data/remote_data_source/notice_remote_datasource.dart';
+import 'package:shikshyadwar_mobile_application_project/features/notice/data/repository/notice_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/notice/domain/repository/notice_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/notice/domain/use%20_case/get_all_notice_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/payment/data/data_source/remote_datasource/payment_remte_data_source.dart';
 import 'package:shikshyadwar_mobile_application_project/features/payment/data/repository/payment_repository_impl.dart';
 import 'package:shikshyadwar_mobile_application_project/features/payment/domain/repository/payment_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/payment/domain/use_cases/get_stripe_api_key_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/payment/domain/use_cases/proccess_payment_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/payment/presentation/payment_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/routine/Presentation/routine_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/routine/data/data_source/remote_datasource/routine_remote_datasource_impl.dart';
+import 'package:shikshyadwar_mobile_application_project/features/routine/data/repository/routine_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/routine/domain/repository/routine_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/routine/domain/use%20_case/get_all_routine._usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/onboarding_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
 
@@ -56,6 +67,8 @@ Future<void> initDependencies() async {
   await _initHomeDependencies();
   await _initRegisterDependencies();
   await _initCourseBookingDependencies();
+  await _initNoticeDependencies();
+  _initRoutineDependencies();
   await _initPaymentDependencies();
   await _initVerifyDependencies();
   await _initSharedPreferences();
@@ -260,6 +273,98 @@ _initPaymentDependencies() {
     ),
   );
 }
+// ..........................notice...........................
+
+_initNoticeDependencies() {
+  getIt.registerLazySingleton<NoticeRemoteDataSource>(
+    () => NoticeRemoteDataSource(getIt<Dio>()),
+  );
+
+  // ✅ Register Remote Data Source
+  getIt.registerLazySingleton<INoticeRemoteDataSource>(
+    () => NoticeRemoteDataSource(getIt()),
+  );
+
+  // ✅ Register Repository Interface
+  getIt.registerLazySingleton<INoticeRepository>(
+    () => NoticeRepositoryImpl(remoteDataSource: getIt()),
+  );
+  getIt.registerLazySingleton<NoticeRepositoryImpl>(
+    () =>
+        NoticeRepositoryImpl(remoteDataSource: getIt<NoticeRemoteDataSource>()),
+  );
+
+  // ✅ Register Use Cases
+  getIt.registerLazySingleton(
+    () => GetAllNoticesUseCase(
+      noticeRepository: getIt(),
+    ),
+  );
+  getIt.registerFactory<NoticeBloc>(
+    () => NoticeBloc(
+      getAllNoticesUseCase: getIt(),
+    ),
+  );
+}
+// .........................................
+void _initRoutineDependencies() {
+  // ✅ Ensure Dio is registered first
+    getIt.registerLazySingleton<RoutineRemoteDataSource>(
+    () => RoutineRemoteDataSourceImpl( getIt()),
+  );
+
+
+  
+  // ✅ Register Routine Repository
+  if (!getIt.isRegistered<RoutineRepository>()) {
+    getIt.registerLazySingleton<RoutineRepository>(
+      () => RoutineRepositoryImpl(
+        routineRemoteDataSource: getIt(),
+      ),
+    );
+  }
+
+  // ✅ Register Use Case
+  if (!getIt.isRegistered<GetAllRoutinesUseCase>()) {
+    getIt.registerLazySingleton<GetAllRoutinesUseCase>(
+      () => GetAllRoutinesUseCase(
+        routineRepository: getIt<RoutineRepository>(),
+      ),
+    );
+  }
+
+  // ✅ Register RoutineBloc
+  if (!getIt.isRegistered<RoutineBloc>()) {
+    getIt.registerFactory<RoutineBloc>(
+      () => RoutineBloc(allRoutinesUseCase: getIt<GetAllRoutinesUseCase>()),
+    );
+  }
+}
+
+
+// // ....................r..................
+// void _initRoutineDependencies() {
+//   // ✅ Register Remote Data Source
+//   getIt.registerLazySingleton<IRoutineRemoteDataSource>(
+//     () => RoutineRemoteDataSource(getIt<Dio>()),
+//   );
+
+//   // ✅ Register Repository Properly as an Interface
+//   getIt.registerLazySingleton<RoutineRepository>(
+//     () => RoutineRepositoryImpl(getIt<IRoutineRemoteDataSource>(),
+//         routineRemoteDataSource: getIt()),
+//   );
+
+//   // ✅ Register Use Case (Ensuring Proper Dependency Order)
+//   getIt.registerLazySingleton<GetAllRoutinesUseCase>(
+//     () => GetAllRoutinesUseCase(routineRepository: getIt()),
+//   );
+
+//   // ✅ Register BLoC
+//   getIt.registerFactory<RoutineBloc>(
+//     () => RoutineBloc(allRoutinesUseCase: getIt()),
+//   );
+// }
 
 /// ====================  Verify email ===================
 // _initVerifyDependencies() {

@@ -1,14 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shikshyadwar_mobile_application_project/features/Message/presentation/view/chat_screen.dart';
-import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view/booking_form_view.dart';
-import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_bloc.dart';
-import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view/course_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view/bottom_view/dashboard_view.dart';
-import 'package:shikshyadwar_mobile_application_project/features/payment/presentation/payment_bloc.dart';
-import 'package:shikshyadwar_mobile_application_project/features/payment/presentation/view/payment_screen.dart';
+import 'package:shikshyadwar_mobile_application_project/features/notice/Presentation/View/notice_view.dart';
+import 'package:shikshyadwar_mobile_application_project/features/routine/Presentation/view/routine_view.dart';
 
 class HomeState extends Equatable {
   final int selectedIndex;
@@ -31,12 +26,8 @@ class HomeState extends Equatable {
       selectedIndex: 0,
       views: [
         const DashboardView(),
-        BlocProvider(
-          create: (_) => GetIt.instance<
-              PaymentBloc>(), // Ensure GetIt is properly initialized
-          child: PaymentScreen(),
-        ),
-        Center(child: Text('Admission')), // Placeholder for "Admission"
+        const NoticeViewPage(),
+        const RoutineScreen(),
         const ChatScreen(
           receiverId: '',
           userId: '',

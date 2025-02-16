@@ -12,23 +12,23 @@ class CategoryHiveModel extends Equatable {
   final String? categoryId;
 
   @HiveField(1)
-  final String categoryName;
+  final String message;
 
   CategoryHiveModel({
     String? categoryId,
-    required this.categoryName,
+    required this.message,
   }) : categoryId = categoryId ?? const Uuid().v4();
 
   // Initial Constructor
   const CategoryHiveModel.initial()
       : categoryId = '',
-        categoryName = '';
+        message = '';
 
   // From Entity
   factory CategoryHiveModel.fromEntity(CategoryEntity entity) {
     return CategoryHiveModel(
       categoryId: entity.categoryId,
-      categoryName: entity.categoryName,
+      message: entity.message,
     );
   }
 
@@ -36,7 +36,7 @@ class CategoryHiveModel extends Equatable {
   CategoryEntity toEntity() {
     return CategoryEntity(
       categoryId: categoryId,
-      categoryName: categoryName,
+      message: message,
     );
   }
 
@@ -51,5 +51,5 @@ class CategoryHiveModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [categoryId, categoryName];
+  List<Object?> get props => [categoryId, message];
 }

@@ -4,10 +4,10 @@ import 'package:shikshyadwar_mobile_application_project/core/error/failure.dart'
 import 'package:shikshyadwar_mobile_application_project/features/routine/domain/entity/routine_entity.dart';
 import 'package:shikshyadwar_mobile_application_project/features/routine/domain/repository/routine_repository.dart';
 
-class GetAllRoutines implements UsecaseWithoutParams<List<RoutineEntity>> {
-  final IRoutineRepository routineRepository;
+class GetAllRoutinesUseCase implements UsecaseWithoutParams<List<RoutineEntity>> {
+  final RoutineRepository routineRepository; // ✅ Use Interface
 
-  GetAllRoutines(this.routineRepository);
+  GetAllRoutinesUseCase({required this.routineRepository});
 
   @override
   Future<Either<Failure, List<RoutineEntity>>> call() {

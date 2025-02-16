@@ -15,7 +15,7 @@ class BookingRemoteDataSource implements IBookingDataSource {
       // Convert entity to model
       var authApiModel = BookingApiModel.fromEntity(booking);
       var response = await _dio.post(
-        ApiEndpoints.courseBooking,
+        ApiEndpoints.getnotice,
         data: authApiModel.toJson(),
       );
       if (response.statusCode == 200) {
