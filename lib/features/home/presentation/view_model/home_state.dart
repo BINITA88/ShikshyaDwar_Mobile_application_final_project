@@ -72,6 +72,7 @@ class HomeState extends Equatable {
     );
   }
 
+// lets make profile all part
   // ✅ **CopyWith method ensures immutability and controlled updates**
   HomeState copyWith({
     int? selectedIndex,
