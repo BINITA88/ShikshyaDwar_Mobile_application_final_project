@@ -2,17 +2,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit()
-      : super(HomeState
-            .initial()); // Use the `initial` method to ensure consistent initialization
+  HomeCubit() : super(HomeState.initial());
 
+  // ✅ **Prevent selecting an invalid tab index**
   void onTabTapped(int index) {
-    // Emit new state with updated selectedIndex
-    emit(state.copyWith(selectedIndex: index));
+    if (index >= 0 && index < state.views.length) {
+      emit(state.copyWith(selectedIndex: index));
+    }
   }
 
+  // ✅ **Prevent invalid carousel index selection**
   void updateCarouselIndex(int index) {
-    // Emit new state with updated carousel index
-    emit(state.copyWith(currentCarouselIndex: index));
+    if (index >= 0 && index < state.carouselImages.length) {
+      emit(state.copyWith(currentCarouselIndex: index));
+    }
   }
 }

@@ -61,4 +61,16 @@ class AuthLocalRepository implements IAuthRepository {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<AuthEntity>>> getAllUsers() {
+    // TODO: implement getAllUsers
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either<Failure, AuthEntity>> getMe() {
+    // TODO: implement getMe
+    throw UnimplementedError();
+  }
 }

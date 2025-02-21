@@ -1,5 +1,6 @@
-part of 'exam_seat_bloc.dart';
 
+import 'package:equatable/equatable.dart';
+import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/domain/entity/exam_seat_entity.dart';
 
 abstract class ExamSeatState extends Equatable {
   const ExamSeatState();

@@ -48,6 +48,29 @@ class AuthRemoteRepository implements IAuthRepository {
     }
   }
 
+  /// ✅ Fetch All Users
+  @override
+  Future<Either<Failure, List<AuthEntity>>> getAllUsers() async {
+    try {
+      final authEntities = await _authRemoteDatasource.getAllUsers();
+      return Right(authEntities);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  /// ✅ Fetch My Profile
+  @override
+  Future<Either<Failure, AuthEntity>> getMe() async {
+    try {
+      final authEntity = await _authRemoteDatasource.getMe(); // ✅ Call API
+      return Right(authEntity);
+    } on SocketException {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
   // @override
   // Future<Either<Failure, String>> sendAndVerifyOTP(String email, String otp) async {
   //   try {

@@ -1,32 +1,37 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shikshyadwar_mobile_application_project/app/shared_prefs/token_shared_prefs.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/api_service.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/hive_service.dart';
 import 'package:shikshyadwar_mobile_application_project/core/socket_service.dart';
-import 'package:shikshyadwar_mobile_application_project/features/Message/data/data_source/chat_remote_datasource.dart';
-import 'package:shikshyadwar_mobile_application_project/features/Message/data/repository/chat_remote_repository.dart';
-import 'package:shikshyadwar_mobile_application_project/features/Message/domain/use_case/get_messages.dart';
-import 'package:shikshyadwar_mobile_application_project/features/Message/domain/use_case/send_message.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/local_datasource/auth_local_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/remote_datasource/auth_remote_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/remote_datasource/otp_remote_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/auth_local_repository/auth_local_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/auth_remote_repository.dart/auth_remote_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/otp_remote_repository.dart/otp_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/get_all_users_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/get_current_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/get_verify_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/login_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/logout_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/register_user_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/auth_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/verify/verify_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/data/data_source/remote_data_source/booking_remote_data_source.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/data/repository/booking_remote_repository/booking_remote_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/domain/use_case/create_booking_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/booking/presentation/view_model/booking/booking_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/chat/chat/data/data_source/remote_data_source/chat_remote_data_source.dart';
+import 'package:shikshyadwar_mobile_application_project/features/chat/chat/data/repository/chat_remote_repository/chat_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/chat/chat/domain/usecase/delete_message_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/chat/chat/domain/usecase/get_message_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/chat/chat/domain/usecase/send_message_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/chat/chat/presentation/view_model/bloc/chat_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/data_source/local_datasource/course_local_data_source.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/data_source/remote_datasource/course_remote_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/repository/course_local_repository.dart';
@@ -34,6 +39,13 @@ import 'package:shikshyadwar_mobile_application_project/features/course/data/rep
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_all_course_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_course_details_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view_model/course_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/Presentation/exam_seat_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/data/data_source/remote_datasource/exam_seat_remote_datasource.dart';
+import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/data/repository/remote_repository/exam_seat_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/domain/repository/exam_seat_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/domain/use%20_case/book_seat.dart';
+import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/domain/use%20_case/get_all_seat.dart';
+import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/domain/use%20_case/unbook_seat.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/notice/Presentation/view_models/notice_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/notice/data/remote_data_source/notice_remote_datasource.dart';
@@ -54,14 +66,12 @@ import 'package:shikshyadwar_mobile_application_project/features/routine/domain/
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/onboarding_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
 
-import '../../features/Message/domain/repository/chat_repository.dart';
-
 //  it is a service locator
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
-  _initSocketService(); // ✅ Register WebSocketManager FIRST
-  _initSetupLocator(); // ✅ Register chat-related dependencies
+  // _initSocketService(); // ✅ Register WebSocketManager FIRST
+  // _initSetupLocator(); // ✅ Register chat-related dependencies
   await _initHiveService();
   await _initApiService();
   await _initHomeDependencies();
@@ -69,6 +79,8 @@ Future<void> initDependencies() async {
   await _initCourseBookingDependencies();
   await _initNoticeDependencies();
   _initRoutineDependencies();
+  initExamSeatDependencies();
+  _initChatDependencies();
   await _initPaymentDependencies();
   await _initVerifyDependencies();
   await _initSharedPreferences();
@@ -76,6 +88,7 @@ Future<void> initDependencies() async {
   await _initSplashScreenDependencies();
   await _initOnboardingScreenDependencies();
   await _initCourseDependencies();
+  await _initAuthDependencies();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -135,31 +148,31 @@ _initApiService() {
 
 /// ==================== web socket Register ===================
 
-void _initSocketService() {
-  if (!GetIt.I.isRegistered<WebSocketManager>()) {
-    getIt.registerLazySingleton<WebSocketManager>(() => WebSocketManager());
-  }
-}
+// void _initSocketService() {
+//   if (!GetIt.I.isRegistered<WebSocketManager>()) {
+//     getIt.registerLazySingleton<WebSocketManager>(() => WebSocketManager());
+//   }
+// }
 
 // ---------------------------- Chat Dependencies ----------------------------
 
-void _initSetupLocator() {
-  getIt.registerLazySingleton<ChatRemoteDataSource>(
-    () => ChatRemoteDataSourceImpl(dio: getIt<Dio>()),
-  );
+// void _initSetupLocator() {
+//   getIt.registerLazySingleton<ChatRemoteDataSource>(
+//     () => ChatRemoteDataSourceImpl(dio: getIt<Dio>()),
+//   );
 
-  getIt.registerLazySingleton<ChatRepository>(
-    () => ChatRepositoryImpl(remoteDataSource: getIt<ChatRemoteDataSource>()),
-  );
+//   getIt.registerLazySingleton<ChatRepository>(
+//     () => ChatRepositoryImpl(remoteDataSource: getIt<ChatRemoteDataSource>()),
+//   );
 
-  getIt.registerLazySingleton<GetMessages>(
-    () => GetMessages(getIt<ChatRepository>()),
-  );
+//   getIt.registerLazySingleton<GetMessages>(
+//     () => GetMessages(getIt<ChatRepository>()),
+//   );
 
-  getIt.registerLazySingleton<SendMessage>(
-    () => SendMessage(getIt<ChatRepository>()),
-  );
-}
+//   getIt.registerLazySingleton<SendMessage>(
+//     () => SendMessage(getIt<ChatRepository>()),
+//   );
+// }
 
 // .............................................register.......................
 
@@ -205,6 +218,64 @@ _initRegisterDependencies() {
       verifyBloc: getIt(),
     ),
   );
+}
+
+// ...............................chatting.......................................
+
+_initChatDependencies() {
+  if (!getIt.isRegistered<ChatRemoteDataSource>()) {
+    getIt.registerLazySingleton<ChatRemoteDataSource>(
+      () => ChatRemoteDataSource(getIt<Dio>()),
+    );
+  }
+
+  if (!getIt.isRegistered<ChatRemoteRepository>()) {
+    getIt.registerLazySingleton<ChatRemoteRepository>(
+      () => ChatRemoteRepository(
+        getIt<ChatRemoteDataSource>(),
+      ),
+    );
+  }
+
+  if (!getIt.isRegistered<SendMessageUseCase>()) {
+    getIt.registerLazySingleton<SendMessageUseCase>(
+      () => SendMessageUseCase(
+        chatRepository: getIt<ChatRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      ),
+    );
+  }
+
+  if (!getIt.isRegistered<GetMessagesUseCase>()) {
+    getIt.registerLazySingleton<GetMessagesUseCase>(
+      () => GetMessagesUseCase(
+        chatRepository: getIt<ChatRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      ),
+    );
+  }
+
+  if (!getIt.isRegistered<DeleteMessageUseCase>()) {
+    getIt.registerLazySingleton<DeleteMessageUseCase>(
+      () => DeleteMessageUseCase(
+        chatRepository: getIt<ChatRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      ),
+    );
+
+    if (!getIt.isRegistered<ChatBloc>()) {
+      getIt.registerFactory<ChatBloc>(
+        () => ChatBloc(
+          sendMessageUseCase: getIt<SendMessageUseCase>(),
+          // getMessageUseCase: getIt<GetMessagesUseCase>(), // Corrected here
+          // deleteMessageUseCase: getIt<DeleteMessageUseCase>(),
+          getMessagesUseCase: getIt<GetMessagesUseCase>(),
+          deletemessageUseCase: getIt(),
+          // tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+        ),
+      );
+    }
+  }
 }
 
 // ...............................booking.......................................
@@ -306,15 +377,14 @@ _initNoticeDependencies() {
     ),
   );
 }
-// .........................................
+
+// .........................................routine....................
 void _initRoutineDependencies() {
   // ✅ Ensure Dio is registered first
-    getIt.registerLazySingleton<RoutineRemoteDataSource>(
-    () => RoutineRemoteDataSourceImpl( getIt()),
+  getIt.registerLazySingleton<RoutineRemoteDataSource>(
+    () => RoutineRemoteDataSourceImpl(getIt()),
   );
 
-
-  
   // ✅ Register Routine Repository
   if (!getIt.isRegistered<RoutineRepository>()) {
     getIt.registerLazySingleton<RoutineRepository>(
@@ -341,6 +411,27 @@ void _initRoutineDependencies() {
   }
 }
 
+// ..............................mock test booking..........................................
+void initExamSeatDependencies() {
+  getIt.registerLazySingleton<IExamSeatRemoteDataSource>(
+    () => ExamSeatRemoteDataSourceImpl(getIt()),
+  );
+
+  getIt.registerLazySingleton<IExamSeatRepository>(
+    () => ExamSeatRepositoryImpl(remoteDataSource: getIt()),
+  );
+
+  getIt.registerLazySingleton(() => GetAllSeat(getIt<IExamSeatRepository>()));
+  getIt.registerLazySingleton(() => BookSeat(getIt<IExamSeatRepository>()));
+  getIt.registerLazySingleton(() => UnbookSeat(getIt<IExamSeatRepository>()));
+
+  getIt.registerFactory(
+    () => ExamSeatBloc(
+        getAllSeat: getIt<GetAllSeat>(),
+        bookSeat: getIt<BookSeat>(),
+        unbookSeat: getIt<UnbookSeat>()),
+  );
+}
 
 // // ....................r..................
 // void _initRoutineDependencies() {
@@ -405,25 +496,61 @@ _initVerifyDependencies() {
   );
 }
 
-/// ====================  Login ===================
+// /// ====================  Login ===================
+// _initLoginDependencies() async {
+//   //Token Shared Preferences
+//   getIt.registerLazySingleton<TokenSharedPrefs>(
+//     () => TokenSharedPrefs(getIt<SharedPreferences>()),
+//   );
+
+//   //UseCase
+// // Use common StudentLocalDatasource and StudentLocalRepository
+
+//   getIt.registerLazySingleton<LoginUseCase>(() =>
+//       LoginUseCase(getIt<TokenSharedPrefs>(), getIt<AuthRemoteRepository>()));
+
+//   getIt.registerFactory<LoginBloc>(
+//     () => LoginBloc(
+//       registerBloc: getIt<RegisterBloc>(),
+//       homeCubit: getIt<HomeCubit>(),
+//       // courseBloc: getIt<CourseBloc>(),
+//       loginUseCase: getIt<LoginUseCase>(),
+//       getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
+//     ),
+//   );
+// }
+
 _initLoginDependencies() async {
-  //Token Shared Preferences
+  // ✅ Ensure AuthRemoteRepository is registered first
+  if (!getIt.isRegistered<AuthRemoteRepository>()) {
+    getIt.registerLazySingleton<AuthRemoteRepository>(
+      () => AuthRemoteRepository(getIt<AuthRemoteDatasource>()),
+    );
+  }
+
+  // ✅ Register Token Shared Preferences
   getIt.registerLazySingleton<TokenSharedPrefs>(
     () => TokenSharedPrefs(getIt<SharedPreferences>()),
   );
 
-  //UseCase
-// Use common StudentLocalDatasource and StudentLocalRepository
+  // ✅ Register Use Cases
+  getIt.registerLazySingleton<LoginUseCase>(
+    () =>
+        LoginUseCase(getIt<TokenSharedPrefs>(), getIt<AuthRemoteRepository>()),
+  );
 
-  getIt.registerLazySingleton<LoginUseCase>(() =>
-      LoginUseCase(getIt<TokenSharedPrefs>(), getIt<AuthRemoteRepository>()));
+  getIt.registerLazySingleton<GetCurrentUserUseCase>(
+    () => GetCurrentUserUseCase(getIt<AuthRemoteRepository>()),
+  );
 
+  // ✅ Register LoginBloc (AFTER RegisterBloc & HomeCubit are available)
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
-      registerBloc: getIt<RegisterBloc>(),
-      homeCubit: getIt<HomeCubit>(),
-      // courseBloc: getIt<CourseBloc>(),
+      registerBloc: getIt<RegisterBloc>(), // Ensure it's registered
+      homeCubit: getIt<HomeCubit>(), // Ensure it's registered
       loginUseCase: getIt<LoginUseCase>(),
+      getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
     ),
   );
 }
@@ -491,4 +618,42 @@ _initOnboardingScreenDependencies() async {
   getIt.registerFactory<OnboardingCubit>(
     () => OnboardingCubit(getIt<LoginBloc>()),
   );
+}
+
+Future<void> _initAuthDependencies() async {
+  if (!getIt.isRegistered<TokenSharedPrefs>()) {
+    getIt.registerLazySingleton<TokenSharedPrefs>(
+      () => TokenSharedPrefs(getIt<SharedPreferences>()),
+    );
+  }
+
+  // if (!getIt.isRegistered<LoginUseCase>()) {
+  //   getIt.registerLazySingleton<LoginUseCase>(
+  //     () => LoginUseCase(
+  //         getIt<AuthRemoteRepository>(), getIt<TokenSharedPrefs>()),
+  //   );
+  // }
+
+  if (!getIt.isRegistered<LogoutUseCase>()) {
+    getIt.registerLazySingleton<LogoutUseCase>(
+      () => LogoutUseCase(getIt<TokenSharedPrefs>()),
+    );
+  }
+
+  if (!getIt.isRegistered<GetAllUsersUseCase>()) {
+    getIt.registerLazySingleton<GetAllUsersUseCase>(
+      () => GetAllUsersUseCase(getIt<AuthRemoteRepository>()),
+    );
+  }
+
+  if (!getIt.isRegistered<AuthBloc>()) {
+    getIt.registerFactory<AuthBloc>(
+      () => AuthBloc(
+        loginUseCase: getIt<LoginUseCase>(),
+        logoutUseCase: getIt<LogoutUseCase>(),
+        tokenPrefs: getIt<TokenSharedPrefs>(),
+        getAllUsersUseCase: getIt<GetAllUsersUseCase>(), // ✅ Corrected
+      ),
+    );
+  }
 }

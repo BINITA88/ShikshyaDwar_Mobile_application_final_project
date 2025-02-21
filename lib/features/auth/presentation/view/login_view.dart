@@ -18,8 +18,8 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
 
-  final _emailController = TextEditingController(text: 'Binita1234@gmail.com');
-  final _passwordController = TextEditingController(text: 'Binita@1234');
+  final _emailController = TextEditingController(text: 'karan@gmail.com');
+  final _passwordController = TextEditingController(text: 'Karan@123');
   final _gap = const SizedBox(height: 20);
 
   @override
@@ -154,16 +154,15 @@ class _LoginViewState extends State<LoginView> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             context.read<LoginBloc>().add(
-                                  LoginStudentEvent(
+                                  LoginUserEvent(
                                     context: context,
                                     email: _emailController.text,
                                     password: _passwordController.text,
                                   ),
                                 );
 
-                            if (_emailController.text ==
-                                    'Binita1234@gmail.com' &&
-                                _passwordController.text == 'Binita@1234') {
+                            if (_emailController.text == 'karan@gmail.com' &&
+                                _passwordController.text == 'Karan@123') {
                               context.read<LoginBloc>().add(
                                     NavigateHomeScreenEvent(
                                       destination: HomeView(),

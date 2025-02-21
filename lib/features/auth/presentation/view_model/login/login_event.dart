@@ -17,6 +17,12 @@ class NavigateRegisterScreenEvent extends LoginEvent {
   });
 }
 
+class GetUserInfoEvent extends LoginEvent {
+  final BuildContext context;
+
+  const GetUserInfoEvent({required this.context});
+}
+
 class NavigateHomeScreenEvent extends LoginEvent {
   final BuildContext context;
   final Widget destination;
@@ -27,12 +33,12 @@ class NavigateHomeScreenEvent extends LoginEvent {
   });
 }
 
-class LoginStudentEvent extends LoginEvent {
+class LoginUserEvent extends LoginEvent {
   final BuildContext context;
   final String email;
   final String password;
 
-  const LoginStudentEvent({
+  const LoginUserEvent({
     required this.context,
     required this.email,
     required this.password,

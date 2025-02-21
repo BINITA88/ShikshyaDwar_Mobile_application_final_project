@@ -22,6 +22,14 @@ class ApiEndpoints {
   static const String uploadImage = "users/uploadImage";
 
   static const String getAllCourses = "/productlist";
+  static const String getCurrentUser = "user/getMe";
+  // ====================== Chatting ======================
+
+  static const String getAllUsers = "users/userlist";
+
+  static const String sendMessage = "messages/send/";
+  static const String getMessages = "/messages/";
+  static const String deleteMessage = "/messages/";
 
   // ====================== Course Routes ======================
   static const String getCourseDetailById = "/productDetail/";
@@ -38,6 +46,10 @@ class ApiEndpoints {
 
   // ====================== Routine ======================
   static const String getroutine = "schedules/getschedule/";
+
+  // ====================== Routine ======================
+  static const String bookExamSeat = "seat/status/";
+  static const String getExamSeats = "seat/";
 }
 
 

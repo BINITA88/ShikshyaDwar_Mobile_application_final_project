@@ -32,12 +32,6 @@ class AuthRemoteDatasource implements IAuthDataSource {
   }
 
   @override
-  Future<AuthEntity> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
-  }
-
-  @override
   Future<String> loginUser(String email, String password) async {
     try {
       Response response = await _dio.post(ApiEndpoints.login, data: {
@@ -101,5 +95,56 @@ class AuthRemoteDatasource implements IAuthDataSource {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  @override
+  Future<List<AuthEntity>> getAllUsers() async {
+    try {
+      Response response = await _dio.get(ApiEndpoints.getAllUsers);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data is List
+            ? response.data // ✅ Case 1: If API returns a direct list
+            : response.data['users'] ??
+                []; // ✅ Case 2: If API wraps users in a key
+
+        return data
+            .map((item) => AuthEntity.fromJson(item as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw Exception("Failed to fetch users: ${response.statusMessage}");
+      }
+    } on DioException catch (e) {
+      throw Exception(
+          e.response?.data["message"] ?? "Network Error: ${e.message}");
+    } catch (e) {
+      throw Exception("Unexpected Error: $e");
+    }
+  }
+
+  @override
+  Future<AuthEntity> getCurrentUser() async {
+    try {
+      Response response = await _dio.get(ApiEndpoints.getCurrentUser);
+
+      if (response.statusCode == 200) {
+        // Assuming the response data is a map representing the AuthEntity
+        final data = response.data;
+        final authEntity = AuthEntity.fromJson(data);
+        return authEntity;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<AuthEntity> getMe() {
+    // TODO: implement getMe
+    throw UnimplementedError();
   }
 }
