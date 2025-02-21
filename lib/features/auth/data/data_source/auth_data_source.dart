@@ -10,6 +10,9 @@ abstract interface class IAuthDataSource {
   Future<AuthEntity> getCurrentUser();
 
   Future<String> uploadProfilePicture(File file);
+  Future<List<AuthEntity>> getAllUsers();
+
+  Future<AuthEntity> getMe(); // ✅ Fetch user details from API
 
   // Future<String> sendAndVerifyOTP(String email, String otp);
 }
