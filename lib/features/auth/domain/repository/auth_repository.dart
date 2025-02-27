@@ -11,9 +11,13 @@ abstract interface class IAuthRepository {
 
   Future<Either<Failure, String>> uploadProfilePicture(File file);
 
-  Future<Either<Failure, AuthEntity>> getCurrentUser();
   Future<Either<Failure, List<AuthEntity>>> getAllUsers();
-  Future<Either<Failure, AuthEntity>> getMe(); // ✅ Added getMe()
-
+  Future<Either<Failure, AuthEntity>> getMe(String authId); // ✅ Added getMe()
+  Future<Either<Failure, void>> forgotPassword({String? email, String? phone});
+  Future<Either<Failure, void>> resetPassword(
+      {String? email,
+      String? phone,
+      required String otp,
+      required String newPassword});
   // Future<Either<Failure, String>> sendAndVerifyOTP(String email, String otp);
 }

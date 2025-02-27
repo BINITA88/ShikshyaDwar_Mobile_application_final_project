@@ -28,7 +28,6 @@ class GetCourseDetailsByIdDTO {
       courseImage: data.courseImage ?? '',
       duration: data.duration ?? 'N/A',
       courseDescription: data.courseDescription ?? 'No description available',
-      category: data.category ?? 'Uncategorized',
     );
   }
 }

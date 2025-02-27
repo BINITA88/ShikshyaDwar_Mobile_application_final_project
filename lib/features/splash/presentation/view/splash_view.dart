@@ -346,3 +346,119 @@ class _SplashViewState extends State<SplashView> {
 //     );
 //   }
 // }
+
+// import 'dart:async';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_sensors/flutter_sensors.dart';
+
+// class SplashView extends StatefulWidget {
+//   const SplashView({super.key});
+
+//   @override
+//   State<SplashView> createState() => _SplashViewState();
+// }
+
+// class _SplashViewState extends State<SplashView> {
+//   StreamSubscription? _subscription;
+//   List<double> _lastValues = [0, 0, 0];
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _startShakeDetection();
+//   }
+
+//   @override
+//   void dispose() {
+//     _subscription?.cancel(); // Stop shake detection when screen is disposed
+//     super.dispose();
+//   }
+
+//   /// **Shake Detection Logic**
+//   void _startShakeDetection() async {
+//     try {
+//       bool isAvailable =
+//           await SensorManager().isSensorAvailable(Sensors.ACCELEROMETER);
+//       if (!isAvailable) {
+//         debugPrint("Accelerometer sensor not available.");
+//         return;
+//       }
+
+//       // ✅ FIX: Await the Stream before listening
+//       final stream = await SensorManager().sensorUpdates(
+//         sensorId: Sensors.ACCELEROMETER,
+//         interval: Sensors.SENSOR_DELAY_UI,
+//       );
+
+//       _subscription = stream.listen((event) {
+//         double x = event.data[0];
+//         double y = event.data[1];
+//         double z = event.data[2];
+
+//         double deltaX = (x - _lastValues[0]).abs();
+//         double deltaY = (y - _lastValues[1]).abs();
+//         double deltaZ = (z - _lastValues[2]).abs();
+
+//         _lastValues = [x, y, z];
+
+//         double shakeThreshold = 15.0; // Adjust threshold as needed
+//         if (deltaX > shakeThreshold ||
+//             deltaY > shakeThreshold ||
+//             deltaZ > shakeThreshold) {
+//           _handleShakeLogout(); // Call logout function
+//         }
+//       });
+//     } catch (e) {
+//       debugPrint("Error initializing shake detection: $e");
+//     }
+//   }
+
+//   /// **Logout Function when Shake is Detected**
+//   void _handleShakeLogout() {
+//     debugPrint("Shake detected! Logging out...");
+//     Navigator.pushReplacementNamed(
+//         context, '/login'); // Navigate to login screen
+//   }
+
+//   /// **Splash Screen UI**
+//   Widget _buildLogoScreen() {
+//     return Container(
+//       decoration: BoxDecoration(
+//         gradient: LinearGradient(
+//           begin: Alignment.topCenter,
+//           end: Alignment.bottomCenter,
+//           colors: [Colors.pink[50]!, Colors.white],
+//         ),
+//       ),
+//       child: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             SizedBox(
+//                 height: 200,
+//                 width: 200,
+//                 child: Image.asset('assets/images/logo.png')),
+//             const SizedBox(height: 12),
+//             const Text(
+//               'Shikshyadwar',
+//               style: TextStyle(
+//                   fontSize: 28,
+//                   fontWeight: FontWeight.bold,
+//                   color: Color(0xFF333333)),
+//             ),
+//             const SizedBox(height: 40),
+//             const CircularProgressIndicator(
+//               valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6B4EFF)),
+//               strokeWidth: 3,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(body: _buildLogoScreen());
+//   }
+// }

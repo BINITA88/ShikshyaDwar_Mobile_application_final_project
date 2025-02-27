@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class ExamSeatEntity extends Equatable {
   final String? examSeatId;
-  final int seatNumber;
+  final String seatNumber;
   final bool booked;
 
   const ExamSeatEntity({

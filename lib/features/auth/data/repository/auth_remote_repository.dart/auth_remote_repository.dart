@@ -22,12 +22,6 @@ class AuthRemoteRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, AuthEntity>> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, String>> loginUser(
       String name, String password) async {
     try {
@@ -61,9 +55,10 @@ class AuthRemoteRepository implements IAuthRepository {
 
   /// ✅ Fetch My Profile
   @override
-  Future<Either<Failure, AuthEntity>> getMe() async {
+  Future<Either<Failure, AuthEntity>> getMe(String authId) async {
     try {
-      final authEntity = await _authRemoteDatasource.getMe(); // ✅ Call API
+      final authEntity =
+          await _authRemoteDatasource.getMe(authId); // ✅ Call API
       return Right(authEntity);
     } on SocketException {
       return Left(ApiFailure(message: "No Internet Connection"));
@@ -83,4 +78,38 @@ class AuthRemoteRepository implements IAuthRepository {
   //         ApiFailure(message: e.toString())); // Updated to match API failure
   //   }
   // }
+
+  @override
+  Future<Either<Failure, void>> forgotPassword(
+      {String? email, String? phone}) async {
+    try {
+      await _authRemoteDatasource.forgotPassword(email: email, phone: phone);
+      return const Right(null);
+    } on SocketException {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    } on HttpException {
+      return Left(ApiFailure(message: 'Server error'));
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> resetPassword(
+      {String? email,
+      String? phone,
+      required String otp,
+      required String newPassword}) async {
+    try {
+      await _authRemoteDatasource.resetPassword(
+          email: email, phone: phone, otp: otp, newPassword: newPassword);
+      return const Right(null);
+    } on SocketException {
+      return Left(ApiFailure(message: "No Internet Connection"));
+    } on HttpException {
+      return Left(ApiFailure(message: 'Server error'));
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

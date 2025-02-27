@@ -89,7 +89,7 @@ class AuthEntity extends Equatable {
 
   // ✅ Empty constructor with default values
   const AuthEntity.empty()
-      : authId = null,
+      : authId = "",
         email = "",
         image = null,
         contactNo = "",
