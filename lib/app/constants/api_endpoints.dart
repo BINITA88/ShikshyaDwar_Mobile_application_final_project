@@ -1,11 +1,13 @@
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static const Duration connectionTimeout = Duration(seconds: 10000);
-  static const Duration receiveTimeout = Duration(seconds: 10000);
+  static const Duration connectionTimeout = Duration(seconds: 10);
+  static const Duration receiveTimeout = Duration(seconds: 10);
 
   // For Android Emulator
-  static const String baseUrl = "http://10.0.2.2:9000/api/";
+  // static const String baseUrl = "http://10.0.2.2:9000/api/";
+  static const String baseUrl = "http://192.168.1.82:9000/api/";
+  // http://192.168.1.82:9000/api/users/signup
 
   // ============= Auth Routes =============
   // static const String login = "users/signin1";
@@ -16,13 +18,17 @@ class ApiEndpoints {
   static const String getAllStudent = "users/userlist";
   static const String postEmailConfirmation = "/users/confirmation/:token";
   static const String deleteStudent = "users/deleteUser/:id";
+  // static const String imageUrl = "http://10.0.2.2:9000/uploads/";
   static const String imageUrl = "  http://10.0.2.2:9000/public/profile";
+// ===================== ✅ Password Routes =====================
+  static const String forgotPassword = "users/forgot-password";
+  static const String resetPassword = "users/reset-password";
 
   // ask ....
   static const String uploadImage = "users/uploadImage";
 
   static const String getAllCourses = "/productlist";
-  static const String getCurrentUser = "user/getMe";
+  static const String getCurrentUser = "user/userdetails";
   // ====================== Chatting ======================
 
   static const String getAllUsers = "users/userlist";

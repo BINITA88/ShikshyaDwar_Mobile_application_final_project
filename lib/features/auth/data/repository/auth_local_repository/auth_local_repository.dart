@@ -69,8 +69,22 @@ class AuthLocalRepository implements IAuthRepository {
   }
   
   @override
-  Future<Either<Failure, AuthEntity>> getMe() {
+  Future<Either<Failure, AuthEntity>> getMe(String authId) {
     // TODO: implement getMe
     throw UnimplementedError();
   }
+  
+  @override
+  Future<Either<Failure, void>> forgotPassword({String? email, String? phone}) {
+    // TODO: implement forgotPassword
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either<Failure, void>> resetPassword({String? email, String? phone, required String otp, required String newPassword}) {
+    // TODO: implement resetPassword
+    throw UnimplementedError();
+  }
+  
+  
 }

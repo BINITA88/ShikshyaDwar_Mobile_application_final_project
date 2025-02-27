@@ -1,60 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/Presentation/exam_seat_bloc.dart';
-// import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/Presentation/exam_seat_event.dart';
-// import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/domain/entity/exam_seat_entity.dart';
-
-// class ExamSeatGrid extends StatelessWidget {
-//   final List<ExamSeatEntity> seats;
-
-//   const ExamSeatGrid({super.key, required this.seats});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GridView.builder(
-//       padding: const EdgeInsets.all(12.0),
-//       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//         crossAxisCount: 5, // ✅ Adjust the number of seats per row
-//         crossAxisSpacing: 10,
-//         mainAxisSpacing: 10,
-//       ),
-//       itemCount: seats.length,
-//       itemBuilder: (context, index) {
-//         final seat = seats[index];
-
-//         return GestureDetector(
-//           onTap: () {
-//             if (seat.booked) {
-//               context
-//                   .read<ExamSeatBloc>()
-//                   .add(UnbookExamSeatEvent(seat.examSeatId!));
-//             } else {
-//               context
-//                   .read<ExamSeatBloc>()
-//                   .add(BookExamSeatEvent(seat.examSeatId!));
-//             }
-//           },
-//           child: Container(
-//             decoration: BoxDecoration(
-//               color: seat.booked
-//                   ? Colors.grey
-//                   : Colors.lightBlue, // ✅ Change color based on status
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-//             child: Center(
-//               child: Icon(
-//                 seat.booked ? Icons.person : Icons.event_seat,
-//                 color: Colors.white,
-//                 size: 24,
-//               ),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/Presentation/exam_seat_bloc.dart';
@@ -64,17 +7,18 @@ import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/dom
 class ExamSeatGrid extends StatelessWidget {
   final List<ExamSeatEntity> seats;
 
-  const ExamSeatGrid({super.key, required this.seats});
+  const ExamSeatGrid(
+      {super.key, required this.seats, required void Function() onSeatBooked});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        crossAxisSpacing: 36,
-        mainAxisSpacing: 20,
-        childAspectRatio: 0.8,
+        crossAxisCount: 4, // Number of seats per row
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 1.1,
       ),
       itemCount: seats.length,
       itemBuilder: (context, index) {
@@ -82,145 +26,110 @@ class ExamSeatGrid extends StatelessWidget {
 
         return GestureDetector(
           onTap: () {
-            if (seat.booked) {
-              context
-                  .read<ExamSeatBloc>()
-                  .add(UnbookExamSeatEvent(seat.examSeatId!));
-            } else {
+            if (!seat.booked && seat.examSeatId != null) {
+              // ✅ Ensure valid seat ID
               context
                   .read<ExamSeatBloc>()
                   .add(BookExamSeatEvent(seat.examSeatId!));
+              _showBookingSnackbar(context);
+            } else {
+              _showErrorSnackbar(context);
             }
           },
           child: CustomPaint(
-            painter: seat.booked ? BookedSeatPainter() : EmptySeatPainter(),
-            child: Stack(
-              children: [
-                // Seat number
-                // Positioned(
-                //   top: 0,
-                //   left: 0,
-                //   child: Container(
-                //     padding: const EdgeInsets.all(4),
-                //     decoration: BoxDecoration(
-                //       color: const Color.fromARGB(137, 65, 2, 2),
-                //       borderRadius: BorderRadius.circular(4),
-                //     ),
-                //     child: Text(
-                //       '${index + 1}',
-                //       style: const TextStyle(
-                //         color: Colors.white,
-                //         fontSize: 12,
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
+            painter: SeatPainter(isBooked: seat.booked),
+            child: Center(
+              child: Text(
+                seat.booked ? "Booked" : "Seat ${index + 1}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         );
       },
     );
   }
+
+  void _showBookingSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("✅ Your seat for this Saturday has been booked!"),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  void _showErrorSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content:
+            Text("⚠️ Invalid seat number format. Please try another seat."),
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.redAccent,
+      ),
+    );
+  }
 }
 
-class EmptySeatPainter extends CustomPainter {
+/// **🎨 Custom Seat Painter for Rounded Cute Seats**
+class SeatPainter extends CustomPainter {
+  final bool isBooked;
+
+  SeatPainter({required this.isBooked});
+
   @override
   void paint(Canvas canvas, Size size) {
     final Paint seatPaint = Paint()
-      ..color = const Color.fromARGB(255, 139, 14, 43)!
+      ..color = isBooked
+          ? const Color.fromARGB(255, 123, 14, 14)
+          : const Color.fromARGB(
+              255, 124, 211, 227)! // Deep Red for booked, Gray for available
       ..style = PaintingStyle.fill;
 
-    final Paint borderPaint = Paint()
-      ..color = Colors.brown[600]!
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+    final Paint shadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.2)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
 
-    // Draw desk
-    final deskPath = Path()
-      ..moveTo(size.width * 0.1, size.height * 0.6)
-      ..lineTo(size.width * 0.9, size.height * 0.6)
-      ..lineTo(size.width * 0.85, size.height)
-      ..lineTo(size.width * 0.15, size.height)
-      ..close();
+    final double seatWidth = size.width * 0.8;
+    final double seatHeight = size.height * 0.5;
+    final double seatX = (size.width - seatWidth) / 2;
+    final double seatY = (size.height - seatHeight) / 2;
 
-    // Draw seat back
-    final seatBackPath = Path()
-      ..moveTo(size.width * 0.2, size.height * 0.3)
-      ..lineTo(size.width * 0.8, size.height * 0.3)
-      ..lineTo(size.width * 0.8, size.height * 0.6)
-      ..lineTo(size.width * 0.2, size.height * 0.6)
-      ..close();
-
-    canvas.drawPath(deskPath, seatPaint);
-    canvas.drawPath(deskPath, borderPaint);
-    canvas.drawPath(seatBackPath, seatPaint);
-    canvas.drawPath(seatBackPath, borderPaint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
-
-class BookedSeatPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // First paint the empty seat
-    EmptySeatPainter().paint(canvas, size);
-
-    final Paint personPaint = Paint()
-      ..color = Colors.blue[700]!
-      ..style = PaintingStyle.fill;
-
-    final Paint skinPaint = Paint()
-      ..color = Colors.pink[100]!
-      ..style = PaintingStyle.fill;
-
-    // Draw body
-    final bodyPath = Path()
-      ..moveTo(size.width * 0.3, size.height * 0.25)
-      ..lineTo(size.width * 0.7, size.height * 0.25)
-      ..lineTo(size.width * 0.6, size.height * 0.55)
-      ..lineTo(size.width * 0.4, size.height * 0.55)
-      ..close();
-
-    // Draw head
-    final headCenter = Offset(size.width * 0.5, size.height * 0.2);
-    final headRadius = size.width * 0.15;
-
-    canvas.drawPath(bodyPath, personPaint);
-    canvas.drawCircle(headCenter, headRadius, skinPaint);
-
-    // Draw simple face details
-    final Paint facePaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-
-    // Eyes
-    canvas.drawCircle(
-      Offset(headCenter.dx - headRadius * 0.3, headCenter.dy),
-      2,
-      facePaint,
-    );
-    canvas.drawCircle(
-      Offset(headCenter.dx + headRadius * 0.3, headCenter.dy),
-      2,
-      facePaint,
+    // **Draw Soft Shadow**
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(seatX, seatY + 4, seatWidth, seatHeight),
+        const Radius.circular(12),
+      ),
+      shadowPaint,
     );
 
-    // Smile
-    final smilePath = Path()
-      ..moveTo(
-          headCenter.dx - headRadius * 0.3, headCenter.dy + headRadius * 0.3)
-      ..quadraticBezierTo(
-        headCenter.dx,
-        headCenter.dy + headRadius * 0.5,
-        headCenter.dx + headRadius * 0.3,
-        headCenter.dy + headRadius * 0.3,
-      );
-    canvas.drawPath(smilePath, facePaint);
+    // **Draw Seat**
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(seatX, seatY, seatWidth, seatHeight),
+        const Radius.circular(12),
+      ),
+      seatPaint,
+    );
+
+    // **Draw Seat Backrest**
+    final double backrestHeight = seatHeight * 0.6;
+    final double backrestY = seatY - backrestHeight * 0.8;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(seatX, backrestY, seatWidth, backrestHeight),
+        const Radius.circular(8),
+      ),
+      seatPaint,
+    );
   }
 
   @override

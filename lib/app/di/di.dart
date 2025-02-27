@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shikshyadwar_mobile_application_project/app/shared_prefs/token_shared_prefs.dart';
+import 'package:shikshyadwar_mobile_application_project/core/Fingerprint/fingerprint_auth.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/api_service.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/hive_service.dart';
 import 'package:shikshyadwar_mobile_application_project/core/socket_service.dart';
@@ -11,12 +12,14 @@ import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/auth_local_repository/auth_local_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/auth_remote_repository.dart/auth_remote_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/repository/otp_remote_repository.dart/otp_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/forgot_password_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/get_all_users_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/get_current_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/get_verify_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/login_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/logout_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/register_user_usecase.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/reset-password_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/auth_bloc.dart';
@@ -84,7 +87,7 @@ Future<void> initDependencies() async {
   await _initPaymentDependencies();
   await _initVerifyDependencies();
   await _initSharedPreferences();
-  await _initLoginDependencies();
+  _initLoginDependencies();
   await _initSplashScreenDependencies();
   await _initOnboardingScreenDependencies();
   await _initCourseDependencies();
@@ -184,7 +187,7 @@ _initRegisterDependencies() {
   );
 
   getIt.registerLazySingleton<AuthRemoteDatasource>(
-    () => AuthRemoteDatasource(getIt<Dio>()),
+    () => AuthRemoteDatasource(getIt<Dio>(), getIt<TokenSharedPrefs>()),
   );
 
   //Repository
@@ -520,7 +523,43 @@ _initVerifyDependencies() {
 //   );
 // }
 
-_initLoginDependencies() async {
+// _initLoginDependencies() async {
+//   // ✅ Ensure AuthRemoteRepository is registered first
+//   if (!getIt.isRegistered<AuthRemoteRepository>()) {
+//     getIt.registerLazySingleton<AuthRemoteRepository>(
+//       () => AuthRemoteRepository(getIt<AuthRemoteDatasource>()),
+//     );
+//   }
+
+//   // ✅ Register Token Shared Preferences
+//   getIt.registerLazySingleton<TokenSharedPrefs>(
+//     () => TokenSharedPrefs(getIt<SharedPreferences>()),
+//   );
+
+//   // ✅ Register Use Cases
+//   getIt.registerLazySingleton<LoginUseCase>(
+//     () =>
+//         LoginUseCase(getIt<TokenSharedPrefs>(), getIt<AuthRemoteRepository>()),
+//   );
+
+//   getIt.registerLazySingleton<GetCurrentUserUseCase>(
+//     () => GetCurrentUserUseCase(getIt<AuthRemoteRepository>()),
+//   );
+
+//   // ✅ Register LoginBloc (AFTER RegisterBloc & HomeCubit are available)
+//   getIt.registerFactory<LoginBloc>(
+//     () => LoginBloc(
+//       registerBloc: getIt<RegisterBloc>(), // Ensure it's registered
+//       homeCubit: getIt<HomeCubit>(), // Ensure it's registered
+//       loginUseCase: getIt<LoginUseCase>(),
+//       getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
+//       tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+//       forgotPasswordUseCase: getIt<ForgotPasswordUseCase>(),
+//       resetPasswordUseCase: getIt<ResetPasswordUseCase>(),
+//     ),
+//   );
+// }
+void _initLoginDependencies() async {
   // ✅ Ensure AuthRemoteRepository is registered first
   if (!getIt.isRegistered<AuthRemoteRepository>()) {
     getIt.registerLazySingleton<AuthRemoteRepository>(
@@ -543,14 +582,44 @@ _initLoginDependencies() async {
     () => GetCurrentUserUseCase(getIt<AuthRemoteRepository>()),
   );
 
-  // ✅ Register LoginBloc (AFTER RegisterBloc & HomeCubit are available)
+  // ✅ Register Missing ForgotPasswordUseCase & ResetPasswordUseCase
+  if (!getIt.isRegistered<ForgotPasswordUseCase>()) {
+    getIt.registerLazySingleton<ForgotPasswordUseCase>(
+      () => ForgotPasswordUseCase(getIt<AuthRemoteRepository>()),
+    );
+  }
+
+  if (!getIt.isRegistered<ResetPasswordUseCase>()) {
+    getIt.registerLazySingleton<ResetPasswordUseCase>(
+      () => ResetPasswordUseCase(getIt<AuthRemoteRepository>()),
+    );
+  }
+
+  // ✅ Ensure RegisterBloc & HomeCubit are registered before LoginBloc
+  if (!getIt.isRegistered<RegisterBloc>()) {
+    getIt.registerLazySingleton<RegisterBloc>(() => RegisterBloc(
+        verifyBloc: getIt(),
+        registerUseCase: getIt(),
+        uploadImageUsecase: getIt(),
+        createStudentUsecase: getIt()));
+  }
+
+  if (!getIt.isRegistered<HomeCubit>()) {
+    getIt.registerLazySingleton<HomeCubit>(() => HomeCubit());
+  }
+
+  // ✅ Register LoginBloc AFTER everything else is registered
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
-      registerBloc: getIt<RegisterBloc>(), // Ensure it's registered
-      homeCubit: getIt<HomeCubit>(), // Ensure it's registered
+      // registerBloc: getIt<RegisterBloc>(), // ✅ Ensure it's registered
+      // homeCubit: getIt<HomeCubit>(), // ✅ Ensure it's registered
       loginUseCase: getIt<LoginUseCase>(),
-      getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
+      // getCurrentUserUseCase: getIt<GetCurrentUserUseCase>(),
       tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      forgotPasswordUseCase:
+          getIt<ForgotPasswordUseCase>(), // ✅ Fixed missing dependency
+      resetPasswordUseCase: getIt<ResetPasswordUseCase>(),
+      fingerprintAuth: getIt<FingerprintAuth>(), // ✅ Fixed missing dependency
     ),
   );
 }
@@ -620,19 +689,57 @@ _initOnboardingScreenDependencies() async {
   );
 }
 
+// Future<void> _initAuthDependencies() async {
+//   if (!getIt.isRegistered<TokenSharedPrefs>()) {
+//     getIt.registerLazySingleton<TokenSharedPrefs>(
+//       () => TokenSharedPrefs(getIt<SharedPreferences>()),
+//     );
+//   }
+
+//   // if (!getIt.isRegistered<LoginUseCase>()) {
+//   //   getIt.registerLazySingleton<LoginUseCase>(
+//   //     () => LoginUseCase(
+//   //         getIt<AuthRemoteRepository>(), getIt<TokenSharedPrefs>()),
+//   //   );
+//   // }
+
+//   if (!getIt.isRegistered<LogoutUseCase>()) {
+//     getIt.registerLazySingleton<LogoutUseCase>(
+//       () => LogoutUseCase(getIt<TokenSharedPrefs>()),
+//     );
+//   }
+
+//   if (!getIt.isRegistered<GetAllUsersUseCase>()) {
+//     getIt.registerLazySingleton<GetAllUsersUseCase>(
+//       () => GetAllUsersUseCase(getIt<AuthRemoteRepository>()),
+//     );
+//   }
+
+//   if (!getIt.isRegistered<AuthBloc>()) {
+//     getIt.registerFactory<AuthBloc>(
+//       () => AuthBloc(
+//         loginUseCase: getIt<LoginUseCase>(),
+//         logoutUseCase: getIt<LogoutUseCase>(),
+//         tokenPrefs: getIt<TokenSharedPrefs>(),
+//         getAllUsersUseCase: getIt<GetAllUsersUseCase>(),
+//         fingerprintAuth: getIt(), // ✅ Corrected
+//       ),
+//     );
+//   }
+// }
 Future<void> _initAuthDependencies() async {
+  if (!getIt.isRegistered<FingerprintAuth>()) {
+    // ✅ Ensure this comes first
+    getIt.registerLazySingleton<FingerprintAuth>(
+      () => FingerprintAuth(),
+    );
+  }
+
   if (!getIt.isRegistered<TokenSharedPrefs>()) {
     getIt.registerLazySingleton<TokenSharedPrefs>(
       () => TokenSharedPrefs(getIt<SharedPreferences>()),
     );
   }
-
-  // if (!getIt.isRegistered<LoginUseCase>()) {
-  //   getIt.registerLazySingleton<LoginUseCase>(
-  //     () => LoginUseCase(
-  //         getIt<AuthRemoteRepository>(), getIt<TokenSharedPrefs>()),
-  //   );
-  // }
 
   if (!getIt.isRegistered<LogoutUseCase>()) {
     getIt.registerLazySingleton<LogoutUseCase>(
@@ -652,7 +759,8 @@ Future<void> _initAuthDependencies() async {
         loginUseCase: getIt<LoginUseCase>(),
         logoutUseCase: getIt<LogoutUseCase>(),
         tokenPrefs: getIt<TokenSharedPrefs>(),
-        getAllUsersUseCase: getIt<GetAllUsersUseCase>(), // ✅ Corrected
+        getAllUsersUseCase: getIt<GetAllUsersUseCase>(),
+        fingerprintAuth: getIt<FingerprintAuth>(), // ✅ Now correctly registered
       ),
     );
   }

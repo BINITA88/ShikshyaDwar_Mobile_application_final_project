@@ -1,10 +1,9 @@
-
 import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/domain/entity/exam_seat_entity.dart';
 
 class ExamSeatModel extends ExamSeatEntity {
   const ExamSeatModel({
     required String examSeatId,
-    required int seatNumber,
+    required String seatNumber,
     required bool booked,
   }) : super(examSeatId: examSeatId, seatNumber: seatNumber, booked: booked);
 

@@ -16,13 +16,12 @@ class CourseEntity extends Equatable {
   const CourseEntity(
       {required this.coursePrice,
       required this.instructor,
-     this.courseImage,
+      this.courseImage,
       required this.duration,
       this.courseId,
       required this.courseName,
-       this.category,
+      this.category,
       required this.courseDescription});
-
 
   const CourseEntity.empty()
       : courseId = '_empty.courseId',
@@ -31,8 +30,8 @@ class CourseEntity extends Equatable {
         instructor = '_empty.instructor',
         courseImage = null,
         duration = '_empty.duration',
-        courseDescription =  '_empty.courseDescription',
-        category =null;
+        courseDescription = '_empty.courseDescription',
+        category = null;
 
   @override
   List<Object?> get props => [

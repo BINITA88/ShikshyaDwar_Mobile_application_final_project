@@ -34,4 +34,9 @@ class TokenSharedPrefs {
       return Left(SharedPrefsFailure(message: e.toString()));
     }
   }
+
+  Future<String?> getAuthIdFromSharedPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("authId"); // 🔹 Ensure "authId" is saved at login
+  }
 }

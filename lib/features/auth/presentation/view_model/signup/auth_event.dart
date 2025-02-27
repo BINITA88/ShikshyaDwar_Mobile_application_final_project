@@ -5,6 +5,13 @@ abstract class AuthEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class ShakeLogoutRequested extends AuthEvent {}
+
+class FingerprintLoginEvent extends AuthEvent {
+  final BuildContext context;
+  FingerprintLoginEvent({required this.context});
+}
+
 /// 🔍 Check if the user is authenticated (Login Persistence)
 class AuthCheckRequested extends AuthEvent {}
 

@@ -68,8 +68,22 @@ class AuthLocalDataSource implements IAuthDataSource {
   }
   
   @override
-  Future<AuthEntity> getMe() {
+  Future<AuthEntity> getMe(String authId) {
     // TODO: implement getMe
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> forgotPassword({String? email, String? phone}) {
+    // TODO: implement forgotPassword
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> resetPassword({String? email, String? phone, required String otp, required String newPassword}) {
+    // TODO: implement resetPassword
+    throw UnimplementedError();
+  }
+  
+ 
 }

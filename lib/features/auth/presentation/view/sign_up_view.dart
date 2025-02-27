@@ -240,7 +240,7 @@ class _SignUpViewState extends State<SignUpView> {
                         context
                             .read<RegisterBloc>()
                             .add(NavigateVerifyScreenEvent(
-                              destination: VerifyView(),
+                              destination: LoginView(),
                               context: context,
                             ));
                       }
