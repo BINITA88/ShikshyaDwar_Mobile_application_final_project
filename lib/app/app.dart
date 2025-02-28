@@ -1,5 +1,3 @@
-
-
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:shikshyadwar_mobile_application_project/app/di/di.dart';
@@ -74,9 +72,6 @@
 //   }
 // }
 
-
-
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,6 +82,7 @@ import 'package:shikshyadwar_mobile_application_project/features/auth/presentati
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/auth_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/auth_state.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/home/presentation/view_model/home_cubit.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view/splash_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/splash/presentation/view_model/splash_cubit.dart';
@@ -105,7 +101,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    
+
     // Initialize the shake detector
     _shakeDetector = ShakeDetector(onShake: () {
       BlocProvider.of<AuthBloc>(context).add(ShakeLogoutRequested());
@@ -130,6 +126,13 @@ class _AppState extends State<App> {
         BlocProvider(create: (context) => getIt<ChatBloc>()),
         BlocProvider(create: (context) => getIt<AuthBloc>()),
         BlocProvider(create: (context) => getIt<LoginBloc>()),
+        BlocProvider(
+            create: (context) => RegisterBloc(
+                verifyBloc: getIt(),
+                registerUseCase: getIt(),
+                uploadImageUsecase: getIt(),
+                createStudentUsecase:
+                    getIt())), // ✅ Ensure RegisterBloc is available globally
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
