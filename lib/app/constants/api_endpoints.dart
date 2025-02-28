@@ -1,12 +1,12 @@
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static const Duration connectionTimeout = Duration(seconds: 10);
-  static const Duration receiveTimeout = Duration(seconds: 10);
+  static const Duration connectionTimeout = Duration(seconds: 30);
+  static const Duration receiveTimeout = Duration(seconds: 30);
 
   // For Android Emulator
-  // static const String baseUrl = "http://10.0.2.2:9000/api/";
-  static const String baseUrl = "http://192.168.1.82:9000/api/";
+  static const String baseUrl = "http://10.0.2.2:9000/api/";
+  // static const String baseUrl = "http://192.168.1.82:9000/api/";
   // http://192.168.1.82:9000/api/users/signup
 
   // ============= Auth Routes =============
