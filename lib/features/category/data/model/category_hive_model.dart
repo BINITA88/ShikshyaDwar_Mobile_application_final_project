@@ -16,7 +16,7 @@ class CategoryHiveModel extends Equatable {
 
   CategoryHiveModel({
     String? categoryId,
-    required this.message,
+    required this.message, 
   }) : categoryId = categoryId ?? const Uuid().v4();
 
   // Initial Constructor

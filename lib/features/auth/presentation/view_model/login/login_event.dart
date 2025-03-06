@@ -85,8 +85,94 @@
 //   @override
 //   List<Object?> get props => [emailOrPhone, otp, newPassword];
 // }
+
+// import 'package:equatable/equatable.dart';
+// import 'package:flutter/cupertino.dart';
+
+// abstract class LoginEvent extends Equatable {
+//   const LoginEvent();
+
+//   @override
+//   List<Object?> get props => [];
+// }
+
+// /// Navigate to Register Screen
+// class NavigateRegisterScreenEvent extends LoginEvent {
+//   final BuildContext context;
+//   final Widget destination;
+
+//   const NavigateRegisterScreenEvent({
+//     required this.context,
+//     required this.destination,
+//   });
+
+//   @override
+//   List<Object?> get props => [context, destination];
+// }
+
+// /// Navigate to Home Screen
+// class NavigateHomeScreenEvent extends LoginEvent {
+//   final BuildContext context;
+//   final Widget destination;
+
+//   const NavigateHomeScreenEvent({
+//     required this.context,
+//     required this.destination,
+//   });
+
+//   @override
+//   List<Object?> get props => [context, destination];
+// }
+
+// /// Login User Event – note we include BuildContext so that the Bloc can navigate directly.
+// class LoginUserEvent extends LoginEvent {
+//   final BuildContext context;
+//   final String email;
+//   final String password;
+
+//   const LoginUserEvent({
+//     required this.context,
+//     required this.email,
+//     required this.password,
+//   });
+
+//   @override
+//   List<Object?> get props => [context, email, password];
+// }
+
+// /// Forgot Password (Send OTP) Event
+// class ForgotPasswordRequested extends LoginEvent {
+//   final String? email;
+//   final String? phone;
+
+//   const ForgotPasswordRequested({this.email, this.phone});
+
+//   @override
+//   List<Object?> get props => [email, phone];
+// }
+
+// /// Reset Password (Verify OTP & Update Password) Event
+// class ResetPasswordRequested extends LoginEvent {
+//   final String emailOrPhone;
+//   final String otp;
+//   final String newPassword;
+
+//   const ResetPasswordRequested({
+//     required this.emailOrPhone,
+//     required this.otp,
+//     required this.newPassword,
+//   });
+
+//   @override
+//   List<Object?> get props => [emailOrPhone, otp, newPassword];
+// }
+
+// class FingerprintLoginEvent extends LoginEvent {
+//   final BuildContext context;
+//   const FingerprintLoginEvent({required this.context});
+// }
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 abstract class LoginEvent extends Equatable {
   const LoginEvent();
@@ -95,37 +181,9 @@ abstract class LoginEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Navigate to Register Screen
-class NavigateRegisterScreenEvent extends LoginEvent {
-  final BuildContext context;
-  final Widget destination;
-
-  const NavigateRegisterScreenEvent({
-    required this.context,
-    required this.destination,
-  });
-
-  @override
-  List<Object?> get props => [context, destination];
-}
-
-/// Navigate to Home Screen
-class NavigateHomeScreenEvent extends LoginEvent {
-  final BuildContext context;
-  final Widget destination;
-
-  const NavigateHomeScreenEvent({
-    required this.context,
-    required this.destination,
-  });
-
-  @override
-  List<Object?> get props => [context, destination];
-}
-
-/// Login User Event – note we include BuildContext so that the Bloc can navigate directly.
+/// ✅ **Login User Event**
 class LoginUserEvent extends LoginEvent {
-  final BuildContext context;
+  final BuildContext context; // ✅ Added BuildContext
   final String email;
   final String password;
 
@@ -139,34 +197,45 @@ class LoginUserEvent extends LoginEvent {
   List<Object?> get props => [context, email, password];
 }
 
-/// Forgot Password (Send OTP) Event
+/// ✅ **Forgot Password Event**
 class ForgotPasswordRequested extends LoginEvent {
+  final BuildContext context; // ✅ Added BuildContext
   final String? email;
   final String? phone;
 
-  const ForgotPasswordRequested({this.email, this.phone});
+  const ForgotPasswordRequested({
+    required this.context,
+    this.email,
+    this.phone,
+  });
 
   @override
-  List<Object?> get props => [email, phone];
+  List<Object?> get props => [context, email, phone];
 }
 
-/// Reset Password (Verify OTP & Update Password) Event
+/// ✅ **Reset Password Event**
 class ResetPasswordRequested extends LoginEvent {
+  final BuildContext context; // ✅ Added BuildContext
   final String emailOrPhone;
   final String otp;
   final String newPassword;
 
   const ResetPasswordRequested({
+    required this.context,
     required this.emailOrPhone,
     required this.otp,
     required this.newPassword,
   });
 
   @override
-  List<Object?> get props => [emailOrPhone, otp, newPassword];
+  List<Object?> get props => [context, emailOrPhone, otp, newPassword];
 }
 
+/// ✅ **Fingerprint Login Event**
 class FingerprintLoginEvent extends LoginEvent {
-  final BuildContext context;
+  final BuildContext context; // ✅ Added BuildContext
   const FingerprintLoginEvent({required this.context});
+
+  @override
+  List<Object?> get props => [context];
 }

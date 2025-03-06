@@ -98,7 +98,9 @@ class _SignUpViewState extends State<SignUpView> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.pink[50]!,
+            // Colors.pink[50]!,
+            Colors.white,
+
             Colors.white,
           ],
         ),
@@ -235,6 +237,7 @@ class _SignUpViewState extends State<SignUpView> {
                               contactNo: _contactNoController.text,
                               password: _passwordController.text,
                               image: imageName,
+                              role: '',
                             ));
 
                         context
@@ -265,7 +268,10 @@ class _SignUpViewState extends State<SignUpView> {
                     children: [
                       Text(
                         'Already have an account? ',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(
+                            fontSize: 16, // Increase font size as needed
+
+                            color: const Color.fromARGB(255, 28, 27, 27)),
                       ),
                       GestureDetector(
                         onTap: () {

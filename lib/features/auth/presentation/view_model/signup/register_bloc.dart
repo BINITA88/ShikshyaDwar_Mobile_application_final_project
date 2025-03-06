@@ -106,7 +106,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           name: event.name,
           password: event.password,
           image: event.image,
-          otp: event.otp
+          otp: event.otp, role: 0, 
           
           ),
     );

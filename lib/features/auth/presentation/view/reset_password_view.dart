@@ -54,7 +54,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.pink[50]!,
+                // Colors.pink[50]!,
+                Colors.white,
+
                 Colors.white,
               ],
             ),
@@ -70,14 +72,14 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                     child: Column(
                       children: [
                         const Icon(Icons.lock_reset_rounded,
-                            size: 80, color: Colors.pink),
+                            size: 80, color: Color.fromARGB(255, 196, 103, 28)),
                         const SizedBox(height: 14),
                         Text(
                           'Reset Your Password',
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
-                            color: Colors.pink[800],
+                            color: const Color.fromARGB(255, 12, 12, 12),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -103,7 +105,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                               _isPasswordVisible
                                   ? Icons.visibility
                                   : Icons.visibility_off,
-                              color: Colors.pink[800],
+                              color: const Color.fromARGB(255, 15, 14, 15),
                             ),
                             onPressed: () {
                               setState(() {
@@ -168,18 +170,58 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               emailOrPhone: widget.emailOrPhone,
               otp: _otpController.text,
               newPassword: _newPasswordController.text,
+              context: context,
             ),
           );
     }
   }
 
   /// ✅ *Reusable TextField Widget*
+  // Widget _buildTextField({
+  //   required TextEditingController controller,
+  //   required String label,
+  //   required IconData icon,
+  //   bool isObscure = false,
+  //   Widget? suffixIcon,
+  // }) {
+  //   return TextFormField(
+  //     controller: controller,
+  //     obscureText: isObscure,
+  //     decoration: InputDecoration(
+  //       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+  //       enabledBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(12),
+  //         borderSide: BorderSide(color: const Color.fromARGB(255, 44, 42, 43)!),
+  //       ),
+  //       focusedBorder: OutlineInputBorder(
+  //         borderRadius: BorderRadius.circular(12),
+  //         borderSide: BorderSide(
+  //             color: const Color.fromARGB(255, 59, 57, 58)!, width: 2),
+  //       ),
+  //       filled: true,
+  //       fillColor: Colors.white,
+  //       labelText: label,
+  //       prefixIcon: Icon(icon, color: const Color.fromARGB(255, 20, 20, 20)),
+  //       suffixIcon: suffixIcon,
+  //       labelStyle: TextStyle(color: Colors.grey[600]),
+  //     ),
+  //     validator: (value) {
+  //       if (value == null || value.isEmpty) {
+  //         return 'Please enter $label';
+  //       }
+  //       return null;
+  //     },
+  //   );
+  // }
+
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
     required IconData icon,
     bool isObscure = false,
     Widget? suffixIcon,
+    Color prefixIconColor = Colors.black, // Default color for prefix icon
+    Color suffixIconColor = Colors.black, // Default color for suffix icon
   }) {
     return TextFormField(
       controller: controller,
@@ -188,17 +230,25 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.pink[200]!),
+          borderSide: const BorderSide(color: Color.fromARGB(255, 81, 77, 79)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.pink[800]!, width: 2),
+          borderSide: const BorderSide(
+              color: Color.fromARGB(255, 59, 57, 58), width: 2),
         ),
         filled: true,
         fillColor: Colors.white,
         labelText: label,
-        prefixIcon: Icon(icon, color: Colors.pink[800]),
-        suffixIcon: suffixIcon,
+        prefixIcon:
+            Icon(icon, color: prefixIconColor), // Custom prefix icon color
+        suffixIcon: suffixIcon != null
+            ? IconTheme(
+                data: IconThemeData(
+                    color: suffixIconColor), // Custom suffix icon color
+                child: suffixIcon,
+              )
+            : null,
         labelStyle: TextStyle(color: Colors.grey[600]),
       ),
       validator: (value) {

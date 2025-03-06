@@ -32,6 +32,88 @@
 // }
 
 
+// import 'package:equatable/equatable.dart';
+
+// class AuthEntity extends Equatable {
+//   final String? authId;
+//   final String email;
+//   final String? image;
+//   final String contactNo;
+//   final String name;
+//   final String password;
+//   final String? otp;
+
+//   const AuthEntity({
+//     this.authId,
+//     required this.email,
+//     this.image,
+//     required this.contactNo,
+//     required this.nam, required int rolee,
+//     required this.password,
+//     this.otp,
+//   });
+
+//   // ✅ From JSON method with null checks
+//   factory AuthEntity.fromJson(Map<String, dynamic> json) {
+//     return AuthEntity(
+//       authId: json['_id'] as String?,
+//       email: json['email'] ?? "No Email",
+//       image: json['image'] as String?,
+//       contactNo: json['contactNo'] ?? "No Contact",
+//       name: json['name'] ?? "Unknown User",
+//       password: json['password'] ?? "", // Ensure default empty password
+//       otp: json['otp'] as String?,
+//     );
+//   }
+
+//   // ✅ CopyWith method for updating specific fields
+//   AuthEntity copyWith({
+//     String? authId,
+//     String? email,
+//     String? image,
+//     String? contactNo,
+//     String? name,
+//     String? password,
+//     String? otp,
+//   }) {
+//     return AuthEntity(
+//       authId: authId ?? this.authId,
+//       email: email ?? this.email,
+//       image: image ?? this.image,
+//       contactNo: contactNo ?? this.contactNo,
+//       name: name ?? this.name,
+//       password: password ?? this.password,
+//       otp: otp ?? this.otp,
+//     );
+//   }
+
+//   // ✅ Empty constructor with default values
+//   const AuthEntity.empty()
+//       : authId = "",
+//         email = "",
+//         image = null,
+//         contactNo = "",
+//         name = "",
+//         password = "",
+//         otp = null;
+
+//   @override
+//   List<Object?> get props => [
+//         authId,
+//         email,
+//         image,
+//         contactNo,
+//         name,
+//         password,
+//         otp,
+//       ];
+// }
+
+
+
+
+// ater role change
+
 import 'package:equatable/equatable.dart';
 
 class AuthEntity extends Equatable {
@@ -42,6 +124,7 @@ class AuthEntity extends Equatable {
   final String name;
   final String password;
   final String? otp;
+  final int role; // ✅ Added role field (0 = Student, 2 = Instructor)
 
   const AuthEntity({
     this.authId,
@@ -51,6 +134,7 @@ class AuthEntity extends Equatable {
     required this.name,
     required this.password,
     this.otp,
+    required this.role, // ✅ Ensure role is included
   });
 
   // ✅ From JSON method with null checks
@@ -61,8 +145,9 @@ class AuthEntity extends Equatable {
       image: json['image'] as String?,
       contactNo: json['contactNo'] ?? "No Contact",
       name: json['name'] ?? "Unknown User",
-      password: json['password'] ?? "", // Ensure default empty password
+      password: json['password'] ?? "",
       otp: json['otp'] as String?,
+      role: json['role'] ?? 0, // ✅ Default role to 0 (Student)
     );
   }
 
@@ -75,6 +160,7 @@ class AuthEntity extends Equatable {
     String? name,
     String? password,
     String? otp,
+    int? role,
   }) {
     return AuthEntity(
       authId: authId ?? this.authId,
@@ -84,6 +170,7 @@ class AuthEntity extends Equatable {
       name: name ?? this.name,
       password: password ?? this.password,
       otp: otp ?? this.otp,
+      role: role ?? this.role, // ✅ Ensure role is copied
     );
   }
 
@@ -95,7 +182,8 @@ class AuthEntity extends Equatable {
         contactNo = "",
         name = "",
         password = "",
-        otp = null;
+        otp = null,
+        role = 0; // ✅ Default to Student
 
   @override
   List<Object?> get props => [
@@ -106,5 +194,6 @@ class AuthEntity extends Equatable {
         name,
         password,
         otp,
+        role, // ✅ Include role in comparison
       ];
 }
