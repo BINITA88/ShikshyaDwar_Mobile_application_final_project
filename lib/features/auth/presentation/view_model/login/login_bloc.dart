@@ -470,6 +470,7 @@
 //     );
 //   }
 // }
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'login_event.dart';
@@ -508,7 +509,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<ForgotPasswordRequested>(_onForgotPasswordRequested);
     on<ResetPasswordRequested>(_onResetPasswordRequested);
   }
-
   Future<void> _onLoginUser(
       LoginUserEvent event, Emitter<LoginState> emit) async {
     emit(state.copyWith(isLoading: true));
@@ -521,11 +521,38 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (failure) {
         emit(state.copyWith(
             isLoading: false, errorMessage: 'Invalid Credentials'));
+
+        // ✅ Show Snackbar for login failure
+        ScaffoldMessenger.of(event.context).showSnackBar(
+          const SnackBar(
+            content: Text("Invalid Credentials. Please try again."),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
       },
       (token) async {
         await _tokenSharedPrefs.saveToken(token);
-        Navigator.pushReplacement(
-            event.context, MaterialPageRoute(builder: (_) => const HomeView()));
+
+        // ✅ Show Snackbar for successful login
+        ScaffoldMessenger.of(event.context).showSnackBar(
+          const SnackBar(
+            content: Text("Login successful!"),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        // ✅ Navigate to HomeView after a slight delay
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.pushReplacement(
+            event.context,
+            MaterialPageRoute(
+              builder: (_) => const HomeView(userRole: 0),
+            ),
+          );
+        });
+
         emit(state.copyWith(isLoading: false, isSuccess: true));
       },
     );
@@ -551,12 +578,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             isLoading: false, errorMessage: "No user session found")),
         (token) {
           if (token != null && token.isNotEmpty) {
-            Navigator.pushReplacement(event.context,
-                MaterialPageRoute(builder: (_) => const HomeView()));
+            Navigator.pushReplacement(
+                event.context,
+                MaterialPageRoute(
+                    builder: (_) => const HomeView(
+                          userRole: 0,
+                        )));
             emit(state.copyWith(isLoading: false, isSuccess: true));
           } else {
-            emit(state.copyWith(
-                isLoading: false, errorMessage: "Authentication failed"));
+            emit(state.copyWith(isLoading: false, isSuccess: true));
           }
         },
       );

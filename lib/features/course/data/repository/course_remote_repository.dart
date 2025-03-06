@@ -14,17 +14,21 @@ class CourseRemoteRepository implements ICourseRepository {
   @override
   Future<Either<Failure, List<CourseEntity>>> getCourses() async {
     try {
+      // ✅ Fetch courses from API
       final courses = await _courseRemoteDataSource.getCourses();
       return Right(courses);
+    } on SocketException {
+      return Left(ApiFailure(message: "No Internet Connection"));
     } catch (e) {
-      return Left(ApiFailure(message: e.toString()));
+      return Left(ApiFailure(message: "API Error: ${e.toString()}"));
     }
   }
 
   @override
   Future<Either<Failure, CourseEntity>> getCourseDetail(String courseId) async {
     try {
-      final courseData = await _courseRemoteDataSource.getCourseDetailsById(courseId);
+      final courseData =
+          await _courseRemoteDataSource.getCourseDetailsById(courseId);
       return Right(courseData);
     } on SocketException {
       return Left(ApiFailure(message: "No Internet Connection"));

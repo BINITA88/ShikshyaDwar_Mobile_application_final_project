@@ -56,7 +56,7 @@ class NoticeErrorState extends NoticeState {
 class NoticeBloc extends Bloc<NoticeEvent, NoticeState> {
   final GetAllNoticesUseCase getAllNoticesUseCase;
 
-  NoticeBloc({required this.getAllNoticesUseCase})
+  NoticeBloc({required this.getAllNoticesUseCase,})
       : super(const NoticeInitialState()) {
     on<LoadNoticeEvent>((event, emit) async {
       emit(const NoticeLoadingState());

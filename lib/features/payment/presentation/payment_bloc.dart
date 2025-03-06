@@ -8,11 +8,11 @@ import 'payment_state.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   final ProcessPaymentUseCase processPaymentUseCase;
-  final GetStripeApiKeyUseCase getStripeApiKeyUseCase;
+  // final GetStripeApiKeyUseCase getStripeApiKeyUseCase;
 
   PaymentBloc({
     required this.processPaymentUseCase,
-    required this.getStripeApiKeyUseCase, 
+    // required this.getStripeApiKeyUseCase, 
   }) : super(PaymentInitial()) {
     on<ProcessPaymentEvent>((event, emit) async {
       emit(PaymentLoading());
@@ -24,14 +24,14 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       }
     });
 
-    on<GetStripeApiKeyEvent>((event, emit) async {
-      emit(PaymentLoading());
-      try {
-        final apiKey = await getStripeApiKeyUseCase();
-        emit(PaymentSuccess(paymentEntity: PaymentEntity(clientSecret: apiKey)));
-      } catch (e) {
-        emit(PaymentError(message: e.toString()));
-      }
-    });
+    // on<GetStripeApiKeyEvent>((event, emit) async {
+    //   emit(PaymentLoading());
+    //   try {
+    //     final apiKey = await getStripeApiKeyUseCase();
+    //     emit(PaymentSuccess(paymentEntity: PaymentEntity(clientSecret: apiKey)));
+    //   } catch (e) {
+    //     emit(PaymentError(message: e.toString()));
+    //   }
+    // });
   }
 }

@@ -15,7 +15,7 @@ class AuthLoading extends AuthState {}
 /// ✅ User is Authenticated
 class AuthAuthenticated extends AuthState {
   final String token;
-  AuthAuthenticated({required this.token});
+  AuthAuthenticated({required this.token, required int role});
 
   @override
   List<Object> get props => [token];

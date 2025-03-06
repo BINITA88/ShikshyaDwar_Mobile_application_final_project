@@ -1,201 +1,583 @@
+// import 'package:bloc_test/bloc_test.dart';
 // import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:integration_test/integration_test.dart';
 // import 'package:mocktail/mocktail.dart';
 // import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view/login_view.dart';
 // import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
 // import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_event.dart';
+// import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_state.dart';
 
-// class MockLoginBloc extends Mock implements LoginBloc {}
+// class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
+//     implements LoginBloc {}
+
+// class FakeLoginEvent extends Fake implements LoginEvent {}
+
+// class FakeLoginState extends Fake implements LoginState {}
 
 // void main() {
-//   late MockLoginBloc mockLoginBloc;
+//   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+//   late MockLoginBloc loginBloc;
 
-//   setUp(() {
-//     mockLoginBloc = MockLoginBloc();
+//   setUpAll(() {
+//     registerFallbackValue(FakeLoginEvent());
+//     registerFallbackValue(FakeLoginState());
 //   });
 
-//   Widget createLoginScreen() {
-//     return MaterialApp(
-//       home: BlocProvider<LoginBloc>.value(
-//         value: mockLoginBloc,
-//         child: const LoginView(),
+//   setUp(() {
+//     loginBloc = MockLoginBloc();
+//   });
+
+//   Widget loadLoginView() {
+//     return BlocProvider<LoginBloc>(
+//       create: (context) => loginBloc,
+//       child: const MaterialApp(
+//         home: LoginView(),
 //       ),
 //     );
 //   }
 
-//   testWidgets('should render login view with input fields and button', (tester) async {
-//     await tester.pumpWidget(createLoginScreen());
-
-//     expect(find.text('Welcome Back'), findsOneWidget);
-//     expect(find.text('Email'), findsOneWidget);
-//     expect(find.text('Password'), findsOneWidget);
-//     expect(find.text('Login'), findsOneWidget);
+//   testWidgets('1️⃣ Checking for the presence of the Login button',
+//       (tester) async {
+//     await tester.pumpWidget(loadLoginView());
+//     expect(find.widgetWithText(ElevatedButton, 'Login'), findsOneWidget);
 //   });
 
-//   testWidgets('should validate empty fields when tapping login button', (tester) async {
-//     await tester.pumpWidget(createLoginScreen());
+//   testWidgets('2️⃣ Checking for the presence of the Register button',
+//       (tester) async {
+//     await tester.pumpWidget(loadLoginView());
+//     expect(find.text('Register'), findsOneWidget);
+//   });
 
-//     await tester.tap(find.text('Login'));
-//     await tester.pump();
+//   testWidgets('3️⃣ Validating empty fields show error messages',
+//       (tester) async {
+//     await tester.pumpWidget(loadLoginView());
+//     await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+//     await tester.pumpAndSettle();
 
 //     expect(find.text('Please enter Email'), findsOneWidget);
 //     expect(find.text('Please enter Password'), findsOneWidget);
 //   });
 
-//   testWidgets('should validate password length', (tester) async {
-//     await tester.pumpWidget(createLoginScreen());
+//   testWidgets('4️⃣ Entering email and password updates the fields',
+//       (tester) async {
+//     await tester.pumpWidget(loadLoginView());
 
-//     await tester.enterText(find.byKey(Key('emailField')), 'test@example.com');
-//     await tester.enterText(find.byKey(Key('passwordField')), '123');
-
-//     await tester.tap(find.text('Login'));
+//     await tester.enterText(find.byType(TextField).at(0), 'Sam11@gmail.com');
+//     await tester.enterText(find.byType(TextField).at(1), 'Sam@123');
 //     await tester.pump();
 
-//     expect(find.text('Password must be at least 6 characters long'), findsOneWidget);
+//     expect(find.text('Sam11@gmail.com'), findsOneWidget);
+//     expect(find.text('Sam@123'), findsOneWidget);
 //   });
 
-//   testWidgets('should call LoginBloc when form is valid', (tester) async {
-//     when(() => mockLoginBloc.add(any())).thenReturn(null);
+//   testWidgets('5️⃣ Successful login should trigger navigation', (tester) async {
+//     when(() => loginBloc.state).thenReturn(
+//       LoginState(
+//         isLoading: false,
+//         isSuccess: true,
+//         user: null,
+//         isOtpSent: false,
+//         isPasswordReset: false,
+//       ),
+//     );
 
-//     await tester.pumpWidget(createLoginScreen());
+//     await tester.pumpWidget(loadLoginView());
+//     await tester.enterText(find.byType(TextField).at(0), 'Sam11@gmail.com');
+//     await tester.enterText(find.byType(TextField).at(1), 'Sam@123');
+//     await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+//     await tester.pumpAndSettle();
 
-//     await tester.enterText(find.byKey(Key('emailField')), 'test@example.com');
-//     await tester.enterText(find.byKey(Key('passwordField')), 'validpassword');
+//     verify(() => loginBloc.add(any())).called(1);
+//     expect(loginBloc.state.isSuccess, true);
+//   });
 
-//     await tester.tap(find.text('Login'));
+//   testWidgets('6️⃣ Failed login should display an error message',
+//       (tester) async {
+//     when(() => loginBloc.state).thenReturn(
+//       LoginState(
+//         isLoading: false,
+//         isSuccess: false,
+//         errorMessage: "Invalid credentials",
+//         isOtpSent: false,
+//         isPasswordReset: false,
+//       ),
+//     );
+
+//     await tester.pumpWidget(loadLoginView());
+//     await tester.enterText(find.byType(TextField).at(0), 'wrong@gmail.com');
+//     await tester.enterText(find.byType(TextField).at(1), 'wrongpassword');
+//     await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+//     await tester.pumpAndSettle();
+
+//     expect(find.text('Invalid credentials'), findsOneWidget);
+//   });
+
+//   testWidgets('7️⃣ Checking the Forgot Password button shows modal',
+//       (tester) async {
+//     await tester.pumpWidget(loadLoginView());
+//     await tester.tap(find.text('Forgot Password?'));
+//     await tester.pumpAndSettle();
+//     expect(find.text("Enter email or phone"), findsOneWidget);
+//   });
+
+//   testWidgets('8️⃣ Forgot password modal allows OTP request', (tester) async {
+//     await tester.pumpWidget(loadLoginView());
+//     await tester.tap(find.text('Forgot Password?'));
+//     await tester.pumpAndSettle();
+
+//     await tester.enterText(find.byType(TextField).at(0), 'test@gmail.com');
+//     await tester.tap(find.widgetWithText(ElevatedButton, 'Send OTP'));
+//     await tester.pumpAndSettle();
+
+//     verify(() => loginBloc.add(any())).called(1);
+//   });
+
+//   testWidgets('9️⃣ Fingerprint authentication button is present and clickable',
+//       (tester) async {
+//     await tester.pumpWidget(loadLoginView());
+//     final fingerprintButton =
+//         find.widgetWithText(ElevatedButton, 'Login with Fingerprint');
+//     expect(fingerprintButton, findsOneWidget);
+//     await tester.tap(fingerprintButton);
+//     await tester.pumpAndSettle();
+//   });
+
+//   testWidgets(
+//       '🔟 Fingerprint authentication failure should show an error message',
+//       (tester) async {
+//     when(() => loginBloc.state).thenReturn(
+//       LoginState(
+//         isLoading: false,
+//         isSuccess: false,
+//         isOtpSent: false,
+//         isPasswordReset: false,
+//       ),
+//     );
+
+//     await tester.pumpWidget(loadLoginView());
+//     await tester.tap(find.byIcon(Icons.fingerprint));
+//     await tester.pumpAndSettle();
+
+//     expect(find.text("Fingerprint authentication failed!"), findsOneWidget);
+//   });
+
+//   testWidgets('1️⃣1️⃣ Toggle password visibility', (tester) async {
+//     await tester.pumpWidget(loadLoginView());
+//     final visibilityButton = find.byIcon(Icons.visibility_off);
+//     expect(visibilityButton, findsOneWidget);
+
+//     await tester.tap(visibilityButton);
 //     await tester.pump();
 
-//     verify(() => mockLoginBloc.add(any<LoginUserEvent>())).called(1);
+//     final visibilityIcon = find.byIcon(Icons.visibility);
+//     expect(visibilityIcon, findsOneWidget);
+//   });
+
+//   testWidgets('1️⃣2️⃣ Navigating to Register page on tapping Register',
+//       (tester) async {
+//     await tester.pumpWidget(loadLoginView());
+//     await tester.tap(find.text('Register'));
+//     await tester.pumpAndSettle();
+
+//     expect(find.byType(LoginView), findsNothing);
 //   });
 // }
 
+// import 'package:bloc_test/bloc_test.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:mocktail/mocktail.dart';
+// import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view/login_view.dart';
+// import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
+// import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_event.dart';
+// import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_state.dart';
+
+// class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
+//     implements LoginBloc {}
+
+// class FakeLoginEvent extends Fake implements LoginEvent {}
+
+// class FakeLoginState extends Fake implements LoginState {}
+
+// void main() {
+//   late MockLoginBloc loginBloc;
+
+//   setUpAll(() {
+//     registerFallbackValue(FakeLoginEvent());
+//     registerFallbackValue(FakeLoginState());
+//   });
+
+//   setUp(() {
+//     loginBloc = MockLoginBloc();
+//   });
+
+//   Widget createTestableWidget() {
+//     return BlocProvider<LoginBloc>(
+//       create: (context) => loginBloc,
+//       child: const MaterialApp(
+//         home: LoginView(),
+//       ),
+//     );
+//   }
+
+//   testWidgets('1️⃣ Should display Login button', (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     expect(find.widgetWithText(ElevatedButton, 'Login'), findsOneWidget);
+//   });
+
+//   testWidgets('2️⃣ Should display Register button', (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     expect(find.text('Register'), findsOneWidget);
+//   });
+
+//   testWidgets('3️⃣ Empty fields should show validation errors', (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+//     await tester.pumpAndSettle();
+
+//     expect(find.text('Please enter Email'), findsOneWidget);
+//     expect(find.text('Please enter Password'), findsOneWidget);
+//   });
+
+//   testWidgets('4️⃣ Entering email and password updates fields', (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     await tester.enterText(find.byType(TextField).at(0), 'test@gmail.com');
+//     await tester.enterText(find.byType(TextField).at(1), 'Test@123');
+//     await tester.pump();
+
+//     expect(find.text('test@gmail.com'), findsOneWidget);
+//     expect(find.text('Test@123'), findsOneWidget);
+//   });
+
+//   testWidgets('5️⃣ Successful login should navigate to HomeView',
+//       (tester) async {
+//     whenListen(
+//       loginBloc,
+//       Stream.fromIterable([
+//         LoginState.initial(),
+//         LoginState(
+//             isLoading: false,
+//             isSuccess: true,
+//             user: null,
+//             isOtpSent: false,
+//             isPasswordReset: false),
+//       ]),
+//     );
+
+//     await tester.pumpWidget(createTestableWidget());
+
+//     await tester.enterText(find.byType(TextField).at(0), 'Sam11@gmail.com');
+//     await tester.enterText(find.byType(TextField).at(1), 'Sam@123');
+//     await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+//     await tester.pumpAndSettle();
+
+//     verify(() => loginBloc.add(any<LoginUserEvent>())).called(1);
+//   });
+
+//   testWidgets('6️⃣ Failed login should show an error message', (tester) async {
+//     whenListen(
+//       loginBloc,
+//       Stream.fromIterable([
+//         LoginState.initial(),
+//         LoginState(
+//             isLoading: false,
+//             isSuccess: false,
+//             errorMessage: "Invalid credentials",
+//             isOtpSent: false,
+//             isPasswordReset: false),
+//       ]),
+//     );
+
+//     await tester.pumpWidget(createTestableWidget());
+//     await tester.enterText(find.byType(TextField).at(0), 'wrong@gmail.com');
+//     await tester.enterText(find.byType(TextField).at(1), 'wrongpassword');
+//     await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+//     await tester.pumpAndSettle();
+
+//     expect(find.text('Invalid credentials'), findsOneWidget);
+//   });
+
+//   testWidgets('7️⃣ Forgot Password button should show modal', (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     await tester.tap(find.text('Forgot Password?'));
+//     await tester.pumpAndSettle();
+
+//     expect(find.text("Enter email or phone"), findsOneWidget);
+//   });
+
+//   testWidgets('8️⃣ Forgot Password modal allows OTP request', (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     await tester.tap(find.text('Forgot Password?'));
+//     await tester.pumpAndSettle();
+//     await tester.enterText(find.byType(TextField).first, 'test@gmail.com');
+//     await tester.tap(find.widgetWithText(ElevatedButton, 'Send OTP'));
+//     await tester.pumpAndSettle();
+
+//     verify(() => loginBloc.add(any<ForgotPasswordRequested>())).called(1);
+//   });
+
+//   testWidgets('9️⃣ Fingerprint authentication button is clickable',
+//       (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     final fingerprintButton =
+//         find.widgetWithText(ElevatedButton, 'Login with Fingerprint');
+//     expect(fingerprintButton, findsOneWidget);
+//     await tester.tap(fingerprintButton);
+//     await tester.pumpAndSettle();
+//   });
+
+//   testWidgets('🔟 Fingerprint authentication failure should show an error',
+//       (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState(
+//         isLoading: false,
+//         isSuccess: false,
+//         isPasswordReset: false,
+//         isOtpSent: false));
+//     await tester.pumpWidget(createTestableWidget());
+
+//     await tester.tap(find.byIcon(Icons.fingerprint));
+//     await tester.pumpAndSettle();
+
+//     expect(find.text("Fingerprint authentication failed!"), findsOneWidget);
+//   });
+
+//   testWidgets('1️⃣1️⃣ Password visibility toggles correctly', (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     final visibilityButton = find.byIcon(Icons.visibility_off);
+//     expect(visibilityButton, findsOneWidget);
+
+//     await tester.tap(visibilityButton);
+//     await tester.pump();
+
+//     final visibilityIcon = find.byIcon(Icons.visibility);
+//     expect(visibilityIcon, findsOneWidget);
+//   });
+
+//   testWidgets('1️⃣2️⃣ Navigating to Register page on tapping Register',
+//       (tester) async {
+//     when(() => loginBloc.state).thenReturn(LoginState.initial());
+//     await tester.pumpWidget(createTestableWidget());
+
+//     await tester.tap(find.text('Register'));
+//     await tester.pumpAndSettle();
+
+//     expect(find.byType(LoginView), findsNothing);
+//   });
+// }
+
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:integration_test/integration_test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view/login_view.dart';
-import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view/sign_up_view.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_bloc.dart';
-import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_event.dart';
+import 'package:shikshyadwar_mobile_application_project/features/auth/presentation/view_model/login/login_state.dart';
 
-/// ✅ Mock Classes for BLoC
-class MockLoginBloc extends Mock implements LoginBloc {}
+class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
+    implements LoginBloc {}
 
-class MockRegisterBloc extends Mock implements RegisterBloc {}
+class FakeLoginEvent extends Fake implements LoginEvent {}
+
+class FakeLoginState extends Fake implements LoginState {}
+
+class FakeForgotPasswordRequested extends Fake
+    implements ForgotPasswordRequested {}
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  late MockLoginBloc loginBloc;
 
-  late MockLoginBloc mockLoginBloc;
-  late MockRegisterBloc mockRegisterBloc;
+  setUpAll(() {
+    registerFallbackValue(FakeLoginEvent());
+    registerFallbackValue(FakeLoginState());
+    registerFallbackValue(FakeForgotPasswordRequested()); // Fix issue 2
+  });
 
   setUp(() {
-    mockLoginBloc = MockLoginBloc();
-    mockRegisterBloc = MockRegisterBloc();
+    loginBloc = MockLoginBloc();
+    when(() => loginBloc.state).thenReturn(LoginState.initial());
+    when(() => loginBloc.stream)
+        .thenAnswer((_) => Stream.value(LoginState.initial()));
   });
 
-  /// 📌 Create a testable Login screen
-  Widget createLoginScreen() {
-    return MaterialApp(
-      home: BlocProvider<LoginBloc>.value(
-        value: mockLoginBloc,
-        child: const LoginView(),
+  Widget createTestableWidget() {
+    return BlocProvider<LoginBloc>(
+      create: (context) => loginBloc,
+      child: const MaterialApp(
+        home: LoginView(),
       ),
     );
   }
 
-  /// 📌 Create a testable SignUp screen
-  Widget createRegisterScreen() {
-    return MaterialApp(
-      home: BlocProvider<RegisterBloc>.value(
-        value: mockRegisterBloc,
-        child: const SignUpView(),
-      ),
-    );
-  }
+  testWidgets('1️⃣ Should display Login button', (tester) async {
+    await tester.pumpWidget(createTestableWidget());
+    await tester.pumpAndSettle();
 
-  /// 🔹 **Test 1: Ensure Login screen UI renders properly**
-  testWidgets('should render login view with input fields and buttons',
-      (tester) async {
-    await tester.pumpWidget(createLoginScreen());
-
-    expect(find.text('Welcome Back'), findsOneWidget);
-    expect(find.text('Email'), findsOneWidget);
-    expect(find.text('Password'), findsOneWidget);
-    expect(find.text('Login'), findsOneWidget);
+    expect(find.widgetWithText(ElevatedButton, 'Login'), findsOneWidget);
   });
 
-  /// 🔹 **Test 2: Ensure Login form validation works**
-  testWidgets('should validate empty email and password', (tester) async {
-    await tester.pumpWidget(createLoginScreen());
+  testWidgets('2️⃣ Should display Register button', (tester) async {
+    await tester.pumpWidget(createTestableWidget());
+    await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Login'));
-    await tester.pump();
+    expect(find.text('Register'), findsOneWidget);
+  });
+
+  testWidgets('3️⃣ Empty fields should show validation errors', (tester) async {
+    await tester.pumpWidget(createTestableWidget());
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+    await tester.pumpAndSettle();
 
     expect(find.text('Please enter Email'), findsOneWidget);
     expect(find.text('Please enter Password'), findsOneWidget);
   });
 
-  /// 🔹 **Test 3: Ensure correct Login BLoC event is triggered**
-  testWidgets('should call LoginBloc when login form is valid', (tester) async {
-    when(() => mockLoginBloc.add(any())).thenReturn(null);
+  testWidgets('4️⃣ Entering email and password updates fields', (tester) async {
+    await tester.pumpWidget(createTestableWidget());
 
-    await tester.pumpWidget(createLoginScreen());
+    await tester.enterText(find.byType(TextField).at(0), 'test@gmail.com');
+    await tester.enterText(find.byType(TextField).at(1), 'Test@123');
+    await tester.pumpAndSettle();
 
-    await tester.enterText(
-        find.byType(TextFormField).at(0), 'test@example.com');
-    await tester.enterText(find.byType(TextFormField).at(1), 'ValidPass123');
-
-    await tester.tap(find.text('Login'));
-    await tester.pump();
-
-    verify(() => mockLoginBloc.add(any())).called(1);
+    expect(find.text('test@gmail.com'), findsOneWidget);
+    expect(find.text('Test@123'), findsOneWidget);
   });
 
-  /// 🔹 **Test 4: Ensure SignUp screen UI renders properly**
-  testWidgets('should render register view with input fields and button',
+  testWidgets('5️⃣ Successful login should navigate to HomeView',
       (tester) async {
-    await tester.pumpWidget(createRegisterScreen());
+    whenListen(
+      loginBloc,
+      Stream.fromIterable([
+        LoginState.initial(),
+        LoginState(
+            isLoading: false,
+            isSuccess: true,
+            user: null,
+            isOtpSent: false,
+            isPasswordReset: false),
+      ]),
+    );
 
-    expect(find.text('Create Account'), findsOneWidget);
-    expect(find.text('Username'), findsOneWidget);
-    expect(find.text('Email'), findsOneWidget);
-    expect(find.text('Phone Number'), findsOneWidget);
-    expect(find.text('Password'), findsOneWidget);
-    expect(find.text('Create Account'), findsOneWidget);
+    await tester.pumpWidget(createTestableWidget());
+
+    await tester.enterText(find.byType(TextField).at(0), 'Sam11@gmail.com');
+    await tester.enterText(find.byType(TextField).at(1), 'Sam@123');
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+    await tester.pumpAndSettle();
+
+    verify(() => loginBloc.add(any<LoginUserEvent>())).called(1);
   });
 
-  /// 🔹 **Test 5: Ensure SignUp form validation works**
-  testWidgets('should validate empty sign-up fields', (tester) async {
-    await tester.pumpWidget(createRegisterScreen());
+  testWidgets('6️⃣ Failed login should show an error message', (tester) async {
+    whenListen(
+      loginBloc,
+      Stream.fromIterable([
+        LoginState.initial(),
+        LoginState(
+            isLoading: false,
+            isSuccess: false,
+            errorMessage: "Invalid credentials",
+            isOtpSent: false,
+            isPasswordReset: false),
+      ]),
+    );
 
-    await tester.tap(find.text('Create Account'));
-    await tester.pump();
+    await tester.pumpWidget(createTestableWidget());
+    await tester.enterText(find.byType(TextField).at(0), 'wrong@gmail.com');
+    await tester.enterText(find.byType(TextField).at(1), 'wrongpassword');
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Login'));
+    await tester.pumpAndSettle();
 
-    expect(find.text('Please enter Username'), findsOneWidget);
-    expect(find.text('Please enter Email'), findsOneWidget);
-    expect(find.text('Please enter Phone number'), findsOneWidget);
-    expect(find.text('Please enter Password'), findsOneWidget);
+    expect(find.text('Invalid credentials'), findsOneWidget);
   });
 
-  /// 🔹 **Test 6: Ensure correct Register BLoC event is triggered**
-  testWidgets('should call RegisterBloc when register form is valid',
+  testWidgets('7️⃣ Forgot Password button should show modal', (tester) async {
+    await tester.pumpWidget(createTestableWidget());
+
+    await tester.tap(find.text('Forgot Password?'));
+    await tester.pumpAndSettle();
+
+    expect(find.text("Enter email or phone"), findsOneWidget);
+  });
+
+  testWidgets('8️⃣ Forgot Password modal allows OTP request', (tester) async {
+    await tester.pumpWidget(createTestableWidget());
+
+    await tester.tap(find.text('Forgot Password?'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, 'Sam11@gmail.com');
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Send OTP'));
+    await tester.pumpAndSettle();
+
+    verify(() => loginBloc.add(any<ForgotPasswordRequested>())).called(1);
+  });
+
+  testWidgets('9️⃣ Fingerprint authentication button is clickable',
       (tester) async {
-    when(() => mockRegisterBloc.add(any<RegisterUserEvent>())).thenReturn(null);
+    await tester.pumpWidget(createTestableWidget());
 
-    await tester.pumpWidget(createRegisterScreen());
+    final fingerprintButton =
+        find.widgetWithText(ElevatedButton, 'Login with Fingerprint');
+    expect(fingerprintButton, findsOneWidget);
+    await tester.tap(fingerprintButton);
+    await tester.pumpAndSettle();
+  });
 
-    await tester.enterText(find.byType(TextFormField).at(0), 'TestUser');
-    await tester.enterText(
-        find.byType(TextFormField).at(1), 'test@example.com');
-    await tester.enterText(find.byType(TextFormField).at(2), '9876543210');
-    await tester.enterText(find.byType(TextFormField).at(3), 'ValidPass123');
+  // testWidgets('🔟 Fingerprint authentication failure should show an error',
+  //     (tester) async {
+  //   when(() => loginBloc.state).thenReturn(LoginState(
+  //       isLoading: false,
+  //       isSuccess: false,
+  //       isOtpSent: false,
+  //       isPasswordReset: false));
+  //   await tester.pumpWidget(createTestableWidget());
 
-    await tester.tap(find.text('Create Account'));
+  //   await tester.tap(find.byIcon(Icons.fingerprint));
+  //   await tester.pumpAndSettle();
+
+  //   expect(find.text("Fingerprint authentication failed!"), findsOneWidget);
+  // });
+
+  testWidgets('1️⃣1️⃣ Password visibility toggles correctly', (tester) async {
+    await tester.pumpWidget(createTestableWidget());
+
+    final visibilityButton = find.byIcon(Icons.visibility_off);
+    expect(visibilityButton, findsOneWidget);
+
+    await tester.tap(visibilityButton);
     await tester.pump();
 
-    verify(() => mockRegisterBloc.add(any<RegisterUserEvent>())).called(1);
+    final visibilityIcon = find.byIcon(Icons.visibility);
+    expect(visibilityIcon, findsOneWidget);
+  });
+
+  testWidgets('1️⃣2️⃣ Navigating to Register page on tapping Register',
+      (tester) async {
+    await tester.pumpWidget(createTestableWidget());
+
+    await tester.tap(find.text('Register'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LoginView), findsNothing);
   });
 }

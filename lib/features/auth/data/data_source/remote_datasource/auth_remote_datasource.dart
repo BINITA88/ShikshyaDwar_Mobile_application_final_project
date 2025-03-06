@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shikshyadwar_mobile_application_project/app/constants/api_endpoints.dart';
@@ -36,21 +37,38 @@ class AuthRemoteDatasource implements IAuthDataSource {
   @override
   Future<String> loginUser(String email, String password) async {
     try {
-      Response response = await _dio.post(ApiEndpoints.login, data: {
-        "email": email,
-        "password": password,
-      });
+      Response response = await _dio.post(
+        ApiEndpoints.login,
+        data: {
+          "email": email,
+          "password": password,
+        },
+      );
 
       if (response.statusCode == 200) {
-        final str = response.data['token'];
-        return str;
+        // ✅ Ensure response data is a Map (DO NOT decode again)
+        final Map<String, dynamic> data = response.data;
+
+        // ✅ Validate response structure
+        if (data.containsKey('token')) {
+          final String token = data['token'];
+          final int? role = data['user']?['role']; // Extract role if available
+
+          print("✅ Login Successful! Token: $token, Role: $role");
+
+          return token; // ✅ Successfully return token
+        } else {
+          throw Exception("Unexpected response format: 'token' not found");
+        }
       } else {
-        throw Exception(response.statusMessage);
+        throw Exception("Login failed with status ${response.statusCode}");
       }
     } on DioException catch (e) {
-      throw Exception(e);
+      print("❌ DioException: ${e.response?.data ?? e.message}");
+      throw Exception(e.response?.data["message"] ?? "Network error");
     } catch (e) {
-      throw Exception(e);
+      print("❌ Unexpected Error: $e");
+      throw Exception("Unexpected error: ${e.toString()}");
     }
   }
 
@@ -123,33 +141,31 @@ class AuthRemoteDatasource implements IAuthDataSource {
       throw Exception("Unexpected Error: $e");
     }
   }
-  
- 
 
   @override
-Future<AuthEntity> getMe(String authId) async {
-  try {
-    if (authId.isEmpty) throw Exception("Invalid auth ID!");
+  Future<AuthEntity> getMe(String authId) async {
+    try {
+      if (authId.isEmpty) throw Exception("Invalid auth ID!");
 
-    // ✅ Fetch user details using authId
-    Response response = await _dio.get(
-      "http://10.0.2.2:9000/api/user/userdetails/$authId", // ✅ Use authId
-      options: Options(headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      }),
-    );
+      // ✅ Fetch user details using authId
+      Response response = await _dio.get(
+        "http://10.0.2.2:9000/api/user/userdetails/$authId", // ✅ Use authId
+        options: Options(headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }),
+      );
 
-    print("✅ API Response: ${response.statusCode} - ${response.data}");
-    return AuthEntity.fromJson(response.data);
-  } on DioException catch (e) {
-    print("❌ DioException: ${e.type}");
-    print("🔹 Response Data: ${e.response?.data}");
-    throw Exception("DioException: ${e.message}");
-  } catch (e) {
-    throw Exception("Unexpected error: $e");
+      print("✅ API Response: ${response.statusCode} - ${response.data}");
+      return AuthEntity.fromJson(response.data);
+    } on DioException catch (e) {
+      print("❌ DioException: ${e.type}");
+      print("🔹 Response Data: ${e.response?.data}");
+      throw Exception("DioException: ${e.message}");
+    } catch (e) {
+      throw Exception("Unexpected error: $e");
+    }
   }
-}
 
 // String extractUserIdFromToken(String token) {
 //   try {
@@ -160,7 +176,7 @@ Future<AuthEntity> getMe(String authId) async {
 //   }
 // }
 
-@override
+  @override
   Future<void> forgotPassword({String? email, String? phone}) async {
     try {
       Response response = await _dio.post(
@@ -211,9 +227,6 @@ Future<AuthEntity> getMe(String authId) async {
       throw Exception(e);
     } catch (e) {
       throw Exception(e);
+    }
+  }
 }
-}
-}
-
-
-

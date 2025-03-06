@@ -42,6 +42,27 @@ class AuthRemoteRepository implements IAuthRepository {
     }
   }
 
+
+  //  @override
+  // Future<Either<Failure, bool>> updateUserProfile({
+  //   required String userId,
+  //   required String name,
+  //   required String email,
+  //   required String contactNo,
+  // }) async {
+  //   try {
+  //     final result = await _authRemoteDatasource.updateUserProfile(
+  //       userId: userId,
+  //       name: name,
+  //       email: email,
+  //       contactNo: contactNo,
+  //     );
+  //     return Right(result);
+  //   } on ServerException {
+  //     return Left(ServerFailure());
+  //   }
+  // }
+
   /// ✅ Fetch All Users
   @override
   Future<Either<Failure, List<AuthEntity>>> getAllUsers() async {

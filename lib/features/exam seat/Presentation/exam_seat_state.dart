@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:shikshyadwar_mobile_application_project/features/exam%20seat/domain/entity/exam_seat_entity.dart';
 
@@ -15,11 +14,12 @@ class ExamSeatLoading extends ExamSeatState {}
 
 class ExamSeatLoaded extends ExamSeatState {
   final List<ExamSeatEntity> seats;
+  final String? selectedSeatId; // ✅ Added selectedSeatId
 
-  const ExamSeatLoaded(this.seats);
+  const ExamSeatLoaded({required this.seats, this.selectedSeatId});
 
   @override
-  List<Object> get props => [seats];
+  List<Object> get props => [seats, selectedSeatId ?? ''];
 }
 
 class ExamSeatError extends ExamSeatState {

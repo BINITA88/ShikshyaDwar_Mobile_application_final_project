@@ -106,7 +106,9 @@ class CourseView extends StatelessWidget {
                                       Text(
                                         "Instructor: ${course.instructor}",
                                         style: const TextStyle(
-                                            fontSize: 14, color: Colors.grey),
+                                            fontSize: 14,
+                                            color: Color.fromARGB(
+                                                255, 113, 110, 110)),
                                       ),
                                       const SizedBox(height: 2),
                                       // ✅ Course Duration
@@ -114,7 +116,8 @@ class CourseView extends StatelessWidget {
                                         course.duration,
                                         style: const TextStyle(
                                             fontSize: 14,
-                                            color: Colors.blueAccent),
+                                            color: Color.fromARGB(
+                                                255, 233, 80, 29)),
                                       ),
 
                                       // ✅ "Add to Schedule" Button

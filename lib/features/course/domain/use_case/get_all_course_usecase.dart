@@ -4,10 +4,11 @@ import 'package:shikshyadwar_mobile_application_project/core/error/failure.dart'
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/entity/course_entity.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/repository/course_repository.dart';
 
+
 class GetAllCourseUsecase implements UsecaseWithoutParams<List<CourseEntity>> {
   final ICourseRepository _courseRepository;
 
-  GetAllCourseUsecase({required ICourseRepository courseRepository})
+  GetAllCourseUsecase( {required ICourseRepository courseRepository})
       : _courseRepository = courseRepository;
 
   @override

@@ -104,7 +104,7 @@ class RoutineTable extends StatelessWidget {
               style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue),
+                  color: Color.fromARGB(255, 2, 2, 2)),
             ),
           ),
           Expanded(

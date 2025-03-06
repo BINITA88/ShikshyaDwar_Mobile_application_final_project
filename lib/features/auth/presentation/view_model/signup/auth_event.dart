@@ -8,8 +8,7 @@ abstract class AuthEvent extends Equatable {
 class ShakeLogoutRequested extends AuthEvent {}
 
 class FingerprintLoginEvent extends AuthEvent {
-  final BuildContext context;
-  FingerprintLoginEvent({required this.context});
+  FingerprintLoginEvent();
 }
 
 /// 🔍 Check if the user is authenticated (Login Persistence)

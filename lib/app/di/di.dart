@@ -1,10 +1,14 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shikshyadwar_mobile_application_project/app/shared_prefs/token_shared_prefs.dart';
 import 'package:shikshyadwar_mobile_application_project/core/Fingerprint/fingerprint_auth.dart';
+import 'package:shikshyadwar_mobile_application_project/core/common/internet_checker/internet_checker.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/api_service.dart';
 import 'package:shikshyadwar_mobile_application_project/core/network/hive_service.dart';
+import 'package:shikshyadwar_mobile_application_project/core/service/network.dart';
 import 'package:shikshyadwar_mobile_application_project/core/socket_service.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/local_datasource/auth_local_datasource.dart';
 import 'package:shikshyadwar_mobile_application_project/features/auth/data/data_source/remote_datasource/auth_remote_datasource.dart';
@@ -37,8 +41,8 @@ import 'package:shikshyadwar_mobile_application_project/features/chat/chat/domai
 import 'package:shikshyadwar_mobile_application_project/features/chat/chat/presentation/view_model/bloc/chat_bloc.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/data_source/local_datasource/course_local_data_source.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/data/data_source/remote_datasource/course_remote_datasource.dart';
-import 'package:shikshyadwar_mobile_application_project/features/course/data/repository/course_local_repository.dart';
-import 'package:shikshyadwar_mobile_application_project/features/course/data/repository/course_remote_repository.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/data/repository/course_repository_impl.dart';
+import 'package:shikshyadwar_mobile_application_project/features/course/domain/repository/course_repository.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_all_course_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/domain/use_case/get_course_details_usecase.dart';
 import 'package:shikshyadwar_mobile_application_project/features/course/presentation/view_model/course_bloc.dart';
@@ -77,6 +81,7 @@ Future<void> initDependencies() async {
   // _initSetupLocator(); // ✅ Register chat-related dependencies
   await _initHiveService();
   await _initApiService();
+  _initNetworkInfo(); // ✅ Register NetworkInfo first
   await _initHomeDependencies();
   await _initRegisterDependencies();
   await _initCourseBookingDependencies();
@@ -90,7 +95,7 @@ Future<void> initDependencies() async {
   _initLoginDependencies();
   await _initSplashScreenDependencies();
   await _initOnboardingScreenDependencies();
-  await _initCourseDependencies();
+  _initCourseDependencies();
   await _initAuthDependencies();
 }
 
@@ -109,6 +114,20 @@ _initApiService() {
     () => ApiService(Dio()).dio,
   );
 }
+
+void _initNetworkInfo() {
+  getIt.registerLazySingleton<Connectivity>(() => Connectivity());
+  getIt.registerLazySingleton<InternetConnectionChecker>(() =>
+      InternetConnectionChecker.createInstance()); // ✅ Use createInstance()
+
+  getIt.registerLazySingleton<NetworkInfo>(
+    () => NetworkInfoImpl(
+      getIt<Connectivity>(),
+      getIt<InternetConnectionChecker>(),
+    ),
+  );
+}
+
 // _initRegisterDependencies() {
 //   // init local data source
 //   getIt.registerLazySingleton(
@@ -182,9 +201,9 @@ _initApiService() {
 _initRegisterDependencies() {
   //DataSource
 
-  getIt.registerLazySingleton<AuthLocalDataSource>(
-    () => AuthLocalDataSource(getIt<HiveService>()),
-  );
+  // getIt.registerLazySingleton<AuthLocalDataSource>(
+  //   () => AuthLocalDataSource(getIt<HiveService>()),
+  // );
 
   getIt.registerLazySingleton<AuthRemoteDatasource>(
     () => AuthRemoteDatasource(getIt<Dio>(), getIt<TokenSharedPrefs>()),
@@ -192,9 +211,9 @@ _initRegisterDependencies() {
 
   //Repository
 
-  getIt.registerLazySingleton(
-    () => AuthLocalRepository(getIt<AuthLocalDataSource>()),
-  );
+  // getIt.registerLazySingleton(
+  //   () => AuthLocalRepository(getIt<AuthLocalDataSource>()),
+  // );
   getIt.registerLazySingleton<AuthRemoteRepository>(
     () => AuthRemoteRepository(getIt<AuthRemoteDatasource>()),
   );
@@ -343,7 +362,7 @@ _initPaymentDependencies() {
   getIt.registerFactory(
     () => PaymentBloc(
       processPaymentUseCase: getIt(),
-      getStripeApiKeyUseCase: getIt(),
+      // getStripeApiKeyUseCase: getIt(),
     ),
   );
 }
@@ -624,50 +643,133 @@ void _initLoginDependencies() async {
   );
 }
 
+// // ..........................course...............
+// _initCourseDependencies() {
+//   // =========================== Data Source ===========================
+
+//   getIt.registerFactory<CourseLocalDataSource>(() => CourseLocalDataSource(
+//       hiveService: getIt<HiveService>(), networkInfo: getIt()));
+
+//   getIt.registerFactory<CourseRemoteDataSource>(
+//       () => CourseRemoteDataSource(getIt<Dio>()));
+
+//   // =========================== Repository ===========================
+
+//   getIt
+//       .registerLazySingleton<CourseLocalRepository>(() => CourseLocalRepository(
+//             courseLocalDataSource: getIt<CourseLocalDataSource>(),
+//             courseRemoteDataSource: getIt(),
+//             networkInfo: getIt(),
+//           ));
+
+//   getIt.registerLazySingleton<CourseRemoteRepository>(
+//     () => CourseRemoteRepository(
+//       getIt<CourseRemoteDataSource>(),
+//     ),
+//   );
+
+//   // Usecases
+
+//   getIt.registerLazySingleton<GetAllCourseUsecase>(
+//     () => GetAllCourseUsecase(
+//       courseRepository: getIt<CourseRemoteRepository>(),
+//     ),
+//   );
+
+//   getIt.registerLazySingleton<GetCourseDetailUseCase>(
+//     () => GetCourseDetailUseCase(
+//       courseRepository: getIt<CourseRemoteRepository>(),
+//     ),
+//   );
+
+// // Bloc
+//   getIt.registerFactory<CourseBloc>(
+//     () => CourseBloc(
+//       getAllCourseUsecase: getIt<GetAllCourseUsecase>(),
+//       getCourseDetailUsecase: getIt<GetCourseDetailUseCase>(),
+//       bookingBloc: getIt(), // Fixed: Removed duplicate parameter
+//     ),
+//   );
+// }
+
 // ..........................course...............
-_initCourseDependencies() {
-  // =========================== Data Source ===========================
+void _initCourseDependencies() {
+  // ✅ Ensure Dio is registered before using it
+  if (!getIt.isRegistered<Dio>()) {}
 
-  getIt.registerFactory<CourseLocalDataSource>(
-      () => CourseLocalDataSource(hiveService: getIt<HiveService>()));
+  // ✅ Ensure NetworkInfo is registered before using it
+  if (!getIt.isRegistered<NetworkInfo>()) {
+    getIt.registerLazySingleton<Connectivity>(() => Connectivity());
+    getIt.registerLazySingleton<InternetConnectionChecker>(
+        () => InternetConnectionChecker.createInstance());
 
-  getIt.registerFactory<CourseRemoteDataSource>(
-      () => CourseRemoteDataSource(getIt<Dio>()));
+    getIt.registerLazySingleton<NetworkInfo>(
+      () => NetworkInfoImpl(
+        getIt<Connectivity>(),
+        getIt<InternetConnectionChecker>(),
+      ),
+    );
+  }
 
-  // =========================== Repository ===========================
+  // ✅ Register Hive Service Before Local Data Source
+  if (!getIt.isRegistered<HiveService>()) {
+    getIt.registerLazySingleton<HiveService>(() => HiveService());
+  }
 
-  getIt.registerLazySingleton<CourseLocalRepository>(() =>
-      CourseLocalRepository(
-          courseLocalDataSource: getIt<CourseLocalDataSource>()));
+  // ✅ Register CourseLocalDataSource
+  if (!getIt.isRegistered<CourseLocalDataSource>()) {
+    getIt.registerLazySingleton<CourseLocalDataSource>(
+      () => CourseLocalDataSource(
+        hiveService: getIt<HiveService>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+  }
 
-  getIt.registerLazySingleton<CourseRemoteRepository>(
-    () => CourseRemoteRepository(
-      getIt<CourseRemoteDataSource>(),
-    ),
-  );
+  // ✅ Register CourseRemoteDataSource
+  if (!getIt.isRegistered<CourseRemoteDataSource>()) {
+    getIt.registerLazySingleton<CourseRemoteDataSource>(
+      () => CourseRemoteDataSource(getIt<Dio>()),
+    );
+  }
 
-  // Usecases
+  // ✅ Register Repository
+  if (!getIt.isRegistered<ICourseRepository>()) {
+    getIt.registerLazySingleton<ICourseRepository>(
+      () => CourseRepositoryImpl(
+        courseLocalDataSource: getIt<CourseLocalDataSource>(),
+        courseRemoteDataSource: getIt<CourseRemoteDataSource>(),
+        networkInfo: getIt<NetworkInfo>(),
+      ),
+    );
+  }
 
-  getIt.registerLazySingleton<GetAllCourseUsecase>(
-    () => GetAllCourseUsecase(
-      courseRepository: getIt<CourseRemoteRepository>(),
-    ),
-  );
+  // ✅ Register Use Cases
+  if (!getIt.isRegistered<GetAllCourseUsecase>()) {
+    getIt.registerLazySingleton<GetAllCourseUsecase>(
+      () => GetAllCourseUsecase(courseRepository: getIt<ICourseRepository>()),
+    );
+  }
 
-  getIt.registerLazySingleton<GetCourseDetailUseCase>(
-    () => GetCourseDetailUseCase(
-      courseRepository: getIt<CourseRemoteRepository>(),
-    ),
-  );
+  if (!getIt.isRegistered<GetCourseDetailUseCase>()) {
+    getIt.registerLazySingleton<GetCourseDetailUseCase>(
+      () =>
+          GetCourseDetailUseCase(courseRepository: getIt<ICourseRepository>()),
+    );
+  }
 
-// Bloc
-  getIt.registerFactory<CourseBloc>(
-    () => CourseBloc(
-      getAllCourseUsecase: getIt<GetAllCourseUsecase>(),
-      getCourseDetailUsecase: getIt<GetCourseDetailUseCase>(),
-      bookingBloc: getIt(), // Fixed: Removed duplicate parameter
-    ),
-  );
+  // ✅ Register Bloc
+  if (!getIt.isRegistered<CourseBloc>()) {
+    getIt.registerFactory<CourseBloc>(
+      () => CourseBloc(
+        getAllCourseUsecase: getIt<GetAllCourseUsecase>(),
+        getCourseDetailUsecase: getIt<GetCourseDetailUseCase>(),
+        bookingBloc: getIt(),
+      ),
+    );
+  }
+
+  print("✅ _initCourseDependencies Completed");
 }
 
 // ......................................
@@ -753,6 +855,13 @@ Future<void> _initAuthDependencies() async {
     );
   }
 
+  // ✅ Register UpdateUserProfileUseCase
+  if (!getIt.isRegistered<GetAllUsersUseCase>()) {
+    getIt.registerLazySingleton<GetAllUsersUseCase>(
+      () => GetAllUsersUseCase(getIt<AuthRemoteRepository>()),
+    );
+  }
+
   if (!getIt.isRegistered<AuthBloc>()) {
     getIt.registerFactory<AuthBloc>(
       () => AuthBloc(
@@ -765,3 +874,58 @@ Future<void> _initAuthDependencies() async {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// hive  try
+
+
+// void _initCourseDependencies() async {
+//   // ✅ Register Hive Box for Courses
+//   final courseBox = await Hive.openBox<CourseHiveModel>('coursesBox');
+//   getIt.registerLazySingleton<Box<CourseHiveModel>>(() => courseBox);
+
+//   // ======================== Data Source =========================
+
+//   getIt.registerFactory<CourseLocalDataSource>(
+//     () => CourseLocalDataSource(
+//       hiveService: getIt<HiveService>(),
+//       networkInfo: getIt<NetworkInfo>(),
+//       box: getIt<Box<CourseHiveModel>>(), // ✅ Use the registered box
+//     ),
+//   );
+
+//   getIt.registerFactory<CourseRemoteDataSource>(
+//     () => CourseRemoteDataSource(getIt<Dio>()),
+//   );
+
+//   // ======================== Repository =========================
+
+//   getIt.registerLazySingleton<CourseRepositoryImpl>(
+//     () => CourseRepositoryImpl(
+//       // courseLocalDataSource: getIt<CourseLocalDataSource>(),
+//       // courseRemoteDataSource: getIt<CourseRemoteDataSource>(),
+//       networkInfo: getIt<NetworkInfo>(),
+//       localDataSource: getIt<CourseLocalDataSource>(),
+//       remoteDataSource: getIt<CourseRemoteDataSource>(),
+//     ),
+//   );
+
+//   getIt.registerLazySingleton<CourseRemoteRepository>(
+//     () => CourseRemoteRepository(getIt<CourseRemoteDataSource>()),
+//   );
+// }
